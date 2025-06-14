@@ -83,7 +83,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
 
       if (error) {
         console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Terjadi kesalahan saat menghubungi server');
+        throw new Error(error.message || 'Failed to connect to Notion API');
       }
 
       if (response?.error) {
@@ -96,14 +96,14 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       console.error('Error calling Notion API:', error);
       setConnectionError(true);
       
-      let errorMessage = 'Maaf, terjadi kesalahan. Silakan coba lagi.';
+      let errorMessage = 'Failed to connect to Notion API. Please check your token.';
       
-      if (error.message?.includes('tidak tersedia')) {
-        errorMessage = 'Notion AI sedang tidak tersedia. Silakan hubungi administrator.';
-      } else if (error.message?.includes('tidak valid')) {
-        errorMessage = 'Terjadi masalah dengan token Notion. Silakan hubungi administrator.';
+      if (error.message?.includes('token not configured')) {
+        errorMessage = 'Notion token not configured. Please add your Notion integration token in settings.';
+      } else if (error.message?.includes('unauthorized')) {
+        errorMessage = 'Invalid Notion token. Please check your integration token.';
       } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
-        errorMessage = 'Masalah koneksi. Periksa koneksi internet Anda dan coba lagi.';
+        errorMessage = 'Network error. Please check your internet connection.';
       }
 
       toast({
@@ -125,6 +125,13 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       const allPages = response.pages || [];
       setPages(allPages);
       setTotalPages(Math.ceil(allPages.length / itemsPerPage));
+      
+      if (allPages.length > 0) {
+        toast({
+          title: "Success",
+          description: `Loaded ${allPages.length} pages from your Notion workspace`,
+        });
+      }
     } catch (error) {
       console.error('Error fetching pages:', error);
     } finally {
@@ -136,7 +143,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     if (!newPageTitle.trim()) {
       toast({
         title: "Error",
-        description: "Judul halaman tidak boleh kosong",
+        description: "Page title cannot be empty",
         variant: "destructive"
       });
       return;
@@ -151,8 +158,8 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       });
       
       toast({
-        title: "Berhasil",
-        description: "Halaman baru berhasil dibuat",
+        title: "Success",
+        description: "New page created successfully in your Notion workspace",
       });
       
       setNewPageTitle('');
@@ -177,8 +184,8 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       });
       
       toast({
-        title: "Berhasil",
-        description: "Halaman berhasil diperbarui",
+        title: "Success",
+        description: "Page updated successfully in your Notion workspace",
       });
       
       setEditingPage(null);
@@ -191,7 +198,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
   };
 
   const deletePage = async (pageId: string) => {
-    if (!confirm('Apakah Anda yakin ingin menghapus halaman ini?')) {
+    if (!confirm('Are you sure you want to archive this page in Notion?')) {
       return;
     }
 
@@ -201,8 +208,8 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       await callNotionAPI('delete_page', { page_id: pageId });
       
       toast({
-        title: "Berhasil",
-        description: "Halaman berhasil dihapus",
+        title: "Success",
+        description: "Page archived successfully in your Notion workspace",
       });
       
       setSelectedPage(null);
@@ -231,6 +238,11 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       setPages(searchResults);
       setTotalPages(Math.ceil(searchResults.length / itemsPerPage));
       setCurrentPage(1);
+      
+      toast({
+        title: "Search Complete",
+        description: `Found ${searchResults.length} pages matching "${searchQuery}"`,
+      });
     } catch (error) {
       console.error('Error searching pages:', error);
     } finally {
@@ -238,9 +250,22 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     }
   };
 
-  const viewPage = (page: NotionPage) => {
+  const viewPage = async (page: NotionPage) => {
     setSelectedPage(page);
     setActiveTab('view');
+    
+    // Fetch page content if not already loaded
+    if (!page.content) {
+      try {
+        const response = await callNotionAPI('get_page_content', { page_id: page.id });
+        const updatedPage = { ...page, content: response.content || 'No content available' };
+        setSelectedPage(updatedPage);
+      } catch (error) {
+        console.error('Error fetching page content:', error);
+        const updatedPage = { ...page, content: 'Failed to load content' };
+        setSelectedPage(updatedPage);
+      }
+    }
   };
 
   const openInNotion = (pageId: string) => {
@@ -321,7 +346,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
             <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
               <FileText className="h-5 w-5 text-white" />
             </div>
-            <span>Notion AI Management</span>
+            <span>Notion Workspace Manager</span>
             {connectionError && (
               <AlertCircle className="h-4 w-4 text-red-500" />
             )}
@@ -623,7 +648,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                   <div className="border rounded-lg p-4 bg-gray-50 min-h-[300px]">
                     <h4 className="font-medium mb-2">Content Preview</h4>
                     <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {selectedPage.content || 'No content available'}
+                      {selectedPage.content || 'Loading content...'}
                     </div>
                   </div>
                 </div>
@@ -634,7 +659,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
           {!user && (
             <div className="p-6 pt-4 border-t">
               <p className="text-xs text-gray-500">
-                Please sign in to use Notion AI
+                Please sign in to use Notion integration
               </p>
             </div>
           )}
@@ -642,7 +667,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
           {connectionError && (
             <div className="p-6 pt-4 border-t">
               <p className="text-xs text-red-500">
-                ⚠️ Connection issues detected. Please try again or contact administrator.
+                ⚠️ Connection error. Please check your Notion token configuration.
               </p>
             </div>
           )}
