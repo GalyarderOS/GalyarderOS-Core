@@ -21,10 +21,12 @@ import {
   MessageCircle,
   Plus,
   Search,
-  Sparkles,
+  Crown,
   ArrowRight,
   Activity,
-  Zap
+  Zap,
+  Sparkles,
+  Award
 } from 'lucide-react';
 import AIAssistant from './AIAssistant';
 import NotionAI from './NotionAI';
@@ -120,8 +122,8 @@ const DashboardHome = () => {
       value: stats.goalsCompleted.value, 
       total: stats.goalsCompleted.total, 
       icon: Target, 
-      color: 'text-emerald-600',
-      bgColor: 'bg-emerald-50',
+      color: 'text-primary',
+      bgColor: 'bg-primary/10',
       description: 'Completed objectives'
     },
     { 
@@ -129,8 +131,8 @@ const DashboardHome = () => {
       value: stats.activeHabits.value, 
       total: stats.activeHabits.total, 
       icon: Calendar, 
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
+      color: 'text-accent',
+      bgColor: 'bg-accent/10',
       description: 'Daily rituals maintained'
     },
     { 
@@ -138,8 +140,8 @@ const DashboardHome = () => {
       value: stats.focusHours.value, 
       total: stats.focusHours.total, 
       icon: Clock, 
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
+      color: 'text-secondary-foreground',
+      bgColor: 'bg-secondary/50',
       description: 'Deep work sessions'
     },
     { 
@@ -147,36 +149,36 @@ const DashboardHome = () => {
       value: stats.memoriesCaptured.value, 
       total: stats.memoriesCaptured.total, 
       icon: BookOpen, 
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50',
+      color: 'text-muted-foreground',
+      bgColor: 'bg-muted/30',
       description: 'Knowledge preserved'
     }
   ];
 
   const quickActions = [
     {
-      icon: <Timer className="h-5 w-5 text-purple-600" />,
+      icon: <Timer className="h-5 w-5 text-primary" />,
       title: 'Start Focus Session',
       description: 'Begin deep work',
       badge: '25 min',
-      bgColor: 'bg-purple-50 hover:bg-purple-100',
-      textColor: 'text-purple-700'
+      bgColor: 'bg-primary/5 hover:bg-primary/10 border border-primary/20',
+      textColor: 'text-primary'
     },
     {
-      icon: <CheckCircle className="h-5 w-5 text-green-600" />,
+      icon: <CheckCircle className="h-5 w-5 text-accent" />,
       title: 'Review Habits',
       description: 'Check daily progress',
       badge: `${stats.activeHabits.value} active`,
-      bgColor: 'bg-green-50 hover:bg-green-100',
-      textColor: 'text-green-700'
+      bgColor: 'bg-accent/5 hover:bg-accent/10 border border-accent/20',
+      textColor: 'text-accent'
     },
     {
-      icon: <Brain className="h-5 w-5 text-blue-600" />,
+      icon: <Brain className="h-5 w-5 text-secondary-foreground" />,
       title: 'Capture Memory',
       description: 'Store new insight',
       badge: 'Quick add',
-      bgColor: 'bg-blue-50 hover:bg-blue-100',
-      textColor: 'text-blue-700'
+      bgColor: 'bg-secondary/20 hover:bg-secondary/30 border border-secondary/30',
+      textColor: 'text-secondary-foreground'
     }
   ];
 
@@ -184,8 +186,8 @@ const DashboardHome = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="relative">
-          <div className="w-16 h-16 border-4 border-[#FFD700]/20 border-t-[#FFD700] rounded-full animate-spin"></div>
-          <Sparkles className="h-6 w-6 text-[#FFD700] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          <div className="w-16 h-16 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+          <Crown className="h-6 w-6 text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
         </div>
       </div>
     );
@@ -199,23 +201,23 @@ const DashboardHome = () => {
         animate={{ opacity: 1, y: 0 }}
         className="relative"
       >
-        <div className="bg-gradient-to-r from-[#FFD700]/10 via-[#FFD700]/5 to-transparent rounded-2xl p-8 border border-[#FFD700]/20">
+        <div className="bg-gradient-to-r from-accent/10 via-primary/5 to-transparent rounded-2xl p-8 border border-accent/20 old-money-card">
           <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="h-6 w-6 text-[#FFD700]" />
-                <span className="text-sm font-medium text-gray-600">Welcome back</span>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <Crown className="h-7 w-7 text-accent" />
+                <span className="text-sm font-medium text-muted-foreground tracking-wide">Welcome back, distinguished member</span>
               </div>
-              <h1 className="text-4xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Playfair Display' }}>
+              <h1 className="text-4xl font-bold old-money-heading" style={{ fontFamily: 'Playfair Display' }}>
                 Ready to Achieve Greatness?
               </h1>
-              <p className="text-lg text-gray-600 max-w-2xl">
-                Your personal operating system is ready to help you make today extraordinary.
+              <p className="text-lg text-muted-foreground max-w-2xl old-money-subheading">
+                Your personal operating system awaits your command. Transform ambition into achievement.
               </p>
             </div>
             <div className="hidden lg:block">
-              <div className="w-24 h-24 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-full flex items-center justify-center shadow-xl">
-                <Activity className="h-12 w-12 text-[#1a1a1a]" />
+              <div className="w-24 h-24 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center soft-shadow-lg">
+                <Award className="h-12 w-12 text-accent-foreground" />
               </div>
             </div>
           </div>
@@ -229,25 +231,25 @@ const DashboardHome = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="group hover:shadow-xl transition-all duration-500 cursor-pointer bg-gradient-to-br from-blue-50 to-white border-2 border-blue-100 hover:border-blue-300" 
+          <Card className="old-money-card group cursor-pointer border-2 border-primary/20 hover:border-primary/40" 
                 onClick={() => setShowAIAssistant(true)}>
             <CardHeader className="pb-4">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <MessageCircle className="h-6 w-6 text-white" />
+                <div className="p-3 bg-gradient-to-br from-primary to-primary/80 rounded-xl soft-shadow group-hover:scale-110 transition-transform duration-300">
+                  <MessageCircle className="h-6 w-6 text-primary-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-bold text-gray-900">AI Assistant</CardTitle>
-                  <CardDescription className="text-blue-600 font-medium">Intelligent guidance</CardDescription>
+                  <CardTitle className="text-xl font-bold old-money-heading">AI Concierge</CardTitle>
+                  <CardDescription className="text-primary font-medium old-money-subheading">Personal guidance</CardDescription>
                 </div>
               </div>
-              <p className="text-gray-600">
-                Get personalized productivity insights and strategic recommendations
+              <p className="text-muted-foreground old-money-subheading">
+                Your sophisticated assistant for strategic insights and productivity counsel
               </p>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 shadow-lg group-hover:shadow-xl transition-all duration-300">
-                Start Conversation
+              <Button className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground soft-shadow-lg old-money-button">
+                Consult Assistant
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
             </CardContent>
@@ -259,25 +261,25 @@ const DashboardHome = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="group hover:shadow-xl transition-all duration-500 cursor-pointer bg-gradient-to-br from-orange-50 to-white border-2 border-orange-100 hover:border-orange-300" 
+          <Card className="old-money-card group cursor-pointer border-2 border-accent/20 hover:border-accent/40" 
                 onClick={() => setShowNotionAI(true)}>
             <CardHeader className="pb-4">
               <div className="flex items-center space-x-3 mb-3">
-                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <FileText className="h-6 w-6 text-white" />
+                <div className="p-3 bg-gradient-to-br from-accent to-accent/80 rounded-xl soft-shadow group-hover:scale-110 transition-transform duration-300">
+                  <FileText className="h-6 w-6 text-accent-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-bold text-gray-900">Workspace AI</CardTitle>
-                  <CardDescription className="text-orange-600 font-medium">Content management</CardDescription>
+                  <CardTitle className="text-xl font-bold old-money-heading">Workspace Butler</CardTitle>
+                  <CardDescription className="text-accent font-medium old-money-subheading">Content mastery</CardDescription>
                 </div>
               </div>
-              <p className="text-gray-600">
-                Seamlessly manage your workspace and knowledge base
+              <p className="text-muted-foreground old-money-subheading">
+                Elegant knowledge management and content curation at your service
               </p>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg group-hover:shadow-xl transition-all duration-300">
-                Open Workspace
+              <Button className="w-full bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 text-accent-foreground soft-shadow-lg old-money-button">
+                Access Workspace
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
               </Button>
             </CardContent>
@@ -295,28 +297,28 @@ const DashboardHome = () => {
             transition={{ delay: index * 0.1 + 0.3 }}
             whileHover={{ y: -5 }}
           >
-            <Card className="border-2 border-gray-100 hover:border-[#FFD700]/30 hover:shadow-xl transition-all duration-500 bg-gradient-to-br from-white to-gray-50/50">
+            <Card className="old-money-card border-2 border-border hover:border-accent/30">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                 <div className="space-y-1">
-                  <CardTitle className="text-sm font-semibold text-gray-600">{stat.label}</CardTitle>
-                  <p className="text-xs text-gray-500">{stat.description}</p>
+                  <CardTitle className="text-sm font-semibold text-muted-foreground old-money-subheading">{stat.label}</CardTitle>
+                  <p className="text-xs text-muted-foreground/80 old-money-subheading">{stat.description}</p>
                 </div>
-                <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                <div className={`p-3 rounded-xl ${stat.bgColor} border border-border/50`}>
                   <stat.icon className={`h-5 w-5 ${stat.color}`} />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="text-3xl font-bold text-[#1a1a1a]">
+                  <div className="text-3xl font-bold old-money-heading">
                     {stat.total ? `${stat.value}/${stat.total}` : stat.value}
                   </div>
                   {stat.total && (
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                       <Progress 
                         value={stat.total > 0 ? (stat.value / stat.total) * 100 : 0} 
                         className="h-2"
                       />
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground old-money-subheading">
                         {Math.round(stat.total > 0 ? (stat.value / stat.total) * 100 : 0)}% complete
                       </p>
                     </div>
@@ -335,14 +337,14 @@ const DashboardHome = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.7 }}
         >
-          <Card className="border-2 border-gray-100 hover:border-[#FFD700]/30 hover:shadow-xl transition-all duration-500">
+          <Card className="old-money-card border-2 border-border hover:border-accent/30">
             <CardHeader className="pb-4">
               <div className="flex items-center space-x-2">
-                <Zap className="h-6 w-6 text-[#FFD700]" />
-                <CardTitle className="text-xl font-bold">Quick Actions</CardTitle>
+                <Zap className="h-6 w-6 text-accent" />
+                <CardTitle className="text-xl font-bold old-money-heading">Quick Actions</CardTitle>
               </div>
-              <CardDescription className="text-gray-600">
-                Jump into your most important activities
+              <CardDescription className="old-money-subheading">
+                Swift access to your most essential activities
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -354,15 +356,15 @@ const DashboardHome = () => {
                   className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all duration-300 ${action.bgColor}`}
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-white rounded-lg shadow-sm">
+                    <div className="p-2 bg-card rounded-lg soft-shadow">
                       {action.icon}
                     </div>
                     <div>
-                      <span className={`font-semibold ${action.textColor}`}>{action.title}</span>
-                      <p className="text-sm text-gray-600">{action.description}</p>
+                      <span className={`font-semibold ${action.textColor} old-money-subheading`}>{action.title}</span>
+                      <p className="text-sm text-muted-foreground old-money-subheading">{action.description}</p>
                     </div>
                   </div>
-                  <Badge variant="secondary" className="bg-white/80 shadow-sm">
+                  <Badge variant="secondary" className="bg-card/80 soft-shadow border border-border/50">
                     {action.badge}
                   </Badge>
                 </motion.div>
@@ -377,14 +379,14 @@ const DashboardHome = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <Card className="border-2 border-gray-100 hover:border-[#FFD700]/30 hover:shadow-xl transition-all duration-500">
+          <Card className="old-money-card border-2 border-border hover:border-accent/30">
             <CardHeader className="pb-4">
               <div className="flex items-center space-x-2">
-                <TrendingUp className="h-6 w-6 text-[#FFD700]" />
-                <CardTitle className="text-xl font-bold">Recent Activity</CardTitle>
+                <TrendingUp className="h-6 w-6 text-accent" />
+                <CardTitle className="text-xl font-bold old-money-heading">Recent Activity</CardTitle>
               </div>
-              <CardDescription className="text-gray-600">
-                Your latest achievements and updates
+              <CardDescription className="old-money-subheading">
+                Your latest achievements and distinguished progress
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -396,16 +398,16 @@ const DashboardHome = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="flex items-start space-x-3 pb-4 border-b border-gray-100 last:border-0"
+                      className="flex items-start space-x-3 pb-4 border-b border-border last:border-0"
                     >
-                      <div className="w-3 h-3 bg-gradient-to-r from-[#FFD700] to-[#FFC700] rounded-full mt-2 shadow-sm"></div>
+                      <div className="w-3 h-3 bg-gradient-to-r from-accent to-primary rounded-full mt-2 soft-shadow"></div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-[#1a1a1a]">{activity.action}</p>
+                        <p className="font-semibold text-sm old-money-subheading">{activity.action}</p>
                         <div className="flex items-center space-x-2 mt-2">
-                          <Badge variant="outline" className="text-xs border-[#FFD700]/30 text-[#1a1a1a]">
+                          <Badge variant="outline" className="text-xs border-accent/30 text-foreground old-money-subheading">
                             {activity.module}
                           </Badge>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-muted-foreground old-money-subheading">
                             {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true })}
                           </span>
                         </div>
@@ -414,9 +416,9 @@ const DashboardHome = () => {
                   ))
                 ) : (
                   <div className="text-center py-8">
-                    <Activity className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-sm font-medium text-gray-500 mb-1">No recent activity</p>
-                    <p className="text-xs text-gray-400">Start using the platform to see your progress here</p>
+                    <Sparkles className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
+                    <p className="text-sm font-medium text-muted-foreground mb-1 old-money-subheading">Your journey begins now</p>
+                    <p className="text-xs text-muted-foreground/80 old-money-subheading">Start using the platform to see your distinguished progress here</p>
                   </div>
                 )}
               </div>
