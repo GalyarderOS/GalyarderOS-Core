@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
@@ -160,6 +161,55 @@ const DashboardHome = () => {
         </h1>
         <p className="text-gray-600">Here's your productivity overview for today</p>
       </motion.div>
+
+      {/* AI Assistant and Notion AI Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setShowAIAssistant(true)}>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center space-x-2">
+                <MessageCircle className="h-5 w-5 text-blue-600" />
+                <span>AI Assistant</span>
+              </CardTitle>
+              <CardDescription>
+                Get personalized productivity advice and insights
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                Start Conversation
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => setShowNotionAI(true)}>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-orange-600" />
+                <span>Notion AI</span>
+              </CardTitle>
+              <CardDescription>
+                Manage your Notion workspace seamlessly
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                Open Notion
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
