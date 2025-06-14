@@ -114,10 +114,10 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
       
       let errorMessage = 'Maaf, terjadi kesalahan. Silakan coba lagi.';
       
-      if (error.message?.includes('API key')) {
-        errorMessage = 'Silakan tambahkan API key Gemini Anda di Settings untuk menggunakan AI Assistant.';
+      if (error.message?.includes('tidak tersedia')) {
+        errorMessage = 'AI Assistant sedang tidak tersedia. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.';
       } else if (error.message?.includes('tidak valid')) {
-        errorMessage = 'API key Gemini tidak valid. Silakan periksa dan perbarui di Settings.';
+        errorMessage = 'Terjadi masalah dengan API key. Silakan hubungi administrator.';
       } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
         errorMessage = 'Masalah koneksi. Periksa koneksi internet Anda dan coba lagi.';
       }
@@ -251,7 +251,7 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
             
             {connectionError && (
               <p className="text-xs text-red-500 mt-2">
-                ⚠️ Masalah koneksi terdeteksi. Periksa API key Gemini di Settings.
+                ⚠️ Masalah koneksi terdeteksi. Silakan coba lagi atau hubungi administrator.
               </p>
             )}
           </div>

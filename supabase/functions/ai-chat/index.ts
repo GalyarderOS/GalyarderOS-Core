@@ -42,31 +42,30 @@ serve(async (req) => {
 
     console.log('User authenticated:', user.id);
 
-    // Get user's Gemini API key from user_settings
+    // Try to get user's personal Gemini API key first
     const { data: userSettings, error: settingsError } = await supabaseClient
       .from('user_settings')
       .select('gemini_api_key')
       .eq('user_id', user.id)
       .single();
 
-    if (settingsError) {
-      console.error('Settings error:', settingsError);
-      return new Response(
-        JSON.stringify({ 
-          error: 'Gagal mengambil pengaturan pengguna. Pastikan Anda sudah menambahkan API key Gemini di Settings.' 
-        }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+    let geminiApiKey = null;
+
+    // Use user's personal API key if available, otherwise fallback to default
+    if (!settingsError && userSettings?.gemini_api_key) {
+      geminiApiKey = userSettings.gemini_api_key;
+      console.log('Using user personal API key');
+    } else {
+      // Fallback to default API key from environment
+      geminiApiKey = Deno.env.get('DEFAULT_GEMINI_API_KEY');
+      console.log('Using default API key');
     }
 
-    if (!userSettings?.gemini_api_key) {
-      console.error('No Gemini API key found');
+    if (!geminiApiKey) {
+      console.error('No Gemini API key available');
       return new Response(
         JSON.stringify({ 
-          error: 'API key Gemini tidak ditemukan. Silakan tambahkan API key Gemini Anda di Settings.' 
+          error: 'AI Assistant tidak tersedia saat ini. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.' 
         }),
         { 
           status: 400, 
@@ -78,7 +77,7 @@ serve(async (req) => {
     console.log('API key found, calling Gemini API');
 
     // Call Gemini API
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${userSettings.gemini_api_key}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`;
     
     const response = await fetch(geminiUrl, {
       method: 'POST',
@@ -111,7 +110,7 @@ User message: ${message}`
       if (response.status === 400 && errorText.includes('API_KEY_INVALID')) {
         return new Response(
           JSON.stringify({ 
-            error: 'API key Gemini tidak valid. Silakan periksa dan perbarui API key Anda di Settings.' 
+            error: 'API key Gemini tidak valid. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.' 
           }),
           { 
             status: 400, 
@@ -137,7 +136,7 @@ User message: ${message}`
     console.error('Error in ai-chat function:', error);
     return new Response(
       JSON.stringify({ 
-        error: `Terjadi kesalahan: ${error.message}. Silakan coba lagi atau periksa API key Gemini Anda di Settings.` 
+        error: `Terjadi kesalahan: ${error.message}. Silakan coba lagi.` 
       }),
       { 
         status: 500, 
