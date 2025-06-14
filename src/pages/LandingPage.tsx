@@ -21,191 +21,243 @@ import {
   Star,
   Quote,
   ArrowRight,
-  CheckCircle
+  CheckCircle,
+  Rocket,
+  Globe,
+  Layers,
+  TrendingUp,
+  Users,
+  Lightbulb,
+  Heart,
+  DollarSign
 } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
-  const features = [
+  const problems = [
+    "95% of people live on default mode, not by design",
+    "Overwhelmed by complexity and fragmented tools", 
+    "Reactive instead of proactive lifestyle",
+    "No unified system for personal growth"
+  ];
+
+  const solutions = [
     {
-      icon: <Brain className="h-10 w-10 text-[#FFD700]" />,
-      title: "Intelligent Productivity",
-      description: "Advanced AI that learns your patterns and optimizes your workflow for maximum efficiency.",
-      highlight: "Smart Learning"
+      icon: <Brain className="h-8 w-8" />,
+      title: "AI-Powered Intelligence",
+      description: "Personal AI that learns your patterns and optimizes your entire life system",
+      highlight: "Smart Automation"
     },
     {
-      icon: <Shield className="h-10 w-10 text-[#FFD700]" />,
-      title: "Unified Life Management",
-      description: "Seamlessly integrate all aspects of your personal and professional life in one elegant platform.",
-      highlight: "Complete Integration"
+      icon: <Layers className="h-8 w-8" />,
+      title: "Modular Ecosystem",
+      description: "Seamlessly integrate all aspects of life - productivity, health, finance, growth",
+      highlight: "Total Integration"
     },
     {
-      icon: <Zap className="h-10 w-10 text-[#FFD700]" />,
-      title: "Effortless Connections",
-      description: "Connect with your favorite tools and services without disrupting your existing workflow.",
-      highlight: "Seamless Sync"
+      icon: <Target className="h-8 w-8" />,
+      title: "Goal-Driven Architecture",
+      description: "Every feature designed to accelerate your journey to maximum potential",
+      highlight: "Purpose-Built"
     },
     {
-      icon: <Sparkles className="h-10 w-10 text-[#FFD700]" />,
-      title: "Personalized Insights",
-      description: "Receive intelligent recommendations tailored to your unique goals and lifestyle patterns.",
-      highlight: "Custom Analytics"
+      icon: <Zap className="h-8 w-8" />,
+      title: "Adaptive & Responsive",
+      description: "System evolves with you, providing exactly what you need, when you need it",
+      highlight: "Dynamic Growth"
     }
   ];
 
   const modules = [
-    { icon: <BarChart3 className="h-6 w-6" />, name: "Dashboard", description: "Comprehensive overview & insights", color: "bg-blue-50 text-blue-600" },
-    { icon: <User className="h-6 w-6" />, name: "Profile & Ethos", description: "Personal identity & values", color: "bg-purple-50 text-purple-600" },
-    { icon: <Target className="h-6 w-6" />, name: "Vision & Roadmap", description: "Strategic goal alignment", color: "bg-green-50 text-green-600" },
-    { icon: <Settings className="h-6 w-6" />, name: "Strategic Pillars", description: "Core principle frameworks", color: "bg-orange-50 text-orange-600" },
-    { icon: <Calendar className="h-6 w-6" />, name: "Daily Rituals", description: "Habit mastery system", color: "bg-pink-50 text-pink-600" },
-    { icon: <Clock className="h-6 w-6" />, name: "Focus Timer", description: "Deep work optimization", color: "bg-indigo-50 text-indigo-600" },
-    { icon: <BookOpen className="h-6 w-6" />, name: "Memory Vault", description: "Knowledge preservation", color: "bg-teal-50 text-teal-600" },
-    { icon: <Activity className="h-6 w-6" />, name: "Weekly Audit", description: "Progress evaluation", color: "bg-red-50 text-red-600" },
-    { icon: <BarChart3 className="h-6 w-6" />, name: "Activity Log", description: "Detailed performance tracking", color: "bg-yellow-50 text-yellow-600" }
+    { icon: <BarChart3 className="h-6 w-6" />, name: "Life Dashboard", description: "Command center for your existence", gradient: "from-blue-500 to-cyan-500" },
+    { icon: <User className="h-6 w-6" />, name: "Identity Engine", description: "Define and refine your core self", gradient: "from-purple-500 to-pink-500" },
+    { icon: <Target className="h-6 w-6" />, name: "Vision System", description: "Strategic goal manifestation", gradient: "from-green-500 to-emerald-500" },
+    { icon: <Calendar className="h-6 w-6" />, name: "Ritual Optimizer", description: "Habit mastery automation", gradient: "from-orange-500 to-red-500" },
+    { icon: <Clock className="h-6 w-6" />, name: "Focus Accelerator", description: "Deep work amplification", gradient: "from-indigo-500 to-purple-500" },
+    { icon: <BookOpen className="h-6 w-6" />, name: "Knowledge Vault", description: "Infinite memory expansion", gradient: "from-teal-500 to-cyan-500" },
+    { icon: <Activity className="h-6 w-6" />, name: "Performance Analytics", description: "Continuous optimization engine", gradient: "from-rose-500 to-pink-500" },
+    { icon: <Settings className="h-6 w-6" />, name: "System Core", description: "Total personalization control", gradient: "from-gray-500 to-slate-500" }
   ];
 
-  const testimonials = [
+  const roadmapPhases = [
     {
-      name: "Sarah Chen",
-      role: "Product Executive",
-      content: "This platform transformed how I approach personal productivity. The intelligent insights are remarkable.",
-      rating: 5,
-      avatar: "SC"
+      phase: "Phase 1",
+      timeline: "Q3-Q4 2025",
+      title: "Foundation MVP",
+      description: "Life Dashboard with AI workflows & journaling",
+      status: "In Development",
+      color: "text-blue-500",
+      bgColor: "bg-blue-50"
     },
     {
-      name: "Marcus Johnson",
-      role: "Technology Entrepreneur",
-      content: "Finally, a system that evolves with your ambitions. The integration capabilities are revolutionary.",
-      rating: 5,
-      avatar: "MJ"
+      phase: "Phase 2", 
+      timeline: "Q1 2026",
+      title: "Early Access Launch",
+      description: "Founders, students, creators community",
+      status: "Coming Soon",
+      color: "text-purple-500",
+      bgColor: "bg-purple-50"
     },
     {
-      name: "Elena Rodriguez",
-      role: "Creative Director",
-      content: "Stunning interface paired with powerful functionality. It's like having a strategic advisor at your fingertips.",
-      rating: 5,
-      avatar: "ER"
+      phase: "Phase 3",
+      timeline: "Q2-Q3 2026", 
+      title: "AI Personality Engine",
+      description: "Modular plugin ecosystem development",
+      status: "Planned",
+      color: "text-green-500",
+      bgColor: "bg-green-50"
+    },
+    {
+      phase: "Phase 4",
+      timeline: "2027+",
+      title: "Digital Soul Layer",
+      description: "Cross-device, blockchain-secured OS",
+      status: "Vision",
+      color: "text-amber-500",
+      bgColor: "bg-amber-50"
     }
   ];
 
-  const benefits = [
-    "AI-powered productivity optimization",
-    "Comprehensive life management system",
-    "Advanced integration capabilities",
-    "Personalized insights and recommendations",
-    "Elegant, intuitive interface",
-    "Strategic planning framework"
+  const marketOpportunity = [
+    { sector: "Productivity Software", size: "$47B", icon: <BarChart3 className="h-5 w-5" /> },
+    { sector: "Mental Health Tech", size: "$26B", icon: <Heart className="h-5 w-5" /> },
+    { sector: "Self-Development", size: "$13B", icon: <Lightbulb className="h-5 w-5" /> },
+    { sector: "Personal Finance", size: "$1.2T", icon: <DollarSign className="h-5 w-5" /> }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FCFCF9] via-white to-[#FCFCF9]">
+    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] text-white overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-[#FFD700]/5 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/3 rounded-full blur-3xl animate-pulse delay-2000"></div>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <header className="sticky top-0 z-50 bg-black/20 backdrop-blur-2xl border-b border-white/10">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <motion.div 
             className="flex items-center space-x-3"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center shadow-lg">
-              <Sparkles className="h-6 w-6 text-[#1a1a1a]" />
+            <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
+              <Sparkles className="h-7 w-7 text-black" />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-[#1a1a1a] to-[#4a4a4a] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
+            <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
               GalyarderOS
             </span>
           </motion.div>
           
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-[#1a1a1a] transition-all duration-300 font-medium">Features</a>
-            <a href="#modules" className="text-gray-600 hover:text-[#1a1a1a] transition-all duration-300 font-medium">Modules</a>
-            <a href="#testimonials" className="text-gray-600 hover:text-[#1a1a1a] transition-all duration-300 font-medium">Reviews</a>
-          </nav>
-
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
               onClick={() => navigate('/auth')}
-              className="text-gray-600 hover:text-[#1a1a1a] font-medium"
+              className="text-white/80 hover:text-white hover:bg-white/10 font-medium border border-white/20 hover:border-white/40"
             >
-              Sign In
+              Access System
             </Button>
             <Button 
               onClick={() => navigate('/auth')}
-              className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-6"
+              className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] hover:from-[#FF6B35] hover:to-[#FFD700] text-black font-bold shadow-2xl hover:shadow-[#FFD700]/25 transition-all duration-500 px-8"
             >
-              Get Started
+              Begin Evolution
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="py-24 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/5 via-transparent to-[#FFD700]/10"></div>
-        <div className="container mx-auto px-6 text-center relative">
+      <section className="py-32 relative">
+        <div className="container mx-auto px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1 }}
           >
-            <div className="inline-flex items-center space-x-2 bg-white/50 backdrop-blur-sm border border-[#FFD700]/20 rounded-full px-4 py-2 mb-8">
-              <Sparkles className="h-4 w-4 text-[#FFD700]" />
-              <span className="text-sm font-medium text-gray-700">The Future of Personal Operating Systems</span>
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#FFD700]/20 to-[#FF6B35]/20 backdrop-blur-sm border border-[#FFD700]/30 rounded-full px-6 py-3 mb-12">
+              <Globe className="h-5 w-5 text-[#FFD700]" />
+              <span className="text-lg font-semibold text-white/90">The Future of Personal Operating Systems</span>
+              <Rocket className="h-5 w-5 text-[#FF6B35]" />
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-bold text-[#1a1a1a] mb-8 leading-tight" style={{ fontFamily: 'Playfair Display' }}>
-              Architect Your
+            <h1 className="text-6xl lg:text-8xl font-bold mb-8 leading-tight" style={{ fontFamily: 'Playfair Display' }}>
+              Your Personal
               <br />
-              <span className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] bg-clip-text text-transparent">
-                Extraordinary Life
+              <span className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] bg-clip-text text-transparent">
+                Operating System
               </span>
             </h1>
             
-            <p className="text-xl lg:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-              Transform your ambitions into achievements with an intelligent personal operating system 
-              that unifies every aspect of your productivity journey.
+            <p className="text-2xl lg:text-3xl text-white/80 mb-8 max-w-5xl mx-auto leading-relaxed font-light">
+              Imagine having your own AI-powered digital ecosystem that learns who you are, 
+              adapts to your goals, and empowers you to reach your absolute maximum potential.
+            </p>
+
+            <p className="text-xl text-[#FFD700] mb-16 font-semibold">
+              Not just software. An entire revolution in how you live, work, and grow.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] text-lg px-8 py-6 h-auto font-semibold shadow-xl hover:shadow-2xl transition-all duration-300"
+                className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] hover:from-[#FF6B35] hover:to-[#FFD700] text-black text-xl px-12 py-8 h-auto font-bold shadow-2xl hover:shadow-[#FFD700]/50 transition-all duration-500 transform hover:scale-105"
               >
-                Begin Your Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
+                Join the Revolution
+                <Rocket className="ml-3 h-6 w-6" />
               </Button>
               <Button 
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 h-auto border-2 border-gray-200 hover:border-[#FFD700] hover:bg-[#FFD700]/5 transition-all duration-300"
+                className="text-xl px-12 py-8 h-auto border-2 border-white/30 hover:border-[#FFD700] hover:bg-[#FFD700]/10 text-white hover:text-[#FFD700] transition-all duration-500"
               >
-                Watch Demo
+                Experience the Vision
               </Button>
-            </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
-              {benefits.slice(0, 4).map((benefit, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + index * 0.1 }}
-                  className="flex items-center space-x-2"
-                >
-                  <CheckCircle className="h-5 w-5 text-[#FFD700] flex-shrink-0" />
-                  <span className="text-sm text-gray-600 font-medium">{benefit}</span>
-                </motion.div>
-              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-white">
+      {/* Problem Statement */}
+      <section className="py-24 bg-gradient-to-r from-red-900/20 to-orange-900/20 backdrop-blur-sm">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-5xl font-bold mb-8 text-white" style={{ fontFamily: 'Playfair Display' }}>
+              The Reality We're Changing
+            </h2>
+            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
+              Let's be real. Most people are living life on default mode, overwhelmed and reactive.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {problems.map((problem, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+                className="flex items-center space-x-4 p-6 bg-black/30 backdrop-blur-sm rounded-2xl border border-red-500/30"
+              >
+                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                <p className="text-lg text-white/90 font-medium">{problem}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Solution Section */}
+      <section className="py-24">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -213,41 +265,43 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#1a1a1a] mb-6" style={{ fontFamily: 'Playfair Display' }}>
-              Engineered for Excellence
+            <h2 className="text-5xl font-bold mb-8 text-white" style={{ fontFamily: 'Playfair Display' }}>
+              The <span className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent">GalyarderOS</span> Solution
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Discover the sophisticated features that make GalyarderOS the ultimate platform for ambitious individuals.
+            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
+              A personalized, AI-powered life management system that brings together everything you need to thrive.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {features.map((feature, index) => (
+          <div className="grid md:grid-cols-2 gap-12 mb-20">
+            {solutions.map((solution, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.2 }}
                 className="group"
               >
-                <Card className="h-full border-2 border-gray-100 hover:border-[#FFD700]/30 transition-all duration-500 hover:shadow-2xl bg-gradient-to-br from-white to-gray-50/50">
+                <Card className="h-full border-2 border-white/10 hover:border-[#FFD700]/50 transition-all duration-500 hover:shadow-2xl bg-gradient-to-br from-black/40 to-gray-900/40 backdrop-blur-sm">
                   <CardHeader className="pb-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="p-4 bg-gradient-to-br from-[#FFD700]/10 to-[#FFD700]/5 rounded-2xl group-hover:from-[#FFD700]/20 group-hover:to-[#FFD700]/10 transition-all duration-500">
-                        {feature.icon}
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="p-4 bg-gradient-to-br from-[#FFD700]/20 to-[#FF6B35]/20 rounded-2xl group-hover:from-[#FFD700]/30 group-hover:to-[#FF6B35]/30 transition-all duration-500">
+                        <div className="text-[#FFD700]">
+                          {solution.icon}
+                        </div>
                       </div>
-                      <Badge variant="secondary" className="bg-[#FFD700]/10 text-[#1a1a1a] border-0 font-medium">
-                        {feature.highlight}
+                      <Badge className="bg-[#FFD700]/20 text-[#FFD700] border-0 font-bold">
+                        {solution.highlight}
                       </Badge>
                     </div>
-                    <CardTitle className="text-2xl font-bold text-[#1a1a1a] group-hover:text-[#FFD700] transition-colors duration-300">
-                      {feature.title}
+                    <CardTitle className="text-2xl font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
+                      {solution.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-lg text-gray-600 leading-relaxed">
-                      {feature.description}
+                    <CardDescription className="text-lg text-white/80 leading-relaxed">
+                      {solution.description}
                     </CardDescription>
                   </CardContent>
                 </Card>
@@ -257,8 +311,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Modules Section */}
-      <section id="modules" className="py-24 bg-gradient-to-br from-gray-50 to-white">
+      {/* Modules Ecosystem */}
+      <section className="py-24 bg-gradient-to-r from-blue-900/20 to-purple-900/20 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -266,39 +320,38 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#1a1a1a] mb-6" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
               Complete Life Architecture
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Nine sophisticated modules designed to transform every dimension of your personal and professional growth.
+            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
+              Eight interconnected modules designed to optimize every dimension of your existence.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {modules.map((module, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.05 }}
                 className="group cursor-pointer"
               >
-                <Card className="border-2 border-gray-100 hover:border-[#FFD700]/40 transition-all duration-500 hover:shadow-xl bg-white">
-                  <CardHeader className="flex flex-row items-center space-y-0 pb-4">
-                    <div className={`p-3 rounded-xl mr-4 transition-all duration-300 group-hover:scale-110 ${module.color}`}>
-                      {module.icon}
+                <Card className="border-2 border-white/10 hover:border-white/30 transition-all duration-500 hover:shadow-xl bg-black/40 backdrop-blur-sm">
+                  <CardHeader className="text-center">
+                    <div className={`w-16 h-16 bg-gradient-to-r ${module.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <div className="text-white">
+                        {module.icon}
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-lg font-bold text-[#1a1a1a] group-hover:text-[#FFD700] transition-colors duration-300">
-                        {module.name}
-                      </CardTitle>
-                      <CardDescription className="text-gray-600 font-medium">
-                        {module.description}
-                      </CardDescription>
-                    </div>
-                    <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-[#FFD700] group-hover:translate-x-1 transition-all duration-300" />
+                    <CardTitle className="text-lg font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
+                      {module.name}
+                    </CardTitle>
+                    <CardDescription className="text-white/70 font-medium">
+                      {module.description}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
               </motion.div>
@@ -307,8 +360,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 bg-white">
+      {/* Market Opportunity */}
+      <section className="py-24">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -316,45 +369,82 @@ const LandingPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold text-[#1a1a1a] mb-6" style={{ fontFamily: 'Playfair Display' }}>
-              Trusted by Visionaries
+            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
+              Massive Market Opportunity
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join thousands of exceptional individuals who have revolutionized their productivity and achieved extraordinary results.
+            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
+              We're not just entering one market. We're creating an entirely new category.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {marketOpportunity.map((market, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="group"
+                className="text-center p-8 bg-gradient-to-br from-black/40 to-gray-900/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#FFD700]/50 transition-all duration-500"
               >
-                <Card className="h-full border-2 border-gray-100 hover:border-[#FFD700]/30 transition-all duration-500 hover:shadow-xl bg-gradient-to-br from-white to-gray-50/30">
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center space-x-1 mb-4">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 fill-[#FFD700] text-[#FFD700]" />
-                      ))}
+                <div className="w-16 h-16 bg-gradient-to-br from-[#FFD700]/20 to-[#FF6B35]/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <div className="text-[#FFD700]">
+                    {market.icon}
+                  </div>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">{market.sector}</h3>
+                <p className="text-3xl font-bold text-[#FFD700]">{market.size}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap */}
+      <section className="py-24 bg-gradient-to-r from-green-900/20 to-blue-900/20 backdrop-blur-sm">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
+              The Evolution Roadmap
+            </h2>
+            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
+              From MVP to Digital Soul Layer - here's how we're building the future.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {roadmapPhases.map((phase, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <Card className="border-2 border-white/10 hover:border-white/30 transition-all duration-500 bg-black/40 backdrop-blur-sm">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                      <Badge className={`${phase.bgColor} ${phase.color} border-0 font-bold`}>
+                        {phase.phase}
+                      </Badge>
+                      <span className="text-sm text-white/60 font-medium">{phase.timeline}</span>
                     </div>
-                    <Quote className="h-8 w-8 text-[#FFD700] mb-4" />
-                    <CardDescription className="text-lg italic text-gray-700 leading-relaxed">
-                      "{testimonial.content}"
+                    <CardTitle className="text-2xl font-bold text-white mb-2">
+                      {phase.title}
+                    </CardTitle>
+                    <CardDescription className="text-lg text-white/80">
+                      {phase.description}
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-full flex items-center justify-center text-[#1a1a1a] font-bold">
-                        {testimonial.avatar}
-                      </div>
-                      <div>
-                        <div className="font-bold text-[#1a1a1a]">{testimonial.name}</div>
-                        <div className="text-sm text-gray-500 font-medium">{testimonial.role}</div>
-                      </div>
+                  <CardContent>
+                    <div className="flex items-center space-x-2">
+                      <div className={`w-3 h-3 rounded-full ${phase.color === 'text-blue-500' ? 'bg-blue-500' : phase.color === 'text-purple-500' ? 'bg-purple-500' : phase.color === 'text-green-500' ? 'bg-green-500' : 'bg-amber-500'}`}></div>
+                      <span className="text-white/70 font-medium">{phase.status}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -365,32 +455,33 @@ const LandingPage = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-gradient-to-r from-[#1a1a1a] via-[#2a2a2a] to-[#1a1a1a] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/10 via-transparent to-[#FFD700]/5"></div>
-        <div className="container mx-auto px-6 text-center relative">
+      <section className="py-32 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/10 via-[#FF6B35]/10 to-[#FF1744]/10"></div>
+        <div className="container mx-auto px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl lg:text-6xl font-bold mb-8" style={{ fontFamily: 'Playfair Display' }}>
-              Ready to Transform<br />
-              <span className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] bg-clip-text text-transparent">
-                Your Future?
-              </span>
+            <h2 className="text-6xl lg:text-7xl font-bold mb-12 text-white" style={{ fontFamily: 'Playfair Display' }}>
+              Ready to<br />
+              <span className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] bg-clip-text text-transparent">
+                Revolutionize
+              </span><br />
+              Your Existence?
             </h2>
-            <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Join the revolution in personal productivity. Experience the power of intelligent life architecture 
-              and unlock your extraordinary potential.
+            <p className="text-2xl text-white/80 mb-16 max-w-4xl mx-auto leading-relaxed">
+              This isn't just software. This is the foundation for a completely new way of living. 
+              Your personal operating system is waiting.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] text-xl px-10 py-7 h-auto font-bold shadow-2xl hover:shadow-[#FFD700]/25 transition-all duration-300"
+                className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] hover:from-[#FF1744] hover:via-[#FF6B35] hover:to-[#FFD700] text-black text-2xl px-16 py-10 h-auto font-bold shadow-2xl hover:shadow-[#FFD700]/50 transition-all duration-500 transform hover:scale-105"
               >
-                Start Your Transformation
-                <ArrowRight className="ml-3 h-6 w-6" />
+                Begin Your Evolution
+                <Rocket className="ml-4 h-8 w-8" />
               </Button>
             </div>
           </motion.div>
@@ -398,19 +489,19 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 bg-[#1a1a1a] text-white">
+      <footer className="py-16 bg-black/60 backdrop-blur-sm border-t border-white/10">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-3 mb-6 md:mb-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center shadow-lg">
-                <Sparkles className="h-6 w-6 text-[#1a1a1a]" />
+            <div className="flex items-center space-x-4 mb-6 md:mb-0">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
+                <Sparkles className="h-7 w-7 text-black" />
               </div>
-              <span className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
                 GalyarderOS
               </span>
             </div>
-            <div className="text-sm text-gray-400">
-              © 2024 GalyarderOS. Crafted for extraordinary minds.
+            <div className="text-white/60">
+              © 2024 GalyarderOS. Building the future of human potential.
             </div>
           </div>
         </div>
