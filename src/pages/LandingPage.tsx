@@ -14,7 +14,6 @@ import {
   Activity, 
   User, 
   BarChart3,
-  Sparkles,
   Shield,
   Zap,
   ChevronRight,
@@ -144,7 +143,11 @@ const LandingPage = () => {
             animate={{ opacity: 1, x: 0 }}
           >
             <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
-              <Sparkles className="h-7 w-7 text-black" />
+              <img 
+                src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                alt="GalyarderOS Logo" 
+                className="h-8 w-8 object-contain filter brightness-0"
+              />
             </div>
             <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
               GalyarderOS
@@ -494,7 +497,11 @@ const LandingPage = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-4 mb-6 md:mb-0">
               <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
-                <Sparkles className="h-7 w-7 text-black" />
+                <img 
+                  src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                  alt="GalyarderOS Logo" 
+                  className="h-8 w-8 object-contain filter brightness-0"
+                />
               </div>
               <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
                 GalyarderOS
