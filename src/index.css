@@ -8,94 +8,94 @@
 @layer base {
   :root {
     /* Light Theme - Old Money Neutrals */
-    --background: 45 20% 97%;
-    --foreground: 25 15% 25%;
+    --background: 35 15% 96%;
+    --foreground: 25 15% 15%;
 
-    --card: 45 25% 98%;
-    --card-foreground: 25 15% 25%;
+    --card: 35 20% 98%;
+    --card-foreground: 25 15% 15%;
 
-    --popover: 45 25% 98%;
-    --popover-foreground: 25 15% 25%;
+    --popover: 35 20% 98%;
+    --popover-foreground: 25 15% 15%;
 
     /* Old Money Primary - Deep Forest Green */
-    --primary: 150 25% 20%;
-    --primary-foreground: 45 20% 97%;
+    --primary: 150 20% 25%;
+    --primary-foreground: 35 15% 96%;
 
     /* Sophisticated Secondary - Warm Cream */
-    --secondary: 45 30% 92%;
-    --secondary-foreground: 150 25% 20%;
+    --secondary: 35 25% 90%;
+    --secondary-foreground: 150 20% 25%;
 
-    --muted: 45 25% 94%;
-    --muted-foreground: 25 10% 55%;
+    --muted: 35 20% 92%;
+    --muted-foreground: 25 10% 45%;
 
     /* Old Money Accent - Warm Gold */
-    --accent: 42 65% 75%;
-    --accent-foreground: 150 25% 20%;
+    --accent: 40 60% 70%;
+    --accent-foreground: 150 20% 25%;
 
-    --destructive: 0 50% 60%;
-    --destructive-foreground: 45 20% 97%;
+    --destructive: 0 50% 55%;
+    --destructive-foreground: 35 15% 96%;
 
     /* Soft Borders */
-    --border: 45 20% 88%;
-    --input: 45 20% 90%;
-    --ring: 42 65% 75%;
+    --border: 35 15% 85%;
+    --input: 35 15% 88%;
+    --ring: 40 60% 70%;
 
-    --radius: 0.875rem;
+    --radius: 0.75rem;
 
     /* Old Money Sidebar */
-    --sidebar-background: 150 25% 20%;
-    --sidebar-foreground: 45 20% 97%;
-    --sidebar-primary: 42 65% 75%;
-    --sidebar-primary-foreground: 150 25% 20%;
-    --sidebar-accent: 150 20% 25%;
-    --sidebar-accent-foreground: 45 20% 97%;
-    --sidebar-border: 150 15% 30%;
-    --sidebar-ring: 42 65% 75%;
+    --sidebar-background: 35 15% 96%;
+    --sidebar-foreground: 25 15% 15%;
+    --sidebar-primary: 40 60% 70%;
+    --sidebar-primary-foreground: 150 20% 25%;
+    --sidebar-accent: 35 20% 92%;
+    --sidebar-accent-foreground: 25 15% 15%;
+    --sidebar-border: 35 15% 85%;
+    --sidebar-ring: 40 60% 70%;
   }
 
   .dark {
     /* Dark Theme - Old Money Dark Palette */
-    --background: 25 20% 8%;
-    --foreground: 45 25% 85%;
+    --background: 25 15% 8%;
+    --foreground: 35 20% 90%;
 
-    --card: 25 25% 10%;
-    --card-foreground: 45 25% 85%;
+    --card: 25 15% 10%;
+    --card-foreground: 35 20% 90%;
 
-    --popover: 25 25% 10%;
-    --popover-foreground: 45 25% 85%;
+    --popover: 25 15% 10%;
+    --popover-foreground: 35 20% 90%;
 
     /* Dark Primary - Warm Gold */
-    --primary: 42 65% 75%;
-    --primary-foreground: 25 20% 8%;
+    --primary: 40 60% 70%;
+    --primary-foreground: 25 15% 8%;
 
     /* Dark Secondary - Deep Charcoal */
-    --secondary: 25 15% 15%;
-    --secondary-foreground: 45 25% 85%;
+    --secondary: 25 12% 12%;
+    --secondary-foreground: 35 20% 90%;
 
-    --muted: 25 15% 15%;
-    --muted-foreground: 45 15% 65%;
+    --muted: 25 12% 15%;
+    --muted-foreground: 35 15% 60%;
 
     /* Dark Accent - Warm Gold */
-    --accent: 42 65% 75%;
-    --accent-foreground: 25 20% 8%;
+    --accent: 40 60% 70%;
+    --accent-foreground: 25 15% 8%;
 
-    --destructive: 0 45% 50%;
-    --destructive-foreground: 45 25% 85%;
+    --destructive: 0 45% 55%;
+    --destructive-foreground: 35 20% 90%;
 
     /* Dark Borders */
-    --border: 25 15% 18%;
-    --input: 25 15% 18%;
-    --ring: 42 65% 75%;
+    --border: 25 10% 20%;
+    --input: 25 10% 20%;
+    --ring: 40 60% 70%;
 
     /* Old Money Dark Sidebar */
-    --sidebar-background: 25 20% 8%;
-    --sidebar-foreground: 45 25% 85%;
-    --sidebar-primary: 42 65% 75%;
-    --sidebar-primary-foreground: 25 20% 8%;
-    --sidebar-accent: 25 15% 15%;
-    --sidebar-accent-foreground: 45 25% 85%;
-    --sidebar-border: 25 15% 18%;
-    --sidebar-ring: 42 65% 75%;
+    --sidebar-background: 25 15% 8%;
+    --sidebar-foreground: 35 20% 90%;
+    --sidebar-primary: 40 60% 70%;
+    --sidebar-primary-foreground: 25 15% 8%;
+    --sidebar-accent: 25 12% 15%;
+    --sidebar-accent-foreground: 35 20% 90%;
+    --sidebar-border: 25 10% 20%;
+    --sidebar-ring: 40 60% 70%;
   }
 }
 
@@ -104,15 +104,20 @@
     @apply border-border;
   }
 
+  html {
+    @apply bg-background text-foreground;
+  }
+
   body {
     @apply bg-background text-foreground font-serif antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: 'Georgia', 'Times New Roman', serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Old Money Typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-medium tracking-wide;
+    @apply font-serif font-medium tracking-wide text-foreground;
     font-family: 'Georgia', 'Times New Roman', serif;
   }
 
@@ -126,20 +131,38 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/15 rounded-full;
+    @apply bg-muted-foreground/20 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/25;
+    @apply bg-muted-foreground/30;
+  }
+
+  /* Dark theme specific scrollbar */
+  .dark ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
   }
 
   /* Soft Glass Effects */
   .glass {
-    @apply backdrop-blur-sm bg-background/85 border border-border/40;
+    @apply backdrop-blur-sm bg-background/90 border border-border/50;
   }
 
   .glass-card {
-    @apply backdrop-blur-sm bg-card/95 border border-border/25 shadow-sm;
+    @apply backdrop-blur-sm bg-card/95 border border-border/30 shadow-sm;
+  }
+
+  /* Dark theme specific glass effects */
+  .dark .glass {
+    @apply bg-background/85 border-border/40;
+  }
+
+  .dark .glass-card {
+    @apply bg-card/90 border-border/25;
   }
 
   /* Old Money Gradients */
@@ -156,22 +179,31 @@
 
   /* Soft Shadows */
   .soft-shadow {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 
   .soft-shadow-lg {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Dark theme specific shadows */
+  .dark .soft-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+
+  .dark .soft-shadow-lg {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.5);
   }
 }
 
 /* Old Money Component Overrides */
 @layer components {
   .old-money-button {
-    @apply relative overflow-hidden transition-all duration-500 ease-out soft-shadow;
+    @apply relative overflow-hidden transition-all duration-300 ease-out soft-shadow bg-background text-foreground;
   }
 
   .old-money-button::before {
-    @apply absolute inset-0 bg-gradient-to-r from-accent/10 to-primary/10 opacity-0 transition-opacity duration-500;
+    @apply absolute inset-0 bg-gradient-to-r from-accent/10 to-primary/10 opacity-0 transition-opacity duration-300;
     content: '';
   }
 
@@ -184,11 +216,11 @@
   }
 
   .old-money-card {
-    @apply relative overflow-hidden transition-all duration-500 soft-shadow;
+    @apply relative overflow-hidden transition-all duration-300 soft-shadow bg-card text-card-foreground;
   }
 
   .old-money-card::before {
-    @apply absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-700;
+    @apply absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-500;
     content: '';
   }
 
@@ -209,5 +241,14 @@
   .old-money-subheading {
     @apply font-serif font-normal tracking-wide text-muted-foreground;
     font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  /* Form elements dark theme fixes */
+  .dark input, .dark textarea, .dark select {
+    @apply bg-muted/30 border-border text-foreground;
+  }
+
+  .dark input:focus, .dark textarea:focus, .dark select:focus {
+    @apply border-accent/50 ring-accent/25;
   }
 }
