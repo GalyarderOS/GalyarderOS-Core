@@ -76,8 +76,8 @@ serve(async (req) => {
 
     console.log('API key found, calling Gemini API');
 
-    // Call Gemini API
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${geminiApiKey}`;
+    // Call Gemini API with correct model name
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
     
     const response = await fetch(geminiUrl, {
       method: 'POST',
