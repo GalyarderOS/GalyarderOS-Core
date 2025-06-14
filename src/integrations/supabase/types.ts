@@ -36,6 +36,190 @@ export type Database = {
         }
         Relationships: []
       }
+      cashflow_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          name: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      cashflow_transactions: {
+        Row: {
+          amount: number
+          category_id: string | null
+          created_at: string
+          description: string
+          id: string
+          transaction_date: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          transaction_date: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          transaction_date?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashflow_transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "cashflow_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          debt_id: string | null
+          id: string
+          notes: string | null
+          payment_date: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          debt_id?: string | null
+          id?: string
+          notes?: string | null
+          payment_date: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          debt_id?: string | null
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_payments_debt_id_fkey"
+            columns: ["debt_id"]
+            isOneToOne: false
+            referencedRelation: "debts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debts: {
+        Row: {
+          created_at: string
+          debt_type: string
+          due_date: string | null
+          id: string
+          interest_rate: number | null
+          minimum_payment: number | null
+          name: string
+          remaining_amount: number
+          total_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          debt_type: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          minimum_payment?: number | null
+          name: string
+          remaining_amount: number
+          total_amount: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          debt_type?: string
+          due_date?: string | null
+          id?: string
+          interest_rate?: number | null
+          minimum_payment?: number | null
+          name?: string
+          remaining_amount?: number
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          description: string
+          expense_date: string
+          id: string
+          is_recurring: boolean | null
+          recurring_frequency: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string
+          description: string
+          expense_date: string
+          id?: string
+          is_recurring?: boolean | null
+          recurring_frequency?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          description?: string
+          expense_date?: string
+          id?: string
+          is_recurring?: boolean | null
+          recurring_frequency?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       focus_sessions: {
         Row: {
           completed_at: string | null
@@ -164,6 +348,86 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_portfolios: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          total_value: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          total_value?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          total_value?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      investments: {
+        Row: {
+          created_at: string
+          current_price: number | null
+          id: string
+          name: string
+          portfolio_id: string | null
+          purchase_date: string
+          purchase_price: number
+          shares: number
+          symbol: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          name: string
+          portfolio_id?: string | null
+          purchase_date: string
+          purchase_price: number
+          shares: number
+          symbol: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_price?: number | null
+          id?: string
+          name?: string
+          portfolio_id?: string | null
+          purchase_date?: string
+          purchase_price?: number
+          shares?: number
+          symbol?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investments_portfolio_id_fkey"
+            columns: ["portfolio_id"]
+            isOneToOne: false
+            referencedRelation: "investment_portfolios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       memories: {
         Row: {
           content: string | null
@@ -253,6 +517,45 @@ export type Database = {
           notion_token?: string | null
           theme?: string | null
           updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wealth_goals: {
+        Row: {
+          created_at: string
+          current_amount: number | null
+          description: string | null
+          id: string
+          status: string | null
+          target_amount: number
+          target_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          target_amount: number
+          target_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          target_amount?: number
+          target_date?: string | null
+          title?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []

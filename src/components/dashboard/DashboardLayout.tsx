@@ -17,7 +17,13 @@ import {
   BookOpen, 
   Settings,
   Sun,
-  Moon
+  Moon,
+  TrendingUp,
+  DollarSign,
+  PiggyBank,
+  CreditCard,
+  Calculator,
+  Briefcase
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -34,7 +40,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const translations = {
     en: {
       dashboard: 'Dashboard',
-      dashboardDesc: 'Overview & insights',
+      dashboardDesc: 'Wealth overview & insights',
       profile: 'Profile & Ethos',
       profileDesc: 'Personal identity',
       vision: 'Vision & Roadmap',
@@ -45,15 +51,29 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       focusDesc: 'Deep work',
       memory: 'Memory Vault',
       memoryDesc: 'Knowledge base',
+      investments: 'Investment Tracker',
+      investmentsDesc: 'Portfolio management',
+      cashflow: 'Cashflow Tracker',
+      cashflowDesc: 'Income & expense tracking',
+      expenses: 'Expense Manager',
+      expensesDesc: 'Spending optimization',
+      wealth: 'Wealth Builder',
+      wealthDesc: 'Financial goal setting',
+      tax: 'Tax Optimizer',
+      taxDesc: 'Tax strategy planning',
+      debt: 'Debt Manager',
+      debtDesc: 'Debt elimination',
       settings: 'Settings',
       settingsDesc: 'Preferences',
       signOut: 'Sign Out',
       systemOnline: 'System Online',
-      welcomeBack: 'Welcome back'
+      welcomeBack: 'Welcome back',
+      personalModules: 'Personal Development',
+      financeModules: 'Wealth Management'
     },
     id: {
       dashboard: 'Dasbor',
-      dashboardDesc: 'Ringkasan & wawasan',
+      dashboardDesc: 'Ringkasan kekayaan & wawasan',
       profile: 'Profil & Etos',
       profileDesc: 'Identitas personal',
       vision: 'Visi & Roadmap',
@@ -64,25 +84,49 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       focusDesc: 'Kerja mendalam',
       memory: 'Brankas Memori',
       memoryDesc: 'Basis pengetahuan',
+      investments: 'Pelacak Investasi',
+      investmentsDesc: 'Manajemen portofolio',
+      cashflow: 'Pelacak Arus Kas',
+      cashflowDesc: 'Pelacakan pendapatan & pengeluaran',
+      expenses: 'Manajer Pengeluaran',
+      expensesDesc: 'Optimisasi pengeluaran',
+      wealth: 'Pembangun Kekayaan',
+      wealthDesc: 'Penetapan tujuan keuangan',
+      tax: 'Optimisasi Pajak',
+      taxDesc: 'Perencanaan strategi pajak',
+      debt: 'Manajer Utang',
+      debtDesc: 'Eliminasi utang',
       settings: 'Pengaturan',
       settingsDesc: 'Preferensi',
       signOut: 'Keluar',
       systemOnline: 'Sistem Online',
-      welcomeBack: 'Selamat datang kembali'
+      welcomeBack: 'Selamat datang kembali',
+      personalModules: 'Pengembangan Personal',
+      financeModules: 'Manajemen Kekayaan'
     }
   };
 
   const t = translations[language];
 
-  const menuItems = [
+  const personalMenuItems = [
     { icon: <BarChart3 className="h-5 w-5" />, label: t.dashboard, path: '/dashboard', description: t.dashboardDesc },
     { icon: <User className="h-5 w-5" />, label: t.profile, path: '/dashboard/profile', description: t.profileDesc },
     { icon: <Target className="h-5 w-5" />, label: t.vision, path: '/dashboard/vision', description: t.visionDesc },
     { icon: <Calendar className="h-5 w-5" />, label: t.habits, path: '/dashboard/habits', description: t.habitsDesc },
     { icon: <Clock className="h-5 w-5" />, label: t.focus, path: '/dashboard/focus', description: t.focusDesc },
     { icon: <BookOpen className="h-5 w-5" />, label: t.memory, path: '/dashboard/memory', description: t.memoryDesc },
-    { icon: <Settings className="h-5 w-5" />, label: t.settings, path: '/dashboard/settings', description: t.settingsDesc },
   ];
+
+  const financeMenuItems = [
+    { icon: <TrendingUp className="h-5 w-5" />, label: t.investments, path: '/dashboard/investments', description: t.investmentsDesc },
+    { icon: <DollarSign className="h-5 w-5" />, label: t.cashflow, path: '/dashboard/cashflow', description: t.cashflowDesc },
+    { icon: <BarChart3 className="h-5 w-5" />, label: t.expenses, path: '/dashboard/expenses', description: t.expensesDesc },
+    { icon: <Target className="h-5 w-5" />, label: t.wealth, path: '/dashboard/wealth', description: t.wealthDesc },
+    { icon: <Calculator className="h-5 w-5" />, label: t.tax, path: '/dashboard/tax', description: t.taxDesc },
+    { icon: <CreditCard className="h-5 w-5" />, label: t.debt, path: '/dashboard/debt', description: t.debtDesc },
+  ];
+
+  const settingsItem = { icon: <Settings className="h-5 w-5" />, label: t.settings, path: '/dashboard/settings', description: t.settingsDesc };
 
   const handleSignOut = async () => {
     await signOut();
@@ -91,6 +135,18 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const getCurrentPageTitle = () => {
+    const allItems = [...personalMenuItems, ...financeMenuItems, settingsItem];
+    const currentItem = allItems.find(item => item.path === location.pathname);
+    return currentItem?.label || t.dashboard;
+  };
+
+  const getCurrentPageDescription = () => {
+    const allItems = [...personalMenuItems, ...financeMenuItems, settingsItem];
+    const currentItem = allItems.find(item => item.path === location.pathname);
+    return currentItem?.description || t.welcomeBack;
   };
 
   return (
@@ -128,29 +184,141 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
-          {menuItems.map((item, index) => (
+        <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+          {/* Personal Development Section */}
+          {sidebarOpen && (
+            <div className="px-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-playfair mb-3">
+                {t.personalModules}
+              </h3>
+            </div>
+          )}
+          
+          <div className="space-y-2">
+            {personalMenuItems.map((item, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  variant={location.pathname === item.path ? "default" : "ghost"}
+                  className={`w-full justify-start h-14 relative group overflow-hidden font-playfair ${
+                    location.pathname === item.path 
+                      ? 'bg-muted hover:bg-muted/80 text-foreground soft-shadow' 
+                      : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
+                  }`}
+                  onClick={() => navigate(item.path)}
+                >
+                  <div className="flex items-center w-full">
+                    <div className={`p-2 rounded-lg mr-3 transition-all duration-300 ${
+                      location.pathname === item.path 
+                        ? 'bg-background/50' 
+                        : 'bg-muted group-hover:bg-muted/80'
+                    }`}>
+                      {item.icon}
+                    </div>
+                    {sidebarOpen && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="flex flex-col items-start flex-1"
+                      >
+                        <span className="font-semibold text-sm">{item.label}</span>
+                        <span className={`text-xs ${
+                          location.pathname === item.path 
+                            ? 'text-foreground/70' 
+                            : 'text-muted-foreground'
+                        }`}>
+                          {item.description}
+                        </span>
+                      </motion.div>
+                    )}
+                  </div>
+                </Button>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Finance Management Section */}
+          {sidebarOpen && (
+            <div className="px-2 pt-4">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-playfair mb-3">
+                {t.financeModules}
+              </h3>
+            </div>
+          )}
+          
+          <div className="space-y-2">
+            {financeMenuItems.map((item, index) => (
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  variant={location.pathname === item.path ? "default" : "ghost"}
+                  className={`w-full justify-start h-14 relative group overflow-hidden font-playfair ${
+                    location.pathname === item.path 
+                      ? 'bg-muted hover:bg-muted/80 text-foreground soft-shadow' 
+                      : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
+                  }`}
+                  onClick={() => navigate(item.path)}
+                >
+                  <div className="flex items-center w-full">
+                    <div className={`p-2 rounded-lg mr-3 transition-all duration-300 ${
+                      location.pathname === item.path 
+                        ? 'bg-background/50' 
+                        : 'bg-muted group-hover:bg-muted/80'
+                    }`}>
+                      {item.icon}
+                    </div>
+                    {sidebarOpen && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="flex flex-col items-start flex-1"
+                      >
+                        <span className="font-semibold text-sm">{item.label}</span>
+                        <span className={`text-xs ${
+                          location.pathname === item.path 
+                            ? 'text-foreground/70' 
+                            : 'text-muted-foreground'
+                        }`}>
+                          {item.description}
+                        </span>
+                      </motion.div>
+                    )}
+                  </div>
+                </Button>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Settings */}
+          <div className="pt-4 border-t border-border">
             <motion.div
-              key={index}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <Button
-                variant={location.pathname === item.path ? "default" : "ghost"}
+                variant={location.pathname === settingsItem.path ? "default" : "ghost"}
                 className={`w-full justify-start h-14 relative group overflow-hidden font-playfair ${
-                  location.pathname === item.path 
+                  location.pathname === settingsItem.path 
                     ? 'bg-muted hover:bg-muted/80 text-foreground soft-shadow' 
                     : 'hover:bg-muted/50 text-muted-foreground hover:text-foreground'
                 }`}
-                onClick={() => navigate(item.path)}
+                onClick={() => navigate(settingsItem.path)}
               >
                 <div className="flex items-center w-full">
                   <div className={`p-2 rounded-lg mr-3 transition-all duration-300 ${
-                    location.pathname === item.path 
+                    location.pathname === settingsItem.path 
                       ? 'bg-background/50' 
                       : 'bg-muted group-hover:bg-muted/80'
                   }`}>
-                    {item.icon}
+                    {settingsItem.icon}
                   </div>
                   {sidebarOpen && (
                     <motion.div
@@ -159,20 +327,20 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                       transition={{ delay: 0.1 }}
                       className="flex flex-col items-start flex-1"
                     >
-                      <span className="font-semibold text-sm">{item.label}</span>
+                      <span className="font-semibold text-sm">{settingsItem.label}</span>
                       <span className={`text-xs ${
-                        location.pathname === item.path 
+                        location.pathname === settingsItem.path 
                           ? 'text-foreground/70' 
                           : 'text-muted-foreground'
                       }`}>
-                        {item.description}
+                        {settingsItem.description}
                       </span>
                     </motion.div>
                   )}
                 </div>
               </Button>
             </motion.div>
-          ))}
+          </div>
         </nav>
 
         {/* User Section */}
@@ -243,10 +411,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               className="hidden sm:block"
             >
               <h1 className="text-lg font-semibold text-foreground font-playfair">
-                {menuItems.find(item => item.path === location.pathname)?.label || t.dashboard}
+                {getCurrentPageTitle()}
               </h1>
               <p className="text-sm text-muted-foreground font-playfair">
-                {menuItems.find(item => item.path === location.pathname)?.description || t.welcomeBack}
+                {getCurrentPageDescription()}
               </p>
             </motion.div>
           </div>
