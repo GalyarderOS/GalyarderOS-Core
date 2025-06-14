@@ -194,28 +194,28 @@ const LandingPage = () => {
   }, [modules.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FCFCF9] via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/60 dark:border-gray-700/60">
+      <nav className="fixed top-0 w-full z-50 glass border-b">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center shadow-lg">
                 <img 
                   src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-xl font-bold text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-xl font-bold premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
                 GalyarderOS
               </span>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.features}</a>
-              <a href="#about" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.about}</a>
-              <a href="#contact" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.contact}</a>
+              <a href="#features" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.features}</a>
+              <a href="#about" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.about}</a>
+              <a href="#contact" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.contact}</a>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -224,7 +224,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#FFD700] hover:bg-[#FFD700]/10"
+                className="premium-button text-muted-foreground hover:text-accent hover:bg-accent/10"
               >
                 {theme === 'light' ? <Palette className="h-4 w-4" /> : <Palette className="h-4 w-4" />}
                 <span className="ml-2 hidden sm:inline">{theme === 'light' ? t.darkMode : t.lightMode}</span>
@@ -235,7 +235,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
-                className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#FFD700] hover:bg-[#FFD700]/10"
+                className="premium-button text-muted-foreground hover:text-accent hover:bg-accent/10"
               >
                 <Languages className="h-4 w-4" />
                 <span className="ml-2 hidden sm:inline">{language === 'en' ? t.indonesian : t.english}</span>
@@ -244,13 +244,13 @@ const LandingPage = () => {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/auth')}
-                className="border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#1a1a1a] dark:border-[#FFD700] dark:text-[#FFD700]"
+                className="premium-button border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground"
               >
                 {t.login}
               </Button>
               <Button 
                 onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a]"
+                className="premium-button premium-gradient hover:shadow-lg text-accent-foreground"
               >
                 {t.getStarted}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -268,20 +268,20 @@ const LandingPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge className="mb-6 bg-gradient-to-r from-[#FFD700]/20 to-[#FFC700]/20 text-[#1a1a1a] dark:text-[#FFD700] border-[#FFD700]/30">
+            <Badge className="mb-6 bg-accent/10 text-accent border-accent/20 backdrop-blur-sm">
               {t.visionTitle}
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               {t.heroTitle}
             </h1>
-            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
               {t.heroSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] px-8 py-6 text-lg"
+                className="premium-button premium-gradient hover:shadow-lg text-accent-foreground px-8 py-6 text-lg"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -289,7 +289,7 @@ const LandingPage = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#1a1a1a] px-8 py-6 text-lg dark:border-[#FFD700] dark:text-[#FFD700]"
+                className="premium-button border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground px-8 py-6 text-lg"
               >
                 {t.ctaSecondary}
               </Button>
@@ -299,7 +299,7 @@ const LandingPage = () => {
       </section>
 
       {/* Problem Section */}
-      <section className="py-20 px-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+      <section className="py-20 px-6 glass-card">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -307,10 +307,10 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               {t.problemTitle}
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               {t.problemSubtitle}
             </p>
           </motion.div>
@@ -323,12 +323,12 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200 dark:border-red-800">
+                <Card className="premium-card glass-card h-full border-destructive/20">
                   <CardContent className="p-6 text-center">
-                    <div className="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-red-600 dark:text-red-400 text-xl">⚠️</span>
+                    <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-destructive text-xl">⚠️</span>
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300">{problem}</p>
+                    <p className="text-foreground/80">{problem}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -346,17 +346,17 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               {t.solutionTitle}
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
               {t.solutionSubtitle}
             </p>
           </motion.div>
 
           {/* Modules Showcase */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold mb-8 text-center text-[#1a1a1a] dark:text-white">{t.modulesTitle}</h3>
+            <h3 className="text-2xl font-bold mb-8 text-center text-foreground">{t.modulesTitle}</h3>
             <div className="grid md:grid-cols-5 gap-6">
               {modules.map((module, index) => (
                 <motion.div
@@ -366,21 +366,21 @@ const LandingPage = () => {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className={`relative ${currentModule === index ? 'scale-105' : ''}`}
                 >
-                  <Card className={`h-full transition-all duration-300 ${
+                  <Card className={`premium-card h-full transition-all duration-300 ${
                     currentModule === index 
-                      ? 'bg-gradient-to-br from-[#FFD700]/20 to-[#FFC700]/20 border-[#FFD700] shadow-lg' 
-                      : 'bg-white/80 dark:bg-gray-800/80 hover:shadow-md'
-                  } backdrop-blur-sm`}>
+                      ? 'glass-card border-accent shadow-accent/25 shadow-lg' 
+                      : 'glass-card hover:shadow-md'
+                  }`}>
                     <CardContent className="p-6 text-center">
                       <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
                         currentModule === index 
-                          ? 'bg-[#FFD700] text-[#1a1a1a]' 
-                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                          ? 'premium-gradient text-accent-foreground' 
+                          : 'bg-muted text-muted-foreground'
                       }`}>
                         {module.icon}
                       </div>
-                      <h4 className="font-semibold mb-2 text-[#1a1a1a] dark:text-white">{module.name}</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">{module.desc}</p>
+                      <h4 className="font-semibold mb-2 text-foreground">{module.name}</h4>
+                      <p className="text-sm text-muted-foreground">{module.desc}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -391,17 +391,17 @@ const LandingPage = () => {
       </section>
 
       {/* Market Potential */}
-      <section className="py-20 px-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+      <section className="py-20 px-6 glass-card">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               {t.marketTitle}
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-12">{t.marketSubtitle}</p>
+            <p className="text-xl text-muted-foreground mb-12">{t.marketSubtitle}</p>
             
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -415,13 +415,13 @@ const LandingPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                  <Card className="premium-card glass-card">
                     <CardContent className="p-8 text-center">
-                      <div className="w-16 h-16 bg-[#FFD700]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <div className="text-[#FFD700]">{market.icon}</div>
+                      <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="text-accent">{market.icon}</div>
                       </div>
-                      <h3 className="text-2xl font-bold mb-2 text-[#1a1a1a] dark:text-white">{market.amount}</h3>
-                      <p className="text-gray-600 dark:text-gray-300">{market.name}</p>
+                      <h3 className="text-2xl font-bold mb-2 text-foreground">{market.amount}</h3>
+                      <p className="text-muted-foreground">{market.name}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -440,7 +440,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               {t.roadmapTitle}
             </h2>
           </motion.div>
@@ -458,15 +458,15 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <Card className="premium-card glass-card h-full">
                   <CardContent className="p-6">
                     <div className="flex items-center mb-4">
-                      <div className="w-8 h-8 bg-[#FFD700] text-[#1a1a1a] rounded-full flex items-center justify-center font-bold mr-3">
+                      <div className="w-8 h-8 premium-gradient text-accent-foreground rounded-full flex items-center justify-center font-bold mr-3">
                         {index + 1}
                       </div>
-                      <h3 className="font-bold text-[#1a1a1a] dark:text-white">{item.phase}</h3>
+                      <h3 className="font-bold text-foreground">{item.phase}</h3>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
+                    <p className="text-muted-foreground">{item.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -476,23 +476,23 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-[#FFD700]/10 to-[#FFC700]/10 dark:from-[#FFD700]/5 dark:to-[#FFC700]/5">
+      <section className="py-20 px-6 glass-card">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
               Ready to Transform Your Life?
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+            <p className="text-xl text-muted-foreground mb-8">
               {t.closing}
             </p>
             <Button 
               size="lg"
               onClick={() => navigate('/auth')}
-              className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] px-12 py-6 text-xl"
+              className="premium-button premium-gradient hover:shadow-lg text-accent-foreground px-12 py-6 text-xl"
             >
               {t.ctaPrimary}
               <ArrowRight className="ml-2 h-6 w-6" />
@@ -502,25 +502,25 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 bg-[#1a1a1a] dark:bg-gray-900">
+      <footer className="py-12 px-6 bg-primary">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-xl font-bold text-white" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-xl font-bold text-primary-foreground" style={{ fontFamily: 'Playfair Display' }}>
                 GalyarderOS
               </span>
             </div>
             
             <div className="text-center md:text-right">
-              <p className="text-gray-400 mb-2">{t.allRights}</p>
-              <p className="text-[#FFD700]">{t.built}</p>
+              <p className="text-primary-foreground/60 mb-2">{t.allRights}</p>
+              <p className="text-accent">{t.built}</p>
             </div>
           </div>
         </div>
