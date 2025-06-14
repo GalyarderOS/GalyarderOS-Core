@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -194,28 +193,28 @@ const LandingPage = () => {
   }, [modules.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 glass border-b backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 old-money-gradient rounded-xl flex items-center justify-center soft-shadow">
+              <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center soft-shadow">
                 <img 
-                  src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                  src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-xl font-serif font-medium old-money-text-gradient">
+              <span className="text-xl font-serif font-medium text-foreground">
                 GalyarderOS
               </span>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.features}</a>
-              <a href="#about" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.about}</a>
-              <a href="#contact" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.contact}</a>
+              <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.features}</a>
+              <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.about}</a>
+              <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.contact}</a>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -224,7 +223,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="old-money-button text-muted-foreground hover:text-accent hover:bg-accent/5 font-serif"
+                className="text-muted-foreground hover:text-foreground hover:bg-muted font-serif"
               >
                 {theme === 'light' ? <Palette className="h-4 w-4" /> : <Palette className="h-4 w-4" />}
                 <span className="ml-2 hidden sm:inline">{theme === 'light' ? t.darkMode : t.lightMode}</span>
@@ -235,7 +234,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
-                className="old-money-button text-muted-foreground hover:text-accent hover:bg-accent/5 font-serif"
+                className="text-muted-foreground hover:text-foreground hover:bg-muted font-serif"
               >
                 <Languages className="h-4 w-4" />
                 <span className="ml-2 hidden sm:inline">{language === 'en' ? t.indonesian : t.english}</span>
@@ -244,13 +243,13 @@ const LandingPage = () => {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/auth')}
-                className="old-money-button border-accent/30 text-accent hover:bg-accent/10 hover:text-accent font-serif"
+                className="border-border hover:bg-muted hover:text-foreground font-serif"
               >
                 {t.login}
               </Button>
               <Button 
                 onClick={() => navigate('/auth')}
-                className="old-money-button old-money-gradient hover:shadow-md text-primary-foreground font-serif"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-serif"
               >
                 {t.getStarted}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -271,7 +270,7 @@ const LandingPage = () => {
             <Badge className="mb-6 bg-accent/15 text-accent border-accent/25 backdrop-blur-sm font-serif">
               {t.visionTitle}
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h1 className="text-5xl md:text-7xl font-serif font-medium mb-6 text-foreground">
               {t.heroTitle}
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed font-serif">
@@ -281,7 +280,7 @@ const LandingPage = () => {
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="old-money-button old-money-gradient hover:shadow-lg text-primary-foreground px-8 py-6 text-lg font-serif"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg font-serif"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -289,7 +288,7 @@ const LandingPage = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="old-money-button border-accent/30 text-accent hover:bg-accent/10 hover:text-accent px-8 py-6 text-lg font-serif"
+                className="border-border hover:bg-muted hover:text-foreground px-8 py-6 text-lg font-serif"
               >
                 {t.ctaSecondary}
               </Button>
@@ -307,7 +306,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-foreground">
               {t.problemTitle}
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-serif">
@@ -346,7 +345,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-foreground">
               {t.solutionTitle}
             </h2>
             <p className="text-xl text-muted-foreground max-w-4xl mx-auto font-serif">
@@ -398,7 +397,7 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-foreground">
               {t.marketTitle}
             </h2>
             <p className="text-xl text-muted-foreground mb-12 font-serif">{t.marketSubtitle}</p>
@@ -440,7 +439,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-foreground">
               {t.roadmapTitle}
             </h2>
           </motion.div>
@@ -483,7 +482,7 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 text-foreground">
               Ready to Transform Your Life?
             </h2>
             <p className="text-xl text-muted-foreground mb-8 font-serif">
@@ -492,7 +491,7 @@ const LandingPage = () => {
             <Button 
               size="lg"
               onClick={() => navigate('/auth')}
-              className="old-money-button old-money-gradient hover:shadow-lg text-primary-foreground px-12 py-6 text-xl font-serif"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-12 py-6 text-xl font-serif"
             >
               {t.ctaPrimary}
               <ArrowRight className="ml-2 h-6 w-6" />
@@ -502,13 +501,13 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 bg-primary/95">
+      <footer className="py-12 px-6 bg-primary">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-10 h-10 old-money-gradient rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-foreground/20 rounded-xl flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                  src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />

@@ -106,7 +106,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           <div className="flex items-center space-x-3">
             <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center shadow-lg">
               <img 
-                src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
                 alt="GalyarderOS Logo" 
                 className="h-8 w-8 object-contain"
               />

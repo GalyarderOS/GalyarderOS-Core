@@ -105,20 +105,23 @@
   }
 
   html {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 
   body {
-    @apply bg-background text-foreground font-serif antialiased;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     font-family: 'Georgia', 'Times New Roman', serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Old Money Typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-medium tracking-wide text-foreground;
+    @apply font-serif font-medium tracking-wide;
     font-family: 'Georgia', 'Times New Roman', serif;
+    color: hsl(var(--foreground));
   }
 
   /* Elegant Scrollbars */
@@ -127,42 +130,50 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted/20;
+    background-color: hsl(var(--muted) / 0.2);
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full;
+    background-color: hsl(var(--muted-foreground) / 0.2);
+    @apply rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
+    background-color: hsl(var(--muted-foreground) / 0.3);
   }
 
   /* Dark theme specific scrollbar */
   .dark ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/30;
+    background-color: hsl(var(--muted-foreground) / 0.3);
   }
 
   .dark ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/40;
+    background-color: hsl(var(--muted-foreground) / 0.4);
   }
 
   /* Soft Glass Effects */
   .glass {
-    @apply backdrop-blur-sm bg-background/90 border border-border/50;
+    backdrop-filter: blur(8px);
+    background-color: hsl(var(--background) / 0.9);
+    border: 1px solid hsl(var(--border) / 0.5);
   }
 
   .glass-card {
-    @apply backdrop-blur-sm bg-card/95 border border-border/30 shadow-sm;
+    backdrop-filter: blur(8px);
+    background-color: hsl(var(--card) / 0.95);
+    border: 1px solid hsl(var(--border) / 0.3);
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.05);
   }
 
   /* Dark theme specific glass effects */
   .dark .glass {
-    @apply bg-background/85 border-border/40;
+    background-color: hsl(var(--background) / 0.85);
+    border: 1px solid hsl(var(--border) / 0.4);
   }
 
   .dark .glass-card {
-    @apply bg-card/90 border-border/25;
+    background-color: hsl(var(--card) / 0.9);
+    border: 1px solid hsl(var(--border) / 0.25);
   }
 
   /* Old Money Gradients */
@@ -179,31 +190,34 @@
 
   /* Soft Shadows */
   .soft-shadow {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.06), 0 1px 3px hsl(var(--foreground) / 0.08);
   }
 
   .soft-shadow-lg {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px hsl(var(--foreground) / 0.08), 0 2px 6px hsl(var(--foreground) / 0.1);
   }
 
   /* Dark theme specific shadows */
   .dark .soft-shadow {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 8px hsl(0 0% 0% / 0.3), 0 1px 3px hsl(0 0% 0% / 0.4);
   }
 
   .dark .soft-shadow-lg {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.4), 0 2px 6px hsl(0 0% 0% / 0.5);
   }
 }
 
 /* Old Money Component Overrides */
 @layer components {
   .old-money-button {
-    @apply relative overflow-hidden transition-all duration-300 ease-out soft-shadow bg-background text-foreground;
+    @apply relative overflow-hidden transition-all duration-300 ease-out soft-shadow;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 
   .old-money-button::before {
-    @apply absolute inset-0 bg-gradient-to-r from-accent/10 to-primary/10 opacity-0 transition-opacity duration-300;
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(to right, hsl(var(--accent) / 0.1), hsl(var(--primary) / 0.1));
     content: '';
   }
 
@@ -216,11 +230,14 @@
   }
 
   .old-money-card {
-    @apply relative overflow-hidden transition-all duration-300 soft-shadow bg-card text-card-foreground;
+    @apply relative overflow-hidden transition-all duration-300 soft-shadow;
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
   }
 
   .old-money-card::before {
-    @apply absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-500;
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: linear-gradient(to bottom right, hsl(var(--accent) / 0.05), hsl(var(--primary) / 0.05));
     content: '';
   }
 
@@ -234,21 +251,37 @@
 
   /* Elegant Text Styles */
   .old-money-heading {
-    @apply font-serif font-medium tracking-wide text-foreground;
+    @apply font-serif font-medium tracking-wide;
     font-family: 'Georgia', 'Times New Roman', serif;
+    color: hsl(var(--foreground));
   }
 
   .old-money-subheading {
-    @apply font-serif font-normal tracking-wide text-muted-foreground;
+    @apply font-serif font-normal tracking-wide;
     font-family: 'Georgia', 'Times New Roman', serif;
+    color: hsl(var(--muted-foreground));
   }
 
-  /* Form elements dark theme fixes */
+  /* Form elements */
+  input, textarea, select {
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: hsl(var(--accent) / 0.5);
+    box-shadow: 0 0 0 2px hsl(var(--accent) / 0.25);
+  }
+
   .dark input, .dark textarea, .dark select {
-    @apply bg-muted/30 border-border text-foreground;
+    background-color: hsl(var(--muted) / 0.3);
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
   }
 
   .dark input:focus, .dark textarea:focus, .dark select:focus {
-    @apply border-accent/50 ring-accent/25;
+    border-color: hsl(var(--accent) / 0.5);
+    box-shadow: 0 0 0 2px hsl(var(--accent) / 0.25);
   }
 }
