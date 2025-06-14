@@ -3,99 +3,99 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Premium Design System - Sophisticated Color Palette */
+/* Old Money Design System - Soft & Elegant Palette */
 
 @layer base {
   :root {
-    /* Light Theme - Premium Neutrals */
-    --background: 0 0% 98%;
-    --foreground: 240 10% 15%;
+    /* Light Theme - Old Money Neutrals */
+    --background: 45 20% 97%;
+    --foreground: 25 15% 25%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 15%;
+    --card: 45 25% 98%;
+    --card-foreground: 25 15% 25%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 15%;
+    --popover: 45 25% 98%;
+    --popover-foreground: 25 15% 25%;
 
-    /* Premium Primary - Deep Navy */
-    --primary: 221 39% 11%;
-    --primary-foreground: 0 0% 98%;
+    /* Old Money Primary - Deep Forest Green */
+    --primary: 150 25% 20%;
+    --primary-foreground: 45 20% 97%;
 
-    /* Sophisticated Secondary */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 221 39% 11%;
+    /* Sophisticated Secondary - Warm Cream */
+    --secondary: 45 30% 92%;
+    --secondary-foreground: 150 25% 20%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 45 25% 94%;
+    --muted-foreground: 25 10% 55%;
 
-    /* Premium Accent - Refined Gold */
-    --accent: 45 100% 51%;
-    --accent-foreground: 221 39% 11%;
+    /* Old Money Accent - Warm Gold */
+    --accent: 42 65% 75%;
+    --accent-foreground: 150 25% 20%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 50% 60%;
+    --destructive-foreground: 45 20% 97%;
 
-    /* Subtle Borders */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 45 100% 51%;
+    /* Soft Borders */
+    --border: 45 20% 88%;
+    --input: 45 20% 90%;
+    --ring: 42 65% 75%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
 
-    /* Premium Sidebar */
-    --sidebar-background: 221 39% 11%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 45 100% 51%;
-    --sidebar-primary-foreground: 221 39% 11%;
-    --sidebar-accent: 220 20% 20%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 220 20% 25%;
-    --sidebar-ring: 45 100% 51%;
+    /* Old Money Sidebar */
+    --sidebar-background: 150 25% 20%;
+    --sidebar-foreground: 45 20% 97%;
+    --sidebar-primary: 42 65% 75%;
+    --sidebar-primary-foreground: 150 25% 20%;
+    --sidebar-accent: 150 20% 25%;
+    --sidebar-accent-foreground: 45 20% 97%;
+    --sidebar-border: 150 15% 30%;
+    --sidebar-ring: 42 65% 75%;
   }
 
   .dark {
-    /* Dark Theme - Premium Dark Palette */
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    /* Dark Theme - Old Money Dark Palette */
+    --background: 25 20% 8%;
+    --foreground: 45 25% 85%;
 
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
+    --card: 25 25% 10%;
+    --card-foreground: 45 25% 85%;
 
-    --popover: 224 71% 4%;
-    --popover-foreground: 213 31% 91%;
+    --popover: 25 25% 10%;
+    --popover-foreground: 45 25% 85%;
 
-    /* Premium Primary - Bright Gold */
-    --primary: 45 100% 51%;
-    --primary-foreground: 224 71% 4%;
+    /* Dark Primary - Warm Gold */
+    --primary: 42 65% 75%;
+    --primary-foreground: 25 20% 8%;
 
-    /* Dark Secondary */
-    --secondary: 215 28% 17%;
-    --secondary-foreground: 213 31% 91%;
+    /* Dark Secondary - Deep Charcoal */
+    --secondary: 25 15% 15%;
+    --secondary-foreground: 45 25% 85%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 217 11% 65%;
+    --muted: 25 15% 15%;
+    --muted-foreground: 45 15% 65%;
 
-    /* Dark Accent */
-    --accent: 45 100% 51%;
-    --accent-foreground: 224 71% 4%;
+    /* Dark Accent - Warm Gold */
+    --accent: 42 65% 75%;
+    --accent-foreground: 25 20% 8%;
 
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 213 31% 91%;
+    --destructive: 0 45% 50%;
+    --destructive-foreground: 45 25% 85%;
 
     /* Dark Borders */
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 45 100% 51%;
+    --border: 25 15% 18%;
+    --input: 25 15% 18%;
+    --ring: 42 65% 75%;
 
-    /* Premium Dark Sidebar */
-    --sidebar-background: 224 71% 4%;
-    --sidebar-foreground: 213 31% 91%;
-    --sidebar-primary: 45 100% 51%;
-    --sidebar-primary-foreground: 224 71% 4%;
-    --sidebar-accent: 215 28% 17%;
-    --sidebar-accent-foreground: 213 31% 91%;
-    --sidebar-border: 215 28% 17%;
-    --sidebar-ring: 45 100% 51%;
+    /* Old Money Dark Sidebar */
+    --sidebar-background: 25 20% 8%;
+    --sidebar-foreground: 45 25% 85%;
+    --sidebar-primary: 42 65% 75%;
+    --sidebar-primary-foreground: 25 20% 8%;
+    --sidebar-accent: 25 15% 15%;
+    --sidebar-accent-foreground: 45 25% 85%;
+    --sidebar-border: 25 15% 18%;
+    --sidebar-ring: 42 65% 75%;
   }
 }
 
@@ -105,79 +105,109 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-serif antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Georgia', 'Times New Roman', serif;
   }
 
-  /* Premium Typography */
+  /* Old Money Typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    @apply font-serif font-medium tracking-wide;
+    font-family: 'Georgia', 'Times New Roman', serif;
   }
 
-  /* Premium Scrollbars */
+  /* Elegant Scrollbars */
   ::-webkit-scrollbar {
     @apply w-2;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-muted/30;
+    @apply bg-muted/20;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full;
+    @apply bg-muted-foreground/15 rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
+    @apply bg-muted-foreground/25;
   }
 
-  /* Premium Glass Effects */
+  /* Soft Glass Effects */
   .glass {
-    @apply backdrop-blur-xl bg-background/80 border border-border/50;
+    @apply backdrop-blur-sm bg-background/85 border border-border/40;
   }
 
   .glass-card {
-    @apply backdrop-blur-xl bg-card/90 border border-border/30 shadow-xl;
+    @apply backdrop-blur-sm bg-card/95 border border-border/25 shadow-sm;
   }
 
-  /* Premium Gradients */
-  .premium-gradient {
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-foreground)) 100%);
+  /* Old Money Gradients */
+  .old-money-gradient {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
   }
 
-  .premium-text-gradient {
+  .old-money-text-gradient {
     background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Soft Shadows */
+  .soft-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .soft-shadow-lg {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
 }
 
-/* Premium Component Overrides */
+/* Old Money Component Overrides */
 @layer components {
-  .premium-button {
-    @apply relative overflow-hidden transition-all duration-300 ease-out;
+  .old-money-button {
+    @apply relative overflow-hidden transition-all duration-500 ease-out soft-shadow;
   }
 
-  .premium-button::before {
-    @apply absolute inset-0 bg-gradient-to-r from-accent/20 to-primary/20 opacity-0 transition-opacity duration-300;
+  .old-money-button::before {
+    @apply absolute inset-0 bg-gradient-to-r from-accent/10 to-primary/10 opacity-0 transition-opacity duration-500;
     content: '';
   }
 
-  .premium-button:hover::before {
+  .old-money-button:hover::before {
     @apply opacity-100;
   }
 
-  .premium-card {
-    @apply relative overflow-hidden;
+  .old-money-button:hover {
+    @apply soft-shadow-lg;
   }
 
-  .premium-card::before {
-    @apply absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-500;
+  .old-money-card {
+    @apply relative overflow-hidden transition-all duration-500 soft-shadow;
+  }
+
+  .old-money-card::before {
+    @apply absolute inset-0 bg-gradient-to-br from-accent/5 to-primary/5 opacity-0 transition-opacity duration-700;
     content: '';
   }
 
-  .premium-card:hover::before {
+  .old-money-card:hover::before {
     @apply opacity-100;
+  }
+
+  .old-money-card:hover {
+    @apply soft-shadow-lg;
+  }
+
+  /* Elegant Text Styles */
+  .old-money-heading {
+    @apply font-serif font-medium tracking-wide text-foreground;
+    font-family: 'Georgia', 'Times New Roman', serif;
+  }
+
+  .old-money-subheading {
+    @apply font-serif font-normal tracking-wide text-muted-foreground;
+    font-family: 'Georgia', 'Times New Roman', serif;
   }
 }

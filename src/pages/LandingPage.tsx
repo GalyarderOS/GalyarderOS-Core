@@ -194,28 +194,28 @@ const LandingPage = () => {
   }, [modules.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 glass border-b">
+      <nav className="fixed top-0 w-full z-50 glass border-b backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 old-money-gradient rounded-xl flex items-center justify-center soft-shadow">
                 <img 
                   src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-xl font-bold premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-xl font-serif font-medium old-money-text-gradient">
                 GalyarderOS
               </span>
             </div>
             
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.features}</a>
-              <a href="#about" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.about}</a>
-              <a href="#contact" className="text-muted-foreground hover:text-accent transition-colors duration-300">{t.contact}</a>
+              <a href="#features" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.features}</a>
+              <a href="#about" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.about}</a>
+              <a href="#contact" className="text-muted-foreground hover:text-accent transition-colors duration-300 font-serif">{t.contact}</a>
             </div>
 
             <div className="flex items-center space-x-4">
@@ -224,7 +224,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                className="premium-button text-muted-foreground hover:text-accent hover:bg-accent/10"
+                className="old-money-button text-muted-foreground hover:text-accent hover:bg-accent/5 font-serif"
               >
                 {theme === 'light' ? <Palette className="h-4 w-4" /> : <Palette className="h-4 w-4" />}
                 <span className="ml-2 hidden sm:inline">{theme === 'light' ? t.darkMode : t.lightMode}</span>
@@ -235,7 +235,7 @@ const LandingPage = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
-                className="premium-button text-muted-foreground hover:text-accent hover:bg-accent/10"
+                className="old-money-button text-muted-foreground hover:text-accent hover:bg-accent/5 font-serif"
               >
                 <Languages className="h-4 w-4" />
                 <span className="ml-2 hidden sm:inline">{language === 'en' ? t.indonesian : t.english}</span>
@@ -244,13 +244,13 @@ const LandingPage = () => {
               <Button 
                 variant="outline" 
                 onClick={() => navigate('/auth')}
-                className="premium-button border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground"
+                className="old-money-button border-accent/30 text-accent hover:bg-accent/10 hover:text-accent font-serif"
               >
                 {t.login}
               </Button>
               <Button 
                 onClick={() => navigate('/auth')}
-                className="premium-button premium-gradient hover:shadow-lg text-accent-foreground"
+                className="old-money-button old-money-gradient hover:shadow-md text-primary-foreground font-serif"
               >
                 {t.getStarted}
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -268,20 +268,20 @@ const LandingPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <Badge className="mb-6 bg-accent/10 text-accent border-accent/20 backdrop-blur-sm">
+            <Badge className="mb-6 bg-accent/15 text-accent border-accent/25 backdrop-blur-sm font-serif">
               {t.visionTitle}
             </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h1 className="text-5xl md:text-7xl font-serif font-medium mb-6 old-money-text-gradient">
               {t.heroTitle}
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-4xl mx-auto leading-relaxed font-serif">
               {t.heroSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="premium-button premium-gradient hover:shadow-lg text-accent-foreground px-8 py-6 text-lg"
+                className="old-money-button old-money-gradient hover:shadow-lg text-primary-foreground px-8 py-6 text-lg font-serif"
               >
                 {t.ctaPrimary}
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -289,7 +289,7 @@ const LandingPage = () => {
               <Button 
                 size="lg" 
                 variant="outline"
-                className="premium-button border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground px-8 py-6 text-lg"
+                className="old-money-button border-accent/30 text-accent hover:bg-accent/10 hover:text-accent px-8 py-6 text-lg font-serif"
               >
                 {t.ctaSecondary}
               </Button>
@@ -307,10 +307,10 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
               {t.problemTitle}
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto font-serif">
               {t.problemSubtitle}
             </p>
           </motion.div>
@@ -323,12 +323,12 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="premium-card glass-card h-full border-destructive/20">
+                <Card className="old-money-card glass-card h-full border-destructive/15 bg-card/80">
                   <CardContent className="p-6 text-center">
                     <div className="w-12 h-12 bg-destructive/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <span className="text-destructive text-xl">⚠️</span>
                     </div>
-                    <p className="text-foreground/80">{problem}</p>
+                    <p className="text-foreground/80 font-serif">{problem}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -346,17 +346,17 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
               {t.solutionTitle}
             </h2>
-            <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-4xl mx-auto font-serif">
               {t.solutionSubtitle}
             </p>
           </motion.div>
 
           {/* Modules Showcase */}
           <div className="mb-16">
-            <h3 className="text-2xl font-bold mb-8 text-center text-foreground">{t.modulesTitle}</h3>
+            <h3 className="text-2xl font-serif font-medium mb-8 text-center text-foreground">{t.modulesTitle}</h3>
             <div className="grid md:grid-cols-5 gap-6">
               {modules.map((module, index) => (
                 <motion.div
@@ -366,21 +366,21 @@ const LandingPage = () => {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className={`relative ${currentModule === index ? 'scale-105' : ''}`}
                 >
-                  <Card className={`premium-card h-full transition-all duration-300 ${
+                  <Card className={`old-money-card h-full transition-all duration-500 ${
                     currentModule === index 
-                      ? 'glass-card border-accent shadow-accent/25 shadow-lg' 
-                      : 'glass-card hover:shadow-md'
+                      ? 'glass-card border-accent/40 soft-shadow-lg bg-accent/5' 
+                      : 'glass-card hover:shadow-sm bg-card/80'
                   }`}>
                     <CardContent className="p-6 text-center">
                       <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
                         currentModule === index 
-                          ? 'premium-gradient text-accent-foreground' 
-                          : 'bg-muted text-muted-foreground'
+                          ? 'old-money-gradient text-primary-foreground' 
+                          : 'bg-muted/50 text-muted-foreground'
                       }`}>
                         {module.icon}
                       </div>
-                      <h4 className="font-semibold mb-2 text-foreground">{module.name}</h4>
-                      <p className="text-sm text-muted-foreground">{module.desc}</p>
+                      <h4 className="font-serif font-medium mb-2 text-foreground">{module.name}</h4>
+                      <p className="text-sm text-muted-foreground font-serif">{module.desc}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -398,10 +398,10 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
               {t.marketTitle}
             </h2>
-            <p className="text-xl text-muted-foreground mb-12">{t.marketSubtitle}</p>
+            <p className="text-xl text-muted-foreground mb-12 font-serif">{t.marketSubtitle}</p>
             
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -415,13 +415,13 @@ const LandingPage = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                 >
-                  <Card className="premium-card glass-card">
+                  <Card className="old-money-card glass-card bg-card/80">
                     <CardContent className="p-8 text-center">
-                      <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <div className="w-16 h-16 bg-accent/15 rounded-full flex items-center justify-center mx-auto mb-4">
                         <div className="text-accent">{market.icon}</div>
                       </div>
-                      <h3 className="text-2xl font-bold mb-2 text-foreground">{market.amount}</h3>
-                      <p className="text-muted-foreground">{market.name}</p>
+                      <h3 className="text-2xl font-serif font-medium mb-2 text-foreground">{market.amount}</h3>
+                      <p className="text-muted-foreground font-serif">{market.name}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -440,7 +440,7 @@ const LandingPage = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
               {t.roadmapTitle}
             </h2>
           </motion.div>
@@ -458,15 +458,15 @@ const LandingPage = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="premium-card glass-card h-full">
+                <Card className="old-money-card glass-card h-full bg-card/80">
                   <CardContent className="p-6">
                     <div className="flex items-center mb-4">
-                      <div className="w-8 h-8 premium-gradient text-accent-foreground rounded-full flex items-center justify-center font-bold mr-3">
+                      <div className="w-8 h-8 old-money-gradient text-primary-foreground rounded-full flex items-center justify-center font-serif font-medium mr-3">
                         {index + 1}
                       </div>
-                      <h3 className="font-bold text-foreground">{item.phase}</h3>
+                      <h3 className="font-serif font-medium text-foreground">{item.phase}</h3>
                     </div>
-                    <p className="text-muted-foreground">{item.desc}</p>
+                    <p className="text-muted-foreground font-serif">{item.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -483,16 +483,16 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 premium-text-gradient" style={{ fontFamily: 'Playfair Display' }}>
+            <h2 className="text-4xl md:text-5xl font-serif font-medium mb-6 old-money-text-gradient">
               Ready to Transform Your Life?
             </h2>
-            <p className="text-xl text-muted-foreground mb-8">
+            <p className="text-xl text-muted-foreground mb-8 font-serif">
               {t.closing}
             </p>
             <Button 
               size="lg"
               onClick={() => navigate('/auth')}
-              className="premium-button premium-gradient hover:shadow-lg text-accent-foreground px-12 py-6 text-xl"
+              className="old-money-button old-money-gradient hover:shadow-lg text-primary-foreground px-12 py-6 text-xl font-serif"
             >
               {t.ctaPrimary}
               <ArrowRight className="ml-2 h-6 w-6" />
@@ -502,25 +502,25 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-6 bg-primary">
+      <footer className="py-12 px-6 bg-primary/95">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-10 h-10 premium-gradient rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 old-money-gradient rounded-xl flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
                   alt="GalyarderOS" 
                   className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-xl font-bold text-primary-foreground" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-xl font-serif font-medium text-primary-foreground">
                 GalyarderOS
               </span>
             </div>
             
             <div className="text-center md:text-right">
-              <p className="text-primary-foreground/60 mb-2">{t.allRights}</p>
-              <p className="text-accent">{t.built}</p>
+              <p className="text-primary-foreground/60 mb-2 font-serif">{t.allRights}</p>
+              <p className="text-accent font-serif">{t.built}</p>
             </div>
           </div>
         </div>
