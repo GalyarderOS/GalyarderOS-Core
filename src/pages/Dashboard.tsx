@@ -7,6 +7,8 @@ import VisionModule from '@/components/dashboard/VisionModule';
 import HabitsModule from '@/components/dashboard/HabitsModule';
 import FocusTimer from '@/components/dashboard/FocusTimer';
 import MemoryVault from '@/components/dashboard/MemoryVault';
+import AIAssistant from '@/components/dashboard/AIAssistant';
+import NotionAI from '@/components/dashboard/NotionAI';
 import Settings from '@/components/dashboard/Settings';
 import InvestmentTracker from '@/components/dashboard/InvestmentTracker';
 import CashflowTracker from '@/components/dashboard/CashflowTracker';
@@ -25,6 +27,8 @@ const Dashboard = () => {
         <Route path="/habits" element={<HabitsModule />} />
         <Route path="/focus" element={<FocusTimer />} />
         <Route path="/memory" element={<MemoryVault />} />
+        <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/notion-ai" element={<NotionAI />} />
         <Route path="/investments" element={<InvestmentTracker />} />
         <Route path="/cashflow" element={<CashflowTracker />} />
         <Route path="/expenses" element={<ExpenseManager />} />

@@ -24,7 +24,9 @@ import {
   Smartphone,
   Moon,
   Sun,
-  Languages
+  Languages,
+  DollarSign,
+  PiggyBank
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -74,13 +76,18 @@ const LandingPage = () => {
       focusDesc: 'Deep work and productivity sessions',
       memoryModule: 'Memory Vault',
       memoryDesc: 'Knowledge management and insights',
+      aiModule: 'AI Assistant',
+      aiDesc: 'Intelligent personal assistant',
+      notionModule: 'Notion AI',
+      notionDesc: 'Enhanced note-taking with AI',
       
       // Market Section
       marketTitle: 'Market Potential',
-      marketSubtitle: 'Billions in combined market opportunity',
-      productivity: 'Productivity Market',
+      marketSubtitle: 'Massive combined market opportunity across key sectors',
+      productivity: 'Productivity Software',
       mentalHealth: 'Mental Health Tech',
       selfDev: 'Self-Development',
+      personalFinance: 'Personal Finance',
       
       // Roadmap
       roadmapTitle: 'The Roadmap',
@@ -145,13 +152,18 @@ const LandingPage = () => {
       focusDesc: 'Sesi kerja mendalam dan produktivitas',
       memoryModule: 'Brankas Memori',
       memoryDesc: 'Manajemen pengetahuan dan wawasan',
+      aiModule: 'Asisten AI',
+      aiDesc: 'Asisten personal cerdas',
+      notionModule: 'Notion AI',
+      notionDesc: 'Pencatatan ditingkatkan dengan AI',
       
       // Market Section
       marketTitle: 'Potensi Pasar',
-      marketSubtitle: 'Peluang pasar gabungan miliaran dollar',
-      productivity: 'Pasar Produktivitas',
+      marketSubtitle: 'Peluang pasar gabungan besar di berbagai sektor kunci',
+      productivity: 'Software Produktivitas',
       mentalHealth: 'Teknologi Kesehatan Mental',
       selfDev: 'Pengembangan Diri',
+      personalFinance: 'Keuangan Personal',
       
       // Roadmap
       roadmapTitle: 'Roadmap',
@@ -185,6 +197,8 @@ const LandingPage = () => {
     { icon: <Calendar className="h-8 w-8" />, name: t.habitsModule, desc: t.habitsDesc },
     { icon: <Zap className="h-8 w-8" />, name: t.focusModule, desc: t.focusDesc },
     { icon: <Brain className="h-8 w-8" />, name: t.memoryModule, desc: t.memoryDesc },
+    { icon: <Brain className="h-8 w-8" />, name: t.aiModule, desc: t.aiDesc },
+    { icon: <Settings className="h-8 w-8" />, name: t.notionModule, desc: t.notionDesc },
   ];
 
   useEffect(() => {
@@ -350,7 +364,7 @@ const LandingPage = () => {
           {/* Modules Showcase */}
           <div className="mb-16">
             <h3 className="text-2xl font-serif font-medium mb-8 text-center text-foreground">{t.modulesTitle}</h3>
-            <div className="grid md:grid-cols-5 gap-6">
+            <div className="grid md:grid-cols-7 gap-6">
               {modules.map((module, index) => (
                 <motion.div
                   key={index}
@@ -365,15 +379,15 @@ const LandingPage = () => {
                       : 'glass-card hover:shadow-sm bg-card/80'
                   }`}>
                     <CardContent className="p-6 text-center">
-                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
                         currentModule === index 
                           ? 'old-money-gradient text-primary-foreground' 
                           : 'bg-muted/50 text-muted-foreground'
                       }`}>
                         {module.icon}
                       </div>
-                      <h4 className="font-serif font-medium mb-2 text-foreground">{module.name}</h4>
-                      <p className="text-sm text-muted-foreground font-serif">{module.desc}</p>
+                      <h4 className="font-serif font-medium mb-2 text-foreground text-sm">{module.name}</h4>
+                      <p className="text-xs text-muted-foreground font-serif">{module.desc}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -383,7 +397,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Market Potential */}
+      {/* Market Potential - Updated to 4 opportunities */}
       <section className="py-20 px-6 glass-card">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
@@ -396,11 +410,12 @@ const LandingPage = () => {
             </h2>
             <p className="text-xl text-muted-foreground mb-12 font-serif">{t.marketSubtitle}</p>
             
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-4 gap-8">
               {[
-                { name: t.productivity, amount: '$40B+', icon: <TrendingUp className="h-8 w-8" /> },
-                { name: t.mentalHealth, amount: '$25B+', icon: <Brain className="h-8 w-8" /> },
-                { name: t.selfDev, amount: '$15B+', icon: <Star className="h-8 w-8" /> }
+                { name: t.productivity, amount: '$47B', icon: <TrendingUp className="h-8 w-8" /> },
+                { name: t.mentalHealth, amount: '$26B', icon: <Brain className="h-8 w-8" /> },
+                { name: t.selfDev, amount: '$13B', icon: <Star className="h-8 w-8" /> },
+                { name: t.personalFinance, amount: '$1.2T', icon: <DollarSign className="h-8 w-8" /> }
               ].map((market, index) => (
                 <motion.div
                   key={index}

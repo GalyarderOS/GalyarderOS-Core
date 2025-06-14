@@ -23,7 +23,9 @@ import {
   PiggyBank,
   CreditCard,
   Calculator,
-  Briefcase
+  Briefcase,
+  Brain,
+  Sparkles
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -40,7 +42,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const translations = {
     en: {
       dashboard: 'Dashboard',
-      dashboardDesc: 'Wealth overview & insights',
+      dashboardDesc: 'Life overview & insights',
       profile: 'Profile & Ethos',
       profileDesc: 'Personal identity',
       vision: 'Vision & Roadmap',
@@ -51,6 +53,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       focusDesc: 'Deep work',
       memory: 'Memory Vault',
       memoryDesc: 'Knowledge base',
+      aiAssistant: 'AI Assistant',
+      aiAssistantDesc: 'Intelligent support',
+      notionAi: 'Notion AI',
+      notionAiDesc: 'Enhanced notes',
       investments: 'Investment Tracker',
       investmentsDesc: 'Portfolio management',
       cashflow: 'Cashflow Tracker',
@@ -73,7 +79,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     },
     id: {
       dashboard: 'Dasbor',
-      dashboardDesc: 'Ringkasan kekayaan & wawasan',
+      dashboardDesc: 'Ringkasan hidup & wawasan',
       profile: 'Profil & Etos',
       profileDesc: 'Identitas personal',
       vision: 'Visi & Roadmap',
@@ -84,6 +90,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       focusDesc: 'Kerja mendalam',
       memory: 'Brankas Memori',
       memoryDesc: 'Basis pengetahuan',
+      aiAssistant: 'Asisten AI',
+      aiAssistantDesc: 'Dukungan cerdas',
+      notionAi: 'Notion AI',
+      notionAiDesc: 'Catatan ditingkatkan',
       investments: 'Pelacak Investasi',
       investmentsDesc: 'Manajemen portofolio',
       cashflow: 'Pelacak Arus Kas',
@@ -115,6 +125,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { icon: <Calendar className="h-5 w-5" />, label: t.habits, path: '/dashboard/habits', description: t.habitsDesc },
     { icon: <Clock className="h-5 w-5" />, label: t.focus, path: '/dashboard/focus', description: t.focusDesc },
     { icon: <BookOpen className="h-5 w-5" />, label: t.memory, path: '/dashboard/memory', description: t.memoryDesc },
+    { icon: <Brain className="h-5 w-5" />, label: t.aiAssistant, path: '/dashboard/ai-assistant', description: t.aiAssistantDesc },
+    { icon: <Sparkles className="h-5 w-5" />, label: t.notionAi, path: '/dashboard/notion-ai', description: t.notionAiDesc },
   ];
 
   const financeMenuItems = [
