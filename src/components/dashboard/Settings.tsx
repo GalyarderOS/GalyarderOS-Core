@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,9 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 import { 
   Settings as SettingsIcon, 
   User, 
@@ -25,11 +28,15 @@ import {
 
 const Settings = () => {
   const { theme, language, setTheme, setLanguage } = useTheme();
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
   const [showApiKeys, setShowApiKeys] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState({
     // Profile Settings
-    fullName: 'John Doe',
-    email: 'john@example.com',
+    fullName: '',
+    email: '',
     
     // API Keys
     geminiApiKey: '',
@@ -53,20 +60,138 @@ const Settings = () => {
     animationsEnabled: true
   });
 
-  const handleSave = () => {
-    // Save settings to Supabase
-    console.log('Saving settings:', settings);
+  useEffect(() => {
+    loadUserData();
+  }, [user]);
+
+  const loadUserData = async () => {
+    if (!user) return;
+
+    try {
+      // Load profile data
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      // Load user settings
+      const { data: userSettings } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      setSettings(prev => ({
+        ...prev,
+        fullName: profile?.full_name || user.user_metadata?.full_name || '',
+        email: user.email || '',
+        geminiApiKey: userSettings?.gemini_api_key || '',
+        notionToken: userSettings?.notion_token || ''
+      }));
+
+      // Update theme context if different
+      if (userSettings?.theme && userSettings.theme !== theme) {
+        setTheme(userSettings.theme as 'light' | 'dark');
+      }
+      if (userSettings?.language && userSettings.language !== language) {
+        setLanguage(userSettings.language as 'en' | 'id');
+      }
+
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load user settings",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteAccount = () => {
-    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      // Delete account logic
+  const handleSave = async () => {
+    if (!user) return;
+
+    setSaving(true);
+    try {
+      // Update profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ 
+          full_name: settings.fullName,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (profileError) throw profileError;
+
+      // Update user settings
+      const { error: settingsError } = await supabase
+        .from('user_settings')
+        .update({
+          theme: theme,
+          language: language,
+          gemini_api_key: settings.geminiApiKey || null,
+          notion_token: settings.notionToken || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (settingsError) throw settingsError;
+
+      toast({
+        title: "Success",
+        description: "Settings saved successfully!"
+      });
+
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save settings",
+        variant: "destructive"
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      // Sign out first
+      await signOut();
+      
+      toast({
+        title: "Account Deletion",
+        description: "Please contact support to complete account deletion.",
+        variant: "destructive"
+      });
+    } catch (error) {
+      console.error('Error during account deletion:', error);
+      toast({
+        title: "Error",
+        description: "Failed to initiate account deletion",
+        variant: "destructive"
+      });
     }
   };
 
   const updateSetting = (key: string, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFD700]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -83,10 +208,11 @@ const Settings = () => {
         </div>
         <Button 
           onClick={handleSave}
+          disabled={saving}
           className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]"
         >
           <Save className="h-4 w-4 mr-2" />
-          Save Changes
+          {saving ? 'Saving...' : 'Save Changes'}
         </Button>
       </motion.div>
 
@@ -123,8 +249,10 @@ const Settings = () => {
                     id="email"
                     type="email"
                     value={settings.email}
-                    onChange={(e) => updateSetting('email', e.target.value)}
+                    disabled
+                    className="bg-gray-100"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                 </div>
               </div>
             </CardContent>
