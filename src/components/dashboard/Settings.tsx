@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -23,7 +23,10 @@ import {
   Trash2,
   Save,
   Eye,
-  EyeOff
+  EyeOff,
+  Sun,
+  Moon,
+  Languages
 } from 'lucide-react';
 
 const Settings = () => {
@@ -185,6 +188,18 @@ const Settings = () => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const handleThemeChange = (value: string) => {
+    if (value && (value === 'light' || value === 'dark')) {
+      setTheme(value);
+    }
+  };
+
+  const handleLanguageChange = (value: string) => {
+    if (value && (value === 'en' || value === 'id')) {
+      setLanguage(value);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -272,50 +287,60 @@ const Settings = () => {
                 <span>Appearance & Language</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <CardContent className="space-y-6">
+              <div className="space-y-4">
                 <div>
-                  <Label>Theme</Label>
-                  <div className="flex space-x-2 mt-2">
-                    <Button
-                      variant={theme === 'light' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setTheme('light')}
-                      className={theme === 'light' ? "bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]" : ""}
+                  <Label className="flex items-center space-x-2 mb-3">
+                    <Sun className="h-4 w-4" />
+                    <span>Theme</span>
+                  </Label>
+                  <ToggleGroup 
+                    type="single" 
+                    value={theme} 
+                    onValueChange={handleThemeChange}
+                    className="justify-start"
+                  >
+                    <ToggleGroupItem 
+                      value="light" 
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
                     >
+                      <Sun className="h-4 w-4 mr-2" />
                       Light
-                    </Button>
-                    <Button
-                      variant={theme === 'dark' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setTheme('dark')}
-                      className={theme === 'dark' ? "bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]" : ""}
+                    </ToggleGroupItem>
+                    <ToggleGroupItem 
+                      value="dark"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
                     >
+                      <Moon className="h-4 w-4 mr-2" />
                       Dark
-                    </Button>
-                  </div>
+                    </ToggleGroupItem>
+                  </ToggleGroup>
                 </div>
                 
                 <div>
-                  <Label>Language</Label>
-                  <div className="flex space-x-2 mt-2">
-                    <Button
-                      variant={language === 'en' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setLanguage('en')}
-                      className={language === 'en' ? "bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]" : ""}
+                  <Label className="flex items-center space-x-2 mb-3">
+                    <Languages className="h-4 w-4" />
+                    <span>Language</span>
+                  </Label>
+                  <ToggleGroup 
+                    type="single" 
+                    value={language} 
+                    onValueChange={handleLanguageChange}
+                    className="justify-start"
+                  >
+                    <ToggleGroupItem 
+                      value="en"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
                     >
-                      English
-                    </Button>
-                    <Button
-                      variant={language === 'id' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setLanguage('id')}
-                      className={language === 'id' ? "bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]" : ""}
+                      🇺🇸 English
+                    </ToggleGroupItem>
+                    <ToggleGroupItem 
+                      value="id"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
                     >
-                      Bahasa
-                    </Button>
-                  </div>
+                      🇮🇩 Bahasa
+                    </ToggleGroupItem>
+                  </ToggleGroup>
                 </div>
               </div>
             </CardContent>
