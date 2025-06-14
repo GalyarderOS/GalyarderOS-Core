@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,8 @@ import {
   Settings,
   Shield,
   Smartphone,
-  Palette,
+  Moon,
+  Sun,
   Languages
 } from 'lucide-react';
 
@@ -210,34 +212,26 @@ const LandingPage = () => {
                 GalyarderOS
               </span>
             </div>
-            
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.features}</a>
-              <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.about}</a>
-              <a href="#contact" className="text-muted-foreground hover:text-foreground transition-colors duration-300 font-serif">{t.contact}</a>
-            </div>
 
-            <div className="flex items-center space-x-4">
-              {/* Theme Toggle */}
+            <div className="flex items-center space-x-2">
+              {/* Theme Toggle - Icon only */}
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
                 className="text-muted-foreground hover:text-foreground hover:bg-muted font-serif"
               >
-                {theme === 'light' ? <Palette className="h-4 w-4" /> : <Palette className="h-4 w-4" />}
-                <span className="ml-2 hidden sm:inline">{theme === 'light' ? t.darkMode : t.lightMode}</span>
+                {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
               </Button>
 
-              {/* Language Toggle */}
+              {/* Language Toggle - Icon only */}
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
                 className="text-muted-foreground hover:text-foreground hover:bg-muted font-serif"
               >
                 <Languages className="h-4 w-4" />
-                <span className="ml-2 hidden sm:inline">{language === 'en' ? t.indonesian : t.english}</span>
               </Button>
 
               <Button 
@@ -503,7 +497,8 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="py-12 px-6 bg-primary">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between">
+          {/* Navigation Links */}
+          <div className="flex flex-col md:flex-row items-center justify-between mb-8">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <div className="w-10 h-10 bg-primary-foreground/20 rounded-xl flex items-center justify-center">
                 <img 
@@ -517,8 +512,19 @@ const LandingPage = () => {
               </span>
             </div>
             
-            <div className="text-center md:text-right">
+            {/* Navigation Links in Footer */}
+            <div className="flex items-center space-x-8 mb-4 md:mb-0">
+              <a href="#features" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors duration-300 font-serif">{t.features}</a>
+              <a href="#about" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors duration-300 font-serif">{t.about}</a>
+              <a href="#contact" className="text-primary-foreground/80 hover:text-primary-foreground transition-colors duration-300 font-serif">{t.contact}</a>
+            </div>
+          </div>
+          
+          <div className="flex flex-col md:flex-row items-center justify-between border-t border-primary-foreground/20 pt-8">
+            <div className="text-center md:text-left">
               <p className="text-primary-foreground/60 mb-2 font-serif">{t.allRights}</p>
+            </div>
+            <div className="text-center md:text-right">
               <p className="text-accent font-serif">{t.built}</p>
             </div>
           </div>
