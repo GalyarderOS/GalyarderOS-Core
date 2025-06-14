@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { formatDistanceToNow } from 'date-fns';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -250,7 +251,7 @@ const DashboardHome = () => {
                             {activity.module}
                           </Badge>
                           <span className="text-xs text-gray-500">
-                            {new Date(activity.created_at).toRelativeTimeString()}
+                            {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true })}
                           </span>
                         </div>
                       </div>
