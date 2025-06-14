@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -17,7 +16,9 @@ import {
   Edit,
   Trash2,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Save,
+  X
 } from 'lucide-react';
 
 interface NotionAIProps {
@@ -36,6 +37,7 @@ interface NotionPage {
 const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
   const [pages, setPages] = useState<NotionPage[]>([]);
   const [selectedPage, setSelectedPage] = useState<NotionPage | null>(null);
+  const [editingPage, setEditingPage] = useState<NotionPage | null>(null);
   const [newPageTitle, setNewPageTitle] = useState('');
   const [newPageContent, setNewPageContent] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
@@ -142,6 +144,30 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     }
   };
 
+  const updatePage = async (pageId: string, title: string, content: string) => {
+    setIsLoading(true);
+    
+    try {
+      const response = await callNotionAPI('update_page', {
+        page_id: pageId,
+        title: title.trim(),
+        content: content.trim()
+      });
+      
+      toast({
+        title: "Berhasil",
+        description: "Halaman berhasil diperbarui",
+      });
+      
+      setEditingPage(null);
+      await fetchPages();
+    } catch (error) {
+      console.error('Error updating page:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const deletePage = async (pageId: string) => {
     if (!confirm('Apakah Anda yakin ingin menghapus halaman ini?')) {
       return;
@@ -158,6 +184,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       });
       
       setSelectedPage(null);
+      setEditingPage(null);
       await fetchPages();
     } catch (error) {
       console.error('Error deleting page:', error);
@@ -247,34 +274,68 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                       animate={{ opacity: 1, y: 0 }}
                       className="border rounded-lg p-4 hover:bg-gray-50"
                     >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{page.title}</h4>
-                          <p className="text-sm text-gray-500 mt-1">
-                            Dibuat: {new Date(page.created_time).toLocaleDateString('id-ID')}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Diedit: {new Date(page.last_edited_time).toLocaleDateString('id-ID')}
-                          </p>
+                      {editingPage?.id === page.id ? (
+                        <div className="space-y-3">
+                          <Input
+                            value={editingPage.title}
+                            onChange={(e) => setEditingPage({...editingPage, title: e.target.value})}
+                            className="font-medium"
+                          />
+                          <Textarea
+                            value={editingPage.content || ''}
+                            onChange={(e) => setEditingPage({...editingPage, content: e.target.value})}
+                            placeholder="Edit content..."
+                            className="min-h-[100px]"
+                          />
+                          <div className="flex space-x-2">
+                            <Button 
+                              size="sm"
+                              onClick={() => updatePage(editingPage.id, editingPage.title, editingPage.content || '')}
+                              disabled={isLoading}
+                            >
+                              <Save className="h-4 w-4 mr-1" />
+                              Save
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => setEditingPage(null)}
+                            >
+                              <X className="h-4 w-4 mr-1" />
+                              Cancel
+                            </Button>
+                          </div>
                         </div>
-                        <div className="flex space-x-2">
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => setSelectedPage(page)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => deletePage(page.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                      ) : (
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h4 className="font-medium text-gray-900">{page.title}</h4>
+                            <p className="text-sm text-gray-500 mt-1">
+                              Dibuat: {new Date(page.created_time).toLocaleDateString('id-ID')}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Diedit: {new Date(page.last_edited_time).toLocaleDateString('id-ID')}
+                            </p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => setEditingPage({...page, content: page.content || ''})}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => deletePage(page.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </motion.div>
                   ))}
                   

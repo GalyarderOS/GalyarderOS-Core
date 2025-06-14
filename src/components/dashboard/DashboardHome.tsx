@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
@@ -161,74 +160,6 @@ const DashboardHome = () => {
         </h1>
         <p className="text-gray-600">Here's your productivity overview for today</p>
       </motion.div>
-
-      {/* AI Tools Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* AI Assistant Card */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setShowAIAssistant(true)}>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-[#FFD700] rounded-lg flex items-center justify-center">
-                  <MessageCircle className="h-5 w-5 text-[#1a1a1a]" />
-                </div>
-                <span>AI Assistant</span>
-              </CardTitle>
-              <CardDescription>
-                Get help with productivity, goals, and habits
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
-                Ask questions about your productivity journey, get advice on goal setting, or discuss habit formation strategies.
-              </p>
-              <Button className="w-full bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]">
-                Start Conversation
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Notion AI Card */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => setShowNotionAI(true)}>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-white" />
-                </div>
-                <span>Notion AI</span>
-              </CardTitle>
-              <CardDescription>
-                Manage your Notion pages and documents
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
-                Create, browse, search, and manage your Notion pages directly from your dashboard.
-              </p>
-              <div className="flex space-x-2">
-                <Button variant="outline" className="flex-1">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  <Search className="h-4 w-4 mr-2" />
-                  Browse
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
