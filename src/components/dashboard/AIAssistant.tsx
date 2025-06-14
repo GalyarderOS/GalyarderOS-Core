@@ -158,7 +158,7 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
             </div>
             <span>AI Assistant</span>
             {connectionError && (
-              <AlertCircle className="h-4 w-4 text-red-500" title="Connection Error" />
+              <AlertCircle className="h-4 w-4 text-red-500" />
             )}
           </DialogTitle>
         </DialogHeader>
