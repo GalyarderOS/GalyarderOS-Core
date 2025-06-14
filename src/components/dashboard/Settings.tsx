@@ -12,20 +12,15 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Save, 
-  User, 
-  Bell, 
-  Shield, 
   Palette, 
-  Globe, 
-  Key, 
-  Moon, 
-  Sun,
   Check,
   Settings as SettingsIcon,
   Brain,
   Sparkles
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+
+type Language = 'en' | 'id';
 
 const Settings = () => {
   const { user } = useAuth();
@@ -62,12 +57,16 @@ const Settings = () => {
       }
 
       if (data) {
+        // Safely cast the language with fallback
+        const dbLanguage = data.language as Language;
+        const validLanguage = (dbLanguage === 'en' || dbLanguage === 'id') ? dbLanguage : 'en';
+        
         setSettings({
           gemini_api_key: data.gemini_api_key || '',
           notion_token: data.notion_token || '',
           notifications_enabled: true,
           dark_mode: data.theme === 'dark',
-          language: data.language || 'en'
+          language: validLanguage
         });
       }
     } catch (error) {
@@ -123,14 +122,10 @@ const Settings = () => {
     en: {
       title: 'Settings',
       subtitle: 'Manage your account preferences and integrations',
-      profile: 'Profile Settings',
-      profileDesc: 'Update your personal information',
       appearance: 'Appearance',
       appearanceDesc: 'Customize your interface',
       integrations: 'AI Integrations',
       integrationsDesc: 'Connect external services',
-      notifications: 'Notifications',
-      notificationsDesc: 'Manage alert preferences',
       darkMode: 'Dark Mode',
       darkModeDesc: 'Switch between light and dark themes',
       language: 'Language',
@@ -147,14 +142,10 @@ const Settings = () => {
     id: {
       title: 'Pengaturan',
       subtitle: 'Kelola preferensi akun dan integrasi Anda',
-      profile: 'Pengaturan Profil',
-      profileDesc: 'Perbarui informasi personal Anda',
       appearance: 'Tampilan',
       appearanceDesc: 'Sesuaikan antarmuka Anda',
       integrations: 'Integrasi AI',
       integrationsDesc: 'Hubungkan layanan eksternal',
-      notifications: 'Notifikasi',
-      notificationsDesc: 'Kelola preferensi peringatan',
       darkMode: 'Mode Gelap',
       darkModeDesc: 'Beralih antara tema terang dan gelap',
       language: 'Bahasa',
@@ -223,7 +214,7 @@ const Settings = () => {
         <div className="space-y-6">
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
-              <Sparkles className="h-4 w-4 text-accent" />
+              <Sparkles className="h-4 w-4 text-muted-foreground" />
               <Label className="text-base font-medium text-foreground font-playfair">{t.geminiKey}</Label>
             </div>
             <p className="text-sm text-muted-foreground font-playfair">{t.geminiDesc}</p>
@@ -238,7 +229,7 @@ const Settings = () => {
           
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
-              <SettingsIcon className="h-4 w-4 text-accent" />
+              <SettingsIcon className="h-4 w-4 text-muted-foreground" />
               <Label className="text-base font-medium text-foreground font-playfair">{t.notionToken}</Label>
             </div>
             <p className="text-sm text-muted-foreground font-playfair">{t.notionDesc}</p>
@@ -265,7 +256,7 @@ const Settings = () => {
         className="text-center space-y-4"
       >
         <div className="flex items-center justify-center space-x-3 mb-4">
-          <div className="p-3 bg-muted rounded-xl soft-shadow">
+          <div className="p-3 bg-muted rounded-xl">
             <SettingsIcon className="h-8 w-8 text-muted-foreground" />
           </div>
           <Badge variant="outline" className="font-playfair border-muted-foreground/20">
@@ -287,7 +278,7 @@ const Settings = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
           >
-            <Card className="border-2 border-border bg-card/80 soft-shadow">
+            <Card className="border-2 border-border bg-card/80">
               <CardHeader className="pb-4">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 bg-muted/50 rounded-lg">
@@ -322,7 +313,7 @@ const Settings = () => {
           onClick={saveSettings}
           disabled={loading}
           size="lg"
-          className="bg-foreground hover:bg-foreground/90 text-background px-8 py-6 text-lg font-playfair soft-shadow"
+          className="bg-foreground hover:bg-foreground/90 text-background px-8 py-6 text-lg font-playfair"
         >
           {loading ? (
             <>
