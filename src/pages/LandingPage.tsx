@@ -1,258 +1,336 @@
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@/contexts/ThemeContext';
 import { 
-  Brain, 
+  ArrowRight, 
+  Zap, 
   Target, 
-  Clock, 
-  BookOpen, 
-  Calendar, 
-  Settings, 
-  Activity, 
-  User, 
-  BarChart3,
-  Shield,
-  Zap,
-  ChevronRight,
-  Star,
-  Quote,
-  ArrowRight,
-  CheckCircle,
-  Rocket,
-  Globe,
-  Layers,
+  Brain, 
+  Globe, 
+  Users, 
   TrendingUp,
-  Users,
-  Lightbulb,
-  Heart,
-  DollarSign
+  CheckCircle,
+  Star,
+  ChevronRight,
+  Calendar,
+  BarChart3,
+  Settings,
+  Shield,
+  Smartphone,
+  Palette,
+  Languages
 } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { theme, language, setTheme, setLanguage } = useTheme();
+  const [currentModule, setCurrentModule] = useState(0);
 
-  const problems = [
-    "95% of people live on default mode, not by design",
-    "Overwhelmed by complexity and fragmented tools", 
-    "Reactive instead of proactive lifestyle",
-    "No unified system for personal growth"
-  ];
-
-  const solutions = [
-    {
-      icon: <Brain className="h-8 w-8" />,
-      title: "AI-Powered Intelligence",
-      description: "Personal AI that learns your patterns and optimizes your entire life system",
-      highlight: "Smart Automation"
+  const translations = {
+    en: {
+      // Navigation
+      features: 'Features',
+      about: 'About',
+      contact: 'Contact',
+      getStarted: 'Get Started',
+      login: 'Login',
+      
+      // Hero Section
+      heroTitle: 'Your Personal Operating System',
+      heroSubtitle: 'Imagine a world where everyone has their own personal operating system. Not just your average productivity tools - a full-stack digital system, powered by AI, totally customizable, and completely in sync with who you are.',
+      ctaPrimary: 'Start Your Journey',
+      ctaSecondary: 'Watch Demo',
+      
+      // Vision Section
+      visionTitle: 'The Vision for GalyarderOS',
+      visionSubtitle: 'A super futuristic, modular UI/UX tailored to Freedom, Mastery, and Impact.',
+      
+      // Problem Section
+      problemTitle: 'The Problem We\'re Solving',
+      problemSubtitle: '95% of people are living life on default mode, not by their own design',
+      problem1: 'People are reacting, not being proactive',
+      problem2: 'The world is getting more complicated',
+      problem3: 'People are overwhelmed and lack direction',
+      
+      // Solution Section
+      solutionTitle: 'The Solution: GalyarderOS',
+      solutionSubtitle: 'A personalized, AI-powered life management system that combines the best of Notion, ChatGPT, Apple Health, TradingView, Asana, and spiritual journaling.',
+      
+      // Modules
+      modulesTitle: 'Core Modules',
+      profileModule: 'Profile & Ethos',
+      profileDesc: 'Define your identity and core values',
+      visionModule: 'Vision & Roadmap',
+      visionDesc: 'Strategic planning for your future',
+      habitsModule: 'Daily Rituals',
+      habitsDesc: 'Build and track meaningful habits',
+      focusModule: 'Focus Timer',
+      focusDesc: 'Deep work and productivity sessions',
+      memoryModule: 'Memory Vault',
+      memoryDesc: 'Knowledge management and insights',
+      
+      // Market Section
+      marketTitle: 'Market Potential',
+      marketSubtitle: 'Billions in combined market opportunity',
+      productivity: 'Productivity Market',
+      mentalHealth: 'Mental Health Tech',
+      selfDev: 'Self-Development',
+      
+      // Roadmap
+      roadmapTitle: 'The Roadmap',
+      phase1: 'Phase 1 (Q3-Q4 2025)',
+      phase1Desc: 'Build MVP with Life Dashboard and AI-driven workflows',
+      phase2: 'Phase 2',
+      phase2Desc: 'Launch Early Access for founders, students, creators',
+      phase3: 'Phase 3',
+      phase3Desc: 'Develop AI Personality Engine & Plugin Ecosystem',
+      phase4: 'Phase 4',
+      phase4Desc: 'Digital Soul Layer - cross-device, blockchain-secured',
+      
+      // Footer
+      closing: 'GalyarderOS isn\'t just a tool; it\'s the key to unlocking massive transformation.',
+      allRights: '© 2025 GalyarderOS. All rights reserved.',
+      built: 'Built for the future of human potential.',
+      
+      // Theme & Language
+      lightMode: 'Light Mode',
+      darkMode: 'Dark Mode',
+      english: 'English',
+      indonesian: 'Bahasa Indonesia'
     },
-    {
-      icon: <Layers className="h-8 w-8" />,
-      title: "Modular Ecosystem",
-      description: "Seamlessly integrate all aspects of life - productivity, health, finance, growth",
-      highlight: "Total Integration"
-    },
-    {
-      icon: <Target className="h-8 w-8" />,
-      title: "Goal-Driven Architecture",
-      description: "Every feature designed to accelerate your journey to maximum potential",
-      highlight: "Purpose-Built"
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Adaptive & Responsive",
-      description: "System evolves with you, providing exactly what you need, when you need it",
-      highlight: "Dynamic Growth"
+    id: {
+      // Navigation
+      features: 'Fitur',
+      about: 'Tentang',
+      contact: 'Kontak',
+      getStarted: 'Mulai Sekarang',
+      login: 'Masuk',
+      
+      // Hero Section
+      heroTitle: 'Sistem Operasi Personal Anda',
+      heroSubtitle: 'Bayangkan dunia di mana setiap orang memiliki sistem operasi personal mereka sendiri. Bukan hanya tools produktivitas biasa - sistem digital lengkap, didukung AI, dapat disesuaikan sepenuhnya, dan sinkron dengan siapa Anda.',
+      ctaPrimary: 'Mulai Perjalanan Anda',
+      ctaSecondary: 'Tonton Demo',
+      
+      // Vision Section
+      visionTitle: 'Visi untuk GalyarderOS',
+      visionSubtitle: 'UI/UX super futuristik dan modular yang disesuaikan untuk Kebebasan, Penguasaan, dan Dampak.',
+      
+      // Problem Section
+      problemTitle: 'Masalah yang Kami Selesaikan',
+      problemSubtitle: '95% orang hidup dalam mode default, bukan berdasarkan desain mereka sendiri',
+      problem1: 'Orang bereaksi, bukan proaktif',
+      problem2: 'Dunia semakin rumit',
+      problem3: 'Orang kewalahan dan kehilangan arah',
+      
+      // Solution Section
+      solutionTitle: 'Solusi: GalyarderOS',
+      solutionSubtitle: 'Sistem manajemen hidup personal bertenaga AI yang menggabungkan yang terbaik dari Notion, ChatGPT, Apple Health, TradingView, Asana, dan jurnal spiritual.',
+      
+      // Modules
+      modulesTitle: 'Modul Inti',
+      profileModule: 'Profil & Etos',
+      profileDesc: 'Definisikan identitas dan nilai inti Anda',
+      visionModule: 'Visi & Roadmap',
+      visionDesc: 'Perencanaan strategis untuk masa depan Anda',
+      habitsModule: 'Ritual Harian',
+      habitsDesc: 'Bangun dan lacak kebiasaan bermakna',
+      focusModule: 'Timer Fokus',
+      focusDesc: 'Sesi kerja mendalam dan produktivitas',
+      memoryModule: 'Brankas Memori',
+      memoryDesc: 'Manajemen pengetahuan dan wawasan',
+      
+      // Market Section
+      marketTitle: 'Potensi Pasar',
+      marketSubtitle: 'Peluang pasar gabungan miliaran dollar',
+      productivity: 'Pasar Produktivitas',
+      mentalHealth: 'Teknologi Kesehatan Mental',
+      selfDev: 'Pengembangan Diri',
+      
+      // Roadmap
+      roadmapTitle: 'Roadmap',
+      phase1: 'Fase 1 (Q3-Q4 2025)',
+      phase1Desc: 'Bangun MVP dengan Life Dashboard dan workflow berbasis AI',
+      phase2: 'Fase 2',
+      phase2Desc: 'Luncurkan Early Access untuk founder, mahasiswa, kreator',
+      phase3: 'Fase 3',
+      phase3Desc: 'Kembangkan AI Personality Engine & Plugin Ecosystem',
+      phase4: 'Fase 4',
+      phase4Desc: 'Digital Soul Layer - lintas perangkat, diamankan blockchain',
+      
+      // Footer
+      closing: 'GalyarderOS bukan hanya tool; ini adalah kunci untuk membuka transformasi besar.',
+      allRights: '© 2025 GalyarderOS. Hak cipta dilindungi.',
+      built: 'Dibangun untuk masa depan potensi manusia.',
+      
+      // Theme & Language
+      lightMode: 'Mode Terang',
+      darkMode: 'Mode Gelap',
+      english: 'English',
+      indonesian: 'Bahasa Indonesia'
     }
-  ];
+  };
+
+  const t = translations[language];
 
   const modules = [
-    { icon: <BarChart3 className="h-6 w-6" />, name: "Life Dashboard", description: "Command center for your existence", gradient: "from-blue-500 to-cyan-500" },
-    { icon: <User className="h-6 w-6" />, name: "Identity Engine", description: "Define and refine your core self", gradient: "from-purple-500 to-pink-500" },
-    { icon: <Target className="h-6 w-6" />, name: "Vision System", description: "Strategic goal manifestation", gradient: "from-green-500 to-emerald-500" },
-    { icon: <Calendar className="h-6 w-6" />, name: "Ritual Optimizer", description: "Habit mastery automation", gradient: "from-orange-500 to-red-500" },
-    { icon: <Clock className="h-6 w-6" />, name: "Focus Accelerator", description: "Deep work amplification", gradient: "from-indigo-500 to-purple-500" },
-    { icon: <BookOpen className="h-6 w-6" />, name: "Knowledge Vault", description: "Infinite memory expansion", gradient: "from-teal-500 to-cyan-500" },
-    { icon: <Activity className="h-6 w-6" />, name: "Performance Analytics", description: "Continuous optimization engine", gradient: "from-rose-500 to-pink-500" },
-    { icon: <Settings className="h-6 w-6" />, name: "System Core", description: "Total personalization control", gradient: "from-gray-500 to-slate-500" }
+    { icon: <Users className="h-8 w-8" />, name: t.profileModule, desc: t.profileDesc },
+    { icon: <Target className="h-8 w-8" />, name: t.visionModule, desc: t.visionDesc },
+    { icon: <Calendar className="h-8 w-8" />, name: t.habitsModule, desc: t.habitsDesc },
+    { icon: <Zap className="h-8 w-8" />, name: t.focusModule, desc: t.focusDesc },
+    { icon: <Brain className="h-8 w-8" />, name: t.memoryModule, desc: t.memoryDesc },
   ];
 
-  const roadmapPhases = [
-    {
-      phase: "Phase 1",
-      timeline: "Q3-Q4 2025",
-      title: "Foundation MVP",
-      description: "Life Dashboard with AI workflows & journaling",
-      status: "In Development",
-      color: "text-blue-500",
-      bgColor: "bg-blue-50"
-    },
-    {
-      phase: "Phase 2", 
-      timeline: "Q1 2026",
-      title: "Early Access Launch",
-      description: "Founders, students, creators community",
-      status: "Coming Soon",
-      color: "text-purple-500",
-      bgColor: "bg-purple-50"
-    },
-    {
-      phase: "Phase 3",
-      timeline: "Q2-Q3 2026", 
-      title: "AI Personality Engine",
-      description: "Modular plugin ecosystem development",
-      status: "Planned",
-      color: "text-green-500",
-      bgColor: "bg-green-50"
-    },
-    {
-      phase: "Phase 4",
-      timeline: "2027+",
-      title: "Digital Soul Layer",
-      description: "Cross-device, blockchain-secured OS",
-      status: "Vision",
-      color: "text-amber-500",
-      bgColor: "bg-amber-50"
-    }
-  ];
-
-  const marketOpportunity = [
-    { sector: "Productivity Software", size: "$47B", icon: <BarChart3 className="h-5 w-5" /> },
-    { sector: "Mental Health Tech", size: "$26B", icon: <Heart className="h-5 w-5" /> },
-    { sector: "Self-Development", size: "$13B", icon: <Lightbulb className="h-5 w-5" /> },
-    { sector: "Personal Finance", size: "$1.2T", icon: <DollarSign className="h-5 w-5" /> }
-  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentModule((prev) => (prev + 1) % modules.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [modules.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#1a1a2e] to-[#16213e] text-white overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-[#FFD700]/5 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-500/3 rounded-full blur-3xl animate-pulse delay-2000"></div>
-      </div>
-
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-black/20 backdrop-blur-2xl border-b border-white/10">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <motion.div 
-            className="flex items-center space-x-3"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
-              <img 
-                src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
-                alt="GalyarderOS Logo" 
-                className="h-8 w-8 object-contain filter brightness-0"
-              />
+    <div className="min-h-screen bg-gradient-to-br from-[#FCFCF9] via-white to-gray-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/60 dark:border-gray-700/60">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
+                  alt="GalyarderOS" 
+                  className="h-6 w-6 object-contain"
+                />
+              </div>
+              <span className="text-xl font-bold text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+                GalyarderOS
+              </span>
             </div>
-            <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
-              GalyarderOS
-            </span>
-          </motion.div>
-          
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/auth')}
-              className="text-white/80 hover:text-white hover:bg-white/10 font-medium border border-white/20 hover:border-white/40"
-            >
-              Access System
-            </Button>
-            <Button 
-              onClick={() => navigate('/auth')}
-              className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] hover:from-[#FF6B35] hover:to-[#FFD700] text-black font-bold shadow-2xl hover:shadow-[#FFD700]/25 transition-all duration-500 px-8"
-            >
-              Begin Evolution
-            </Button>
+            
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.features}</a>
+              <a href="#about" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.about}</a>
+              <a href="#contact" className="text-gray-600 dark:text-gray-300 hover:text-[#FFD700] transition-colors">{t.contact}</a>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              {/* Theme Toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#FFD700] hover:bg-[#FFD700]/10"
+              >
+                {theme === 'light' ? <Palette className="h-4 w-4" /> : <Palette className="h-4 w-4" />}
+                <span className="ml-2 hidden sm:inline">{theme === 'light' ? t.darkMode : t.lightMode}</span>
+              </Button>
+
+              {/* Language Toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setLanguage(language === 'en' ? 'id' : 'en')}
+                className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#FFD700] hover:bg-[#FFD700]/10"
+              >
+                <Languages className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">{language === 'en' ? t.indonesian : t.english}</span>
+              </Button>
+
+              <Button 
+                variant="outline" 
+                onClick={() => navigate('/auth')}
+                className="border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#1a1a1a] dark:border-[#FFD700] dark:text-[#FFD700]"
+              >
+                {t.login}
+              </Button>
+              <Button 
+                onClick={() => navigate('/auth')}
+                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a]"
+              >
+                {t.getStarted}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
-      <section className="py-32 relative">
-        <div className="container mx-auto px-6 text-center relative z-10">
+      <section className="pt-32 pb-20 px-6">
+        <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#FFD700]/20 to-[#FF6B35]/20 backdrop-blur-sm border border-[#FFD700]/30 rounded-full px-6 py-3 mb-12">
-              <Globe className="h-5 w-5 text-[#FFD700]" />
-              <span className="text-lg font-semibold text-white/90">The Future of Personal Operating Systems</span>
-              <Rocket className="h-5 w-5 text-[#FF6B35]" />
-            </div>
-            
-            <h1 className="text-6xl lg:text-8xl font-bold mb-8 leading-tight" style={{ fontFamily: 'Playfair Display' }}>
-              Your Personal
-              <br />
-              <span className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] bg-clip-text text-transparent">
-                Operating System
-              </span>
+            <Badge className="mb-6 bg-gradient-to-r from-[#FFD700]/20 to-[#FFC700]/20 text-[#1a1a1a] dark:text-[#FFD700] border-[#FFD700]/30">
+              {t.visionTitle}
+            </Badge>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              {t.heroTitle}
             </h1>
-            
-            <p className="text-2xl lg:text-3xl text-white/80 mb-8 max-w-5xl mx-auto leading-relaxed font-light">
-              Imagine having your own AI-powered digital ecosystem that learns who you are, 
-              adapts to your goals, and empowers you to reach your absolute maximum potential.
+            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+              {t.heroSubtitle}
             </p>
-
-            <p className="text-xl text-[#FFD700] mb-16 font-semibold">
-              Not just software. An entire revolution in how you live, work, and grow.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg"
                 onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] hover:from-[#FF6B35] hover:to-[#FFD700] text-black text-xl px-12 py-8 h-auto font-bold shadow-2xl hover:shadow-[#FFD700]/50 transition-all duration-500 transform hover:scale-105"
+                className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] px-8 py-6 text-lg"
               >
-                Join the Revolution
-                <Rocket className="ml-3 h-6 w-6" />
+                {t.ctaPrimary}
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button 
-                size="lg"
+                size="lg" 
                 variant="outline"
-                className="text-xl px-12 py-8 h-auto border-2 border-white/30 hover:border-[#FFD700] hover:bg-[#FFD700]/10 text-white hover:text-[#FFD700] transition-all duration-500"
+                className="border-[#FFD700] text-[#FFD700] hover:bg-[#FFD700] hover:text-[#1a1a1a] px-8 py-6 text-lg dark:border-[#FFD700] dark:text-[#FFD700]"
               >
-                Experience the Vision
+                {t.ctaSecondary}
               </Button>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Problem Statement */}
-      <section className="py-24 bg-gradient-to-r from-red-900/20 to-orange-900/20 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
+      {/* Problem Section */}
+      <section className="py-20 px-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl font-bold mb-8 text-white" style={{ fontFamily: 'Playfair Display' }}>
-              The Reality We're Changing
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              {t.problemTitle}
             </h2>
-            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
-              Let's be real. Most people are living life on default mode, overwhelmed and reactive.
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              {t.problemSubtitle}
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {problems.map((problem, index) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {[t.problem1, t.problem2, t.problem3].map((problem, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="flex items-center space-x-4 p-6 bg-black/30 backdrop-blur-sm rounded-2xl border border-red-500/30"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                <p className="text-lg text-white/90 font-medium">{problem}</p>
+                <Card className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-red-200 dark:border-red-800">
+                  <CardContent className="p-6 text-center">
+                    <div className="w-12 h-12 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-red-600 dark:text-red-400 text-xl">⚠️</span>
+                    </div>
+                    <p className="text-gray-700 dark:text-gray-300">{problem}</p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -260,195 +338,135 @@ const LandingPage = () => {
       </section>
 
       {/* Solution Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-6">
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-5xl font-bold mb-8 text-white" style={{ fontFamily: 'Playfair Display' }}>
-              The <span className="bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent">GalyarderOS</span> Solution
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              {t.solutionTitle}
             </h2>
-            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
-              A personalized, AI-powered life management system that brings together everything you need to thrive.
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto">
+              {t.solutionSubtitle}
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-12 mb-20">
-            {solutions.map((solution, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="group"
-              >
-                <Card className="h-full border-2 border-white/10 hover:border-[#FFD700]/50 transition-all duration-500 hover:shadow-2xl bg-gradient-to-br from-black/40 to-gray-900/40 backdrop-blur-sm">
-                  <CardHeader className="pb-6">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="p-4 bg-gradient-to-br from-[#FFD700]/20 to-[#FF6B35]/20 rounded-2xl group-hover:from-[#FFD700]/30 group-hover:to-[#FF6B35]/30 transition-all duration-500">
-                        <div className="text-[#FFD700]">
-                          {solution.icon}
-                        </div>
-                      </div>
-                      <Badge className="bg-[#FFD700]/20 text-[#FFD700] border-0 font-bold">
-                        {solution.highlight}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-2xl font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
-                      {solution.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-lg text-white/80 leading-relaxed">
-                      {solution.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Modules Ecosystem */}
-      <section className="py-24 bg-gradient-to-r from-blue-900/20 to-purple-900/20 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
-          >
-            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
-              Complete Life Architecture
-            </h2>
-            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
-              Eight interconnected modules designed to optimize every dimension of your existence.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {modules.map((module, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                className="group cursor-pointer"
-              >
-                <Card className="border-2 border-white/10 hover:border-white/30 transition-all duration-500 hover:shadow-xl bg-black/40 backdrop-blur-sm">
-                  <CardHeader className="text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-r ${module.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                      <div className="text-white">
+          {/* Modules Showcase */}
+          <div className="mb-16">
+            <h3 className="text-2xl font-bold mb-8 text-center text-[#1a1a1a] dark:text-white">{t.modulesTitle}</h3>
+            <div className="grid md:grid-cols-5 gap-6">
+              {modules.map((module, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className={`relative ${currentModule === index ? 'scale-105' : ''}`}
+                >
+                  <Card className={`h-full transition-all duration-300 ${
+                    currentModule === index 
+                      ? 'bg-gradient-to-br from-[#FFD700]/20 to-[#FFC700]/20 border-[#FFD700] shadow-lg' 
+                      : 'bg-white/80 dark:bg-gray-800/80 hover:shadow-md'
+                  } backdrop-blur-sm`}>
+                    <CardContent className="p-6 text-center">
+                      <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors ${
+                        currentModule === index 
+                          ? 'bg-[#FFD700] text-[#1a1a1a]' 
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
+                      }`}>
                         {module.icon}
                       </div>
-                    </div>
-                    <CardTitle className="text-lg font-bold text-white group-hover:text-[#FFD700] transition-colors duration-300">
-                      {module.name}
-                    </CardTitle>
-                    <CardDescription className="text-white/70 font-medium">
-                      {module.description}
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </motion.div>
-            ))}
+                      <h4 className="font-semibold mb-2 text-[#1a1a1a] dark:text-white">{module.name}</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-300">{module.desc}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Market Opportunity */}
-      <section className="py-24">
-        <div className="container mx-auto px-6">
+      {/* Market Potential */}
+      <section className="py-20 px-6 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            transition={{ duration: 0.6 }}
           >
-            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
-              Massive Market Opportunity
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              {t.marketTitle}
             </h2>
-            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
-              We're not just entering one market. We're creating an entirely new category.
-            </p>
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-12">{t.marketSubtitle}</p>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { name: t.productivity, amount: '$40B+', icon: <TrendingUp className="h-8 w-8" /> },
+                { name: t.mentalHealth, amount: '$25B+', icon: <Brain className="h-8 w-8" /> },
+                { name: t.selfDev, amount: '$15B+', icon: <Star className="h-8 w-8" /> }
+              ].map((market, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                >
+                  <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                    <CardContent className="p-8 text-center">
+                      <div className="w-16 h-16 bg-[#FFD700]/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div className="text-[#FFD700]">{market.icon}</div>
+                      </div>
+                      <h3 className="text-2xl font-bold mb-2 text-[#1a1a1a] dark:text-white">{market.amount}</h3>
+                      <p className="text-gray-600 dark:text-gray-300">{market.name}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {marketOpportunity.map((market, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="text-center p-8 bg-gradient-to-br from-black/40 to-gray-900/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-[#FFD700]/50 transition-all duration-500"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#FFD700]/20 to-[#FF6B35]/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <div className="text-[#FFD700]">
-                    {market.icon}
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">{market.sector}</h3>
-                <p className="text-3xl font-bold text-[#FFD700]">{market.size}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
       {/* Roadmap */}
-      <section className="py-24 bg-gradient-to-r from-green-900/20 to-blue-900/20 backdrop-blur-sm">
-        <div className="container mx-auto px-6">
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-20"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-5xl font-bold text-white mb-8" style={{ fontFamily: 'Playfair Display' }}>
-              The Evolution Roadmap
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              {t.roadmapTitle}
             </h2>
-            <p className="text-2xl text-white/80 max-w-4xl mx-auto">
-              From MVP to Digital Soul Layer - here's how we're building the future.
-            </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {roadmapPhases.map((phase, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              { phase: t.phase1, desc: t.phase1Desc },
+              { phase: t.phase2, desc: t.phase2Desc },
+              { phase: t.phase3, desc: t.phase3Desc },
+              { phase: t.phase4, desc: t.phase4Desc }
+            ].map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="border-2 border-white/10 hover:border-white/30 transition-all duration-500 bg-black/40 backdrop-blur-sm">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-4">
-                      <Badge className={`${phase.bgColor} ${phase.color} border-0 font-bold`}>
-                        {phase.phase}
-                      </Badge>
-                      <span className="text-sm text-white/60 font-medium">{phase.timeline}</span>
+                <Card className="h-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-8 h-8 bg-[#FFD700] text-[#1a1a1a] rounded-full flex items-center justify-center font-bold mr-3">
+                        {index + 1}
+                      </div>
+                      <h3 className="font-bold text-[#1a1a1a] dark:text-white">{item.phase}</h3>
                     </div>
-                    <CardTitle className="text-2xl font-bold text-white mb-2">
-                      {phase.title}
-                    </CardTitle>
-                    <CardDescription className="text-lg text-white/80">
-                      {phase.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center space-x-2">
-                      <div className={`w-3 h-3 rounded-full ${phase.color === 'text-blue-500' ? 'bg-blue-500' : phase.color === 'text-purple-500' ? 'bg-purple-500' : phase.color === 'text-green-500' ? 'bg-green-500' : 'bg-amber-500'}`}></div>
-                      <span className="text-white/70 font-medium">{phase.status}</span>
-                    </div>
+                    <p className="text-gray-600 dark:text-gray-300">{item.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -457,58 +475,52 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700]/10 via-[#FF6B35]/10 to-[#FF1744]/10"></div>
-        <div className="container mx-auto px-6 text-center relative z-10">
+      {/* CTA Section */}
+      <section className="py-20 px-6 bg-gradient-to-r from-[#FFD700]/10 to-[#FFC700]/10 dark:from-[#FFD700]/5 dark:to-[#FFC700]/5">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
           >
-            <h2 className="text-6xl lg:text-7xl font-bold mb-12 text-white" style={{ fontFamily: 'Playfair Display' }}>
-              Ready to<br />
-              <span className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] bg-clip-text text-transparent">
-                Revolutionize
-              </span><br />
-              Your Existence?
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+              Ready to Transform Your Life?
             </h2>
-            <p className="text-2xl text-white/80 mb-16 max-w-4xl mx-auto leading-relaxed">
-              This isn't just software. This is the foundation for a completely new way of living. 
-              Your personal operating system is waiting.
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+              {t.closing}
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <Button 
-                size="lg"
-                onClick={() => navigate('/auth')}
-                className="bg-gradient-to-r from-[#FFD700] via-[#FF6B35] to-[#FF1744] hover:from-[#FF1744] hover:via-[#FF6B35] hover:to-[#FFD700] text-black text-2xl px-16 py-10 h-auto font-bold shadow-2xl hover:shadow-[#FFD700]/50 transition-all duration-500 transform hover:scale-105"
-              >
-                Begin Your Evolution
-                <Rocket className="ml-4 h-8 w-8" />
-              </Button>
-            </div>
+            <Button 
+              size="lg"
+              onClick={() => navigate('/auth')}
+              className="bg-gradient-to-r from-[#FFD700] to-[#FFC700] hover:from-[#FFC700] hover:to-[#FFB700] text-[#1a1a1a] px-12 py-6 text-xl"
+            >
+              {t.ctaPrimary}
+              <ArrowRight className="ml-2 h-6 w-6" />
+            </Button>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-16 bg-black/60 backdrop-blur-sm border-t border-white/10">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-4 mb-6 md:mb-0">
-              <div className="w-12 h-12 bg-gradient-to-br from-[#FFD700] to-[#FF6B35] rounded-2xl flex items-center justify-center shadow-2xl">
+      <footer className="py-12 px-6 bg-[#1a1a1a] dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#FFD700] to-[#FFC700] rounded-xl flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" 
-                  alt="GalyarderOS Logo" 
-                  className="h-8 w-8 object-contain filter brightness-0"
+                  alt="GalyarderOS" 
+                  className="h-6 w-6 object-contain"
                 />
               </div>
-              <span className="text-3xl font-bold bg-gradient-to-r from-[#FFD700] to-[#FF6B35] bg-clip-text text-transparent" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-xl font-bold text-white" style={{ fontFamily: 'Playfair Display' }}>
                 GalyarderOS
               </span>
             </div>
-            <div className="text-white/60">
-              © 2024 GalyarderOS. Building the future of human potential.
+            
+            <div className="text-center md:text-right">
+              <p className="text-gray-400 mb-2">{t.allRights}</p>
+              <p className="text-[#FFD700]">{t.built}</p>
             </div>
           </div>
         </div>

@@ -48,31 +48,56 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(newTheme);
     localStorage.setItem('galyarderos-theme', newTheme);
     
-    // Apply theme to document
+    // Apply theme to document with more comprehensive coverage
+    const root = document.documentElement;
+    const body = document.body;
+    
     if (newTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
+      root.classList.add('dark');
+      body.classList.add('dark');
+      // Force dark theme on all elements
+      root.style.setProperty('color-scheme', 'dark');
+      body.style.backgroundColor = '#111827';
+      body.style.color = '#f9fafb';
     } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
+      root.classList.remove('dark');
+      body.classList.remove('dark');
+      root.style.setProperty('color-scheme', 'light');
+      body.style.backgroundColor = '#ffffff';
+      body.style.color = '#111827';
     }
+    
+    // Dispatch custom event for components that need to react
+    window.dispatchEvent(new CustomEvent('themeChange', { detail: newTheme }));
   };
 
   const updateLanguage = (newLanguage: Language) => {
     console.log('Updating language to:', newLanguage);
     setLanguage(newLanguage);
     localStorage.setItem('galyarderos-language', newLanguage);
+    
+    // Dispatch custom event for language change
+    window.dispatchEvent(new CustomEvent('languageChange', { detail: newLanguage }));
   };
 
   // Apply theme on mount and when theme changes
   useEffect(() => {
     console.log('Theme effect triggered:', theme);
+    const root = document.documentElement;
+    const body = document.body;
+    
     if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.body.classList.add('dark');
+      root.classList.add('dark');
+      body.classList.add('dark');
+      root.style.setProperty('color-scheme', 'dark');
+      body.style.backgroundColor = '#111827';
+      body.style.color = '#f9fafb';
     } else {
-      document.documentElement.classList.remove('dark');
-      document.body.classList.remove('dark');
+      root.classList.remove('dark');
+      body.classList.remove('dark');
+      root.style.setProperty('color-scheme', 'light');
+      body.style.backgroundColor = '#ffffff';
+      body.style.color = '#111827';
     }
   }, [theme]);
 
