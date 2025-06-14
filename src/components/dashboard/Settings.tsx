@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -63,6 +64,103 @@ const Settings = () => {
     animationsEnabled: true
   });
 
+  const translations = {
+    en: {
+      settings: 'Settings',
+      subtitle: 'Manage your account and app preferences',
+      profile: 'Profile Information',
+      profileDesc: 'Update your personal information and preferences',
+      fullName: 'Full Name',
+      email: 'Email Address',
+      emailNote: 'Email cannot be changed',
+      appearance: 'Appearance & Language',
+      theme: 'Theme',
+      light: 'Light',
+      dark: 'Dark',
+      language: 'Language',
+      apiIntegrations: 'API Integrations',
+      apiDesc: 'Connect external services to enhance your productivity',
+      showApiKeys: 'Show API Keys',
+      sensitive: 'Sensitive',
+      geminiKey: 'Gemini AI API Key',
+      geminiPlaceholder: 'Enter your Gemini API key for AI features',
+      notionToken: 'Notion Integration Token',
+      notionPlaceholder: 'Enter your Notion integration token',
+      notifications: 'Notifications',
+      emailNotifications: 'Email Notifications',
+      emailNotificationsDesc: 'Receive updates via email',
+      weeklyReports: 'Weekly Reports',
+      weeklyReportsDesc: 'Get weekly productivity summaries',
+      habitReminders: 'Habit Reminders',
+      habitRemindersDesc: 'Daily reminders for your habits',
+      focusAlerts: 'Focus Session Alerts',
+      focusAlertsDesc: 'Alerts when focus sessions complete',
+      privacy: 'Privacy & Security',
+      analytics: 'Analytics',
+      analyticsDesc: 'Help improve the app with usage data',
+      autoSave: 'Auto-save',
+      autoSaveDesc: 'Automatically save your changes',
+      dangerZone: 'Danger Zone',
+      dangerDesc: 'These actions are permanent and cannot be undone',
+      deleteAccount: 'Delete Account',
+      save: 'Save Changes',
+      saving: 'Saving...',
+      success: 'Success',
+      successMsg: 'Settings saved successfully!',
+      error: 'Error',
+      errorMsg: 'Failed to save settings',
+      loadError: 'Failed to load user settings'
+    },
+    id: {
+      settings: 'Pengaturan',
+      subtitle: 'Kelola akun dan preferensi aplikasi Anda',
+      profile: 'Informasi Profil',
+      profileDesc: 'Perbarui informasi personal dan preferensi Anda',
+      fullName: 'Nama Lengkap',
+      email: 'Alamat Email',
+      emailNote: 'Email tidak dapat diubah',
+      appearance: 'Tampilan & Bahasa',
+      theme: 'Tema',
+      light: 'Terang',
+      dark: 'Gelap',
+      language: 'Bahasa',
+      apiIntegrations: 'Integrasi API',
+      apiDesc: 'Hubungkan layanan eksternal untuk meningkatkan produktivitas',
+      showApiKeys: 'Tampilkan API Keys',
+      sensitive: 'Sensitif',
+      geminiKey: 'Kunci API Gemini AI',
+      geminiPlaceholder: 'Masukkan kunci API Gemini untuk fitur AI',
+      notionToken: 'Token Integrasi Notion',
+      notionPlaceholder: 'Masukkan token integrasi Notion',
+      notifications: 'Notifikasi',
+      emailNotifications: 'Notifikasi Email',
+      emailNotificationsDesc: 'Terima pembaruan melalui email',
+      weeklyReports: 'Laporan Mingguan',
+      weeklyReportsDesc: 'Dapatkan ringkasan produktivitas mingguan',
+      habitReminders: 'Pengingat Kebiasaan',
+      habitRemindersDesc: 'Pengingat harian untuk kebiasaan Anda',
+      focusAlerts: 'Peringatan Sesi Fokus',
+      focusAlertsDesc: 'Peringatan saat sesi fokus selesai',
+      privacy: 'Privasi & Keamanan',
+      analytics: 'Analitik',
+      analyticsDesc: 'Bantu tingkatkan aplikasi dengan data penggunaan',
+      autoSave: 'Simpan Otomatis',
+      autoSaveDesc: 'Simpan perubahan secara otomatis',
+      dangerZone: 'Zona Berbahaya',
+      dangerDesc: 'Tindakan ini bersifat permanen dan tidak dapat dibatalkan',
+      deleteAccount: 'Hapus Akun',
+      save: 'Simpan Perubahan',
+      saving: 'Menyimpan...',
+      success: 'Berhasil',
+      successMsg: 'Pengaturan berhasil disimpan!',
+      error: 'Error',
+      errorMsg: 'Gagal menyimpan pengaturan',
+      loadError: 'Gagal memuat pengaturan pengguna'
+    }
+  };
+
+  const t = translations[language];
+
   useEffect(() => {
     loadUserData();
   }, [user]);
@@ -93,19 +191,11 @@ const Settings = () => {
         notionToken: userSettings?.notion_token || ''
       }));
 
-      // Update theme context if different
-      if (userSettings?.theme && userSettings.theme !== theme) {
-        setTheme(userSettings.theme as 'light' | 'dark');
-      }
-      if (userSettings?.language && userSettings.language !== language) {
-        setLanguage(userSettings.language as 'en' | 'id');
-      }
-
     } catch (error) {
       console.error('Error loading user data:', error);
       toast({
-        title: "Error",
-        description: "Failed to load user settings",
+        title: t.error,
+        description: t.loadError,
         variant: "destructive"
       });
     } finally {
@@ -132,27 +222,27 @@ const Settings = () => {
       // Update user settings
       const { error: settingsError } = await supabase
         .from('user_settings')
-        .update({
+        .upsert({
+          user_id: user.id,
           theme: theme,
           language: language,
           gemini_api_key: settings.geminiApiKey || null,
           notion_token: settings.notionToken || null,
           updated_at: new Date().toISOString()
-        })
-        .eq('user_id', user.id);
+        });
 
       if (settingsError) throw settingsError;
 
       toast({
-        title: "Success",
-        description: "Settings saved successfully!"
+        title: t.success,
+        description: t.successMsg
       });
 
     } catch (error) {
       console.error('Error saving settings:', error);
       toast({
-        title: "Error",
-        description: "Failed to save settings",
+        title: t.error,
+        description: t.errorMsg,
         variant: "destructive"
       });
     } finally {
@@ -166,7 +256,6 @@ const Settings = () => {
     }
 
     try {
-      // Sign out first
       await signOut();
       
       toast({
@@ -177,7 +266,7 @@ const Settings = () => {
     } catch (error) {
       console.error('Error during account deletion:', error);
       toast({
-        title: "Error",
+        title: t.error,
         description: "Failed to initiate account deletion",
         variant: "destructive"
       });
@@ -185,16 +274,19 @@ const Settings = () => {
   };
 
   const updateSetting = (key: string, value: any) => {
+    console.log('Updating setting:', key, value);
     setSettings(prev => ({ ...prev, [key]: value }));
   };
 
   const handleThemeChange = (value: string) => {
+    console.log('Theme change requested:', value);
     if (value && (value === 'light' || value === 'dark')) {
       setTheme(value);
     }
   };
 
   const handleLanguageChange = (value: string) => {
+    console.log('Language change requested:', value);
     if (value && (value === 'en' || value === 'id')) {
       setLanguage(value);
     }
@@ -216,10 +308,10 @@ const Settings = () => {
         className="flex items-center justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold text-[#1a1a1a]" style={{ fontFamily: 'Playfair Display' }}>
-            Settings
+          <h1 className="text-3xl font-bold text-[#1a1a1a] dark:text-white" style={{ fontFamily: 'Playfair Display' }}>
+            {t.settings}
           </h1>
-          <p className="text-gray-600">Manage your account and app preferences</p>
+          <p className="text-gray-600 dark:text-gray-400">{t.subtitle}</p>
         </div>
         <Button 
           onClick={handleSave}
@@ -227,7 +319,7 @@ const Settings = () => {
           className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]"
         >
           <Save className="h-4 w-4 mr-2" />
-          {saving ? 'Saving...' : 'Save Changes'}
+          {saving ? t.saving : t.save}
         </Button>
       </motion.div>
 
@@ -238,36 +330,37 @@ const Settings = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 dark:text-white">
                 <User className="h-5 w-5 text-[#FFD700]" />
-                <span>Profile Information</span>
+                <span>{t.profile}</span>
               </CardTitle>
-              <CardDescription>
-                Update your personal information and preferences
+              <CardDescription className="dark:text-gray-400">
+                {t.profileDesc}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="fullName">Full Name</Label>
+                  <Label htmlFor="fullName" className="dark:text-gray-300">{t.fullName}</Label>
                   <Input
                     id="fullName"
                     value={settings.fullName}
                     onChange={(e) => updateSetting('fullName', e.target.value)}
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email" className="dark:text-gray-300">{t.email}</Label>
                   <Input
                     id="email"
                     type="email"
                     value={settings.email}
                     disabled
-                    className="bg-gray-100"
+                    className="bg-gray-100 dark:bg-gray-600 dark:border-gray-500"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t.emailNote}</p>
                 </div>
               </div>
             </CardContent>
@@ -280,19 +373,19 @@ const Settings = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 dark:text-white">
                 <Palette className="h-5 w-5 text-[#FFD700]" />
-                <span>Appearance & Language</span>
+                <span>{t.appearance}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <Label className="flex items-center space-x-2 mb-3">
+                  <Label className="flex items-center space-x-2 mb-3 dark:text-gray-300">
                     <Sun className="h-4 w-4" />
-                    <span>Theme</span>
+                    <span>{t.theme}</span>
                   </Label>
                   <ToggleGroup 
                     type="single" 
@@ -302,25 +395,25 @@ const Settings = () => {
                   >
                     <ToggleGroupItem 
                       value="light" 
-                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a] dark:data-[state=off]:bg-gray-700 dark:data-[state=off]:text-gray-300"
                     >
                       <Sun className="h-4 w-4 mr-2" />
-                      Light
+                      {t.light}
                     </ToggleGroupItem>
                     <ToggleGroupItem 
                       value="dark"
-                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a] dark:data-[state=off]:bg-gray-700 dark:data-[state=off]:text-gray-300"
                     >
                       <Moon className="h-4 w-4 mr-2" />
-                      Dark
+                      {t.dark}
                     </ToggleGroupItem>
                   </ToggleGroup>
                 </div>
                 
                 <div>
-                  <Label className="flex items-center space-x-2 mb-3">
+                  <Label className="flex items-center space-x-2 mb-3 dark:text-gray-300">
                     <Languages className="h-4 w-4" />
-                    <span>Language</span>
+                    <span>{t.language}</span>
                   </Label>
                   <ToggleGroup 
                     type="single" 
@@ -330,13 +423,13 @@ const Settings = () => {
                   >
                     <ToggleGroupItem 
                       value="en"
-                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a] dark:data-[state=off]:bg-gray-700 dark:data-[state=off]:text-gray-300"
                     >
                       🇺🇸 English
                     </ToggleGroupItem>
                     <ToggleGroupItem 
                       value="id"
-                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a]"
+                      className="data-[state=on]:bg-[#FFD700] data-[state=on]:text-[#1a1a1a] dark:data-[state=off]:bg-gray-700 dark:data-[state=off]:text-gray-300"
                     >
                       🇮🇩 Bahasa
                     </ToggleGroupItem>
@@ -353,26 +446,27 @@ const Settings = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 dark:text-white">
                 <Key className="h-5 w-5 text-[#FFD700]" />
-                <span>API Integrations</span>
+                <span>{t.apiIntegrations}</span>
               </CardTitle>
-              <CardDescription>
-                Connect external services to enhance your productivity
+              <CardDescription className="dark:text-gray-400">
+                {t.apiDesc}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-2">
-                  <Label>Show API Keys</Label>
-                  <Badge variant="secondary">Sensitive</Badge>
+                  <Label className="dark:text-gray-300">{t.showApiKeys}</Label>
+                  <Badge variant="secondary">{t.sensitive}</Badge>
                 </div>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setShowApiKeys(!showApiKeys)}
+                  className="dark:border-gray-600 dark:text-gray-300"
                 >
                   {showApiKeys ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
@@ -380,24 +474,26 @@ const Settings = () => {
               
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="geminiKey">Gemini AI API Key</Label>
+                  <Label htmlFor="geminiKey" className="dark:text-gray-300">{t.geminiKey}</Label>
                   <Input
                     id="geminiKey"
                     type={showApiKeys ? "text" : "password"}
-                    placeholder="Enter your Gemini API key for AI features"
+                    placeholder={t.geminiPlaceholder}
                     value={settings.geminiApiKey}
                     onChange={(e) => updateSetting('geminiApiKey', e.target.value)}
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   />
                 </div>
                 
                 <div>
-                  <Label htmlFor="notionToken">Notion Integration Token</Label>
+                  <Label htmlFor="notionToken" className="dark:text-gray-300">{t.notionToken}</Label>
                   <Input
                     id="notionToken"
                     type={showApiKeys ? "text" : "password"}
-                    placeholder="Enter your Notion integration token"
+                    placeholder={t.notionPlaceholder}
                     value={settings.notionToken}
                     onChange={(e) => updateSetting('notionToken', e.target.value)}
+                    className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   />
                 </div>
               </div>
@@ -411,19 +507,19 @@ const Settings = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 dark:text-white">
                 <Bell className="h-5 w-5 text-[#FFD700]" />
-                <span>Notifications</span>
+                <span>{t.notifications}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Email Notifications</Label>
-                    <p className="text-sm text-gray-500">Receive updates via email</p>
+                    <Label className="dark:text-gray-300">{t.emailNotifications}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.emailNotificationsDesc}</p>
                   </div>
                   <Switch
                     checked={settings.emailNotifications}
@@ -433,8 +529,8 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Weekly Reports</Label>
-                    <p className="text-sm text-gray-500">Get weekly productivity summaries</p>
+                    <Label className="dark:text-gray-300">{t.weeklyReports}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.weeklyReportsDesc}</p>
                   </div>
                   <Switch
                     checked={settings.weeklyReports}
@@ -444,8 +540,8 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Habit Reminders</Label>
-                    <p className="text-sm text-gray-500">Daily reminders for your habits</p>
+                    <Label className="dark:text-gray-300">{t.habitReminders}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.habitRemindersDesc}</p>
                   </div>
                   <Switch
                     checked={settings.habitReminders}
@@ -455,8 +551,8 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Focus Session Alerts</Label>
-                    <p className="text-sm text-gray-500">Alerts when focus sessions complete</p>
+                    <Label className="dark:text-gray-300">{t.focusAlerts}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.focusAlertsDesc}</p>
                   </div>
                   <Switch
                     checked={settings.focusSessionAlerts}
@@ -474,19 +570,19 @@ const Settings = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card>
+          <Card className="dark:bg-gray-800 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
+              <CardTitle className="flex items-center space-x-2 dark:text-white">
                 <Shield className="h-5 w-5 text-[#FFD700]" />
-                <span>Privacy & Security</span>
+                <span>{t.privacy}</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Analytics</Label>
-                    <p className="text-sm text-gray-500">Help improve the app with usage data</p>
+                    <Label className="dark:text-gray-300">{t.analytics}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.analyticsDesc}</p>
                   </div>
                   <Switch
                     checked={settings.analyticsEnabled}
@@ -496,8 +592,8 @@ const Settings = () => {
                 
                 <div className="flex items-center justify-between">
                   <div>
-                    <Label>Auto-save</Label>
-                    <p className="text-sm text-gray-500">Automatically save your changes</p>
+                    <Label className="dark:text-gray-300">{t.autoSave}</Label>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{t.autoSaveDesc}</p>
                   </div>
                   <Switch
                     checked={settings.autoSave}
@@ -506,13 +602,13 @@ const Settings = () => {
                 </div>
               </div>
               
-              <Separator />
+              <Separator className="dark:border-gray-600" />
               
               <div className="space-y-4">
                 <div>
-                  <Label className="text-red-600">Danger Zone</Label>
-                  <p className="text-sm text-gray-500 mb-3">
-                    These actions are permanent and cannot be undone
+                  <Label className="text-red-600 dark:text-red-400">{t.dangerZone}</Label>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                    {t.dangerDesc}
                   </p>
                   <Button
                     variant="destructive"
@@ -520,7 +616,7 @@ const Settings = () => {
                     className="w-full sm:w-auto"
                   >
                     <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Account
+                    {t.deleteAccount}
                   </Button>
                 </div>
               </div>

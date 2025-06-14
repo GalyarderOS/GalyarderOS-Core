@@ -26,26 +26,54 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [language, setLanguage] = useState<Language>('en');
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    const savedLanguage = localStorage.getItem('language') as Language;
+    // Load saved preferences from localStorage
+    const savedTheme = localStorage.getItem('galyarderos-theme') as Theme;
+    const savedLanguage = localStorage.getItem('galyarderos-language') as Language;
     
-    if (savedTheme) setTheme(savedTheme);
-    if (savedLanguage) setLanguage(savedLanguage);
+    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+      setTheme(savedTheme);
+    } else {
+      // Default to system preference
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(systemPrefersDark ? 'dark' : 'light');
+    }
+    
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'id')) {
+      setLanguage(savedLanguage);
+    }
   }, []);
 
   const updateTheme = (newTheme: Theme) => {
+    console.log('Updating theme to:', newTheme);
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+    localStorage.setItem('galyarderos-theme', newTheme);
+    
+    // Apply theme to document
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
   };
 
   const updateLanguage = (newLanguage: Language) => {
+    console.log('Updating language to:', newLanguage);
     setLanguage(newLanguage);
-    localStorage.setItem('language', newLanguage);
+    localStorage.setItem('galyarderos-language', newLanguage);
   };
 
+  // Apply theme on mount and when theme changes
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    console.log('Theme effect triggered:', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
   }, [theme]);
 
   const value = {

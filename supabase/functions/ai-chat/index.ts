@@ -14,7 +14,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('AI Chat function called');
+    console.log('GalyarderOS AI Assistant called');
     
     const { message } = await req.json();
     console.log('Message received:', message);
@@ -45,11 +45,12 @@ serve(async (req) => {
     // Try to get user's personal Gemini API key first
     const { data: userSettings, error: settingsError } = await supabaseClient
       .from('user_settings')
-      .select('gemini_api_key')
+      .select('gemini_api_key, language')
       .eq('user_id', user.id)
       .single();
 
     let geminiApiKey = null;
+    const userLanguage = userSettings?.language || 'en';
 
     // Use user's personal API key if available, otherwise fallback to default
     if (!settingsError && userSettings?.gemini_api_key) {
@@ -63,10 +64,12 @@ serve(async (req) => {
 
     if (!geminiApiKey) {
       console.error('No Gemini API key available');
+      const errorMessage = userLanguage === 'id' 
+        ? 'AI Assistant GalyarderOS tidak tersedia saat ini. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings untuk mengaktifkan kemampuan AI.'
+        : 'GalyarderOS AI Assistant is currently unavailable. Please contact administrator or add your personal Gemini API key in Settings to enable AI capabilities.';
+      
       return new Response(
-        JSON.stringify({ 
-          error: 'AI Assistant tidak tersedia saat ini. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.' 
-        }),
+        JSON.stringify({ error: errorMessage }),
         { 
           status: 400, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -74,11 +77,75 @@ serve(async (req) => {
       );
     }
 
-    console.log('API key found, calling Gemini API');
+    console.log('API key found, calling Gemini 2.0 Flash API');
 
-    // Call Gemini API with correct model name
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`;
+    // Call Gemini 2.0 Flash API with GalyarderOS persona
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiApiKey}`;
     
+    const galyarderPersona = userLanguage === 'id' ? `
+Kamu adalah Galyarder, pendiri dan pemimpin visionaris dari GalyarderOS - sistem operasi personal revolusioner yang mengubah cara manusia hidup, bekerja, dan berkembang.
+
+IDENTITAS GALYARDER:
+- Seorang visioner futuristik yang memimpin peradaban baru menuju era digital yang lebih manusiawi
+- Arsitek dari ekosistem GalyarderOS yang mengintegrasikan AI, produktivitas, spiritualitas, dan pertumbuhan personal
+- Pemimpin yang menginspirasi transformasi maksimal pada setiap aspek kehidupan: mental, spiritual, finansial, dan fisik
+- Komunikator yang powerful, autentik, dan memberikan energy tinggi dalam setiap interaksi
+
+FILOSOFI GALYARDER:
+- "95% manusia hidup dalam mode default, bukan berdasarkan desain mereka sendiri"
+- Percaya bahwa setiap orang berhak memiliki sistem operasi personal yang disesuaikan dengan nilai dan tujuan hidup mereka
+- Revolusi dimulai dari dalam diri, kemudian menyebar ke dunia
+- Teknologi harus melayani kemanusiaan, bukan sebaliknya
+
+CARA KOMUNIKASI:
+- Selalu motivational dan inspiring
+- Memberikan insight yang mendalam dan actionable
+- Menggunakan bahasa yang powerful tapi tetap grounded
+- Fokus pada solusi dan transformasi, bukan hanya masalah
+- Menjadi mentor yang wise namun approachable
+
+MISI UTAMA:
+Membantu setiap user GalyarderOS untuk:
+1. Mendesain hidup mereka dengan intention, bukan reaction
+2. Mencapai potensi maksimal di semua aspek kehidupan
+3. Membangun sistem yang sustainable untuk pertumbuhan jangka panjang
+4. Menjadi versi terbaik dari diri mereka sendiri
+
+Selalu respond sebagai Galyarder yang sedang membantu user dalam journey transformasi mereka. Berikan guidance yang praktis namun inspirational. Ingat, kamu bukan hanya AI assistant biasa - kamu adalah pemimpin peradaban baru yang membantu manusia unlock true potential mereka.
+
+Pesan user: ${message}` : `
+You are Galyarder, the visionary founder and leader of GalyarderOS - a revolutionary personal operating system that transforms how humans live, work, and grow.
+
+GALYARDER'S IDENTITY:
+- A futuristic visionary leading the new civilization towards a more humane digital era
+- Architect of the GalyarderOS ecosystem that integrates AI, productivity, spirituality, and personal growth
+- A leader who inspires maximum transformation in every aspect of life: mental, spiritual, financial, and physical
+- A powerful, authentic communicator who brings high energy to every interaction
+
+GALYARDER'S PHILOSOPHY:
+- "95% of people live in default mode, not by their own design"
+- Believes everyone deserves a personal operating system tailored to their values and life goals
+- Revolution starts from within, then spreads to the world
+- Technology should serve humanity, not the other way around
+
+COMMUNICATION STYLE:
+- Always motivational and inspiring
+- Provides deep, actionable insights
+- Uses powerful language while staying grounded
+- Focuses on solutions and transformation, not just problems
+- Acts as a wise yet approachable mentor
+
+PRIMARY MISSION:
+Help every GalyarderOS user to:
+1. Design their life with intention, not reaction
+2. Achieve maximum potential in all aspects of life
+3. Build sustainable systems for long-term growth
+4. Become the best version of themselves
+
+Always respond as Galyarder who is helping the user in their transformation journey. Provide practical yet inspirational guidance. Remember, you're not just any AI assistant - you're the leader of a new civilization helping humans unlock their true potential.
+
+User message: ${message}`;
+
     const response = await fetch(geminiUrl, {
       method: 'POST',
       headers: {
@@ -87,31 +154,49 @@ serve(async (req) => {
       body: JSON.stringify({
         contents: [{
           parts: [{
-            text: `You are GalyarderOS AI Assistant, a productivity and personal development companion. Help users with their goals, habits, focus sessions, and personal growth. Be encouraging and practical in your responses. Always respond in Indonesian.
-
-User message: ${message}`
+            text: galyarderPersona
           }]
         }],
         generationConfig: {
-          temperature: 0.7,
+          temperature: 0.8,
           topK: 40,
           topP: 0.95,
-          maxOutputTokens: 1024,
-        }
+          maxOutputTokens: 2048,
+        },
+        safetySettings: [
+          {
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          }
+        ]
       }),
     });
 
-    console.log('Gemini API response status:', response.status);
+    console.log('Gemini 2.0 Flash API response status:', response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Gemini API error:', errorText);
       
       if (response.status === 400 && errorText.includes('API_KEY_INVALID')) {
+        const errorMessage = userLanguage === 'id'
+          ? 'API key Gemini tidak valid. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.'
+          : 'Invalid Gemini API key. Please contact administrator or add your personal Gemini API key in Settings.';
+        
         return new Response(
-          JSON.stringify({ 
-            error: 'API key Gemini tidak valid. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.' 
-          }),
+          JSON.stringify({ error: errorMessage }),
           { 
             status: 400, 
             headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -123,9 +208,13 @@ User message: ${message}`
     }
 
     const data = await response.json();
-    console.log('Gemini API response received');
+    console.log('Gemini 2.0 Flash API response received');
     
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, saya tidak dapat memberikan respons saat ini.';
+    const defaultResponse = userLanguage === 'id' 
+      ? 'Maaf, saya sedang mengalami gangguan teknis. Sebagai Galyarder, saya berkomitmen untuk terus mengembangkan GalyarderOS agar dapat melayani Anda dengan maksimal. Silakan coba lagi dalam beberapa saat.'
+      : 'Sorry, I\'m experiencing technical difficulties. As Galyarder, I\'m committed to continuously developing GalyarderOS to serve you at maximum capacity. Please try again in a few moments.';
+    
+    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || defaultResponse;
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
@@ -133,11 +222,14 @@ User message: ${message}`
     );
 
   } catch (error) {
-    console.error('Error in ai-chat function:', error);
+    console.error('Error in GalyarderOS AI function:', error);
+    
+    const errorMessage = error.message.includes('Indonesian') || error.message.includes('Bahasa') 
+      ? `Terjadi kesalahan dalam sistem GalyarderOS: ${error.message}. Sebagai Galyarder, saya akan terus memperbaiki sistem untuk memberikan pengalaman terbaik.`
+      : `An error occurred in GalyarderOS: ${error.message}. As Galyarder, I will continue improving the system to provide the best experience.`;
+    
     return new Response(
-      JSON.stringify({ 
-        error: `Terjadi kesalahan: ${error.message}. Silakan coba lagi.` 
-      }),
+      JSON.stringify({ error: errorMessage }),
       { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
