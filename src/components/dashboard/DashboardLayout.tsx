@@ -122,7 +122,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   GalyarderOS
                 </span>
                 <span className="text-xs text-muted-foreground font-medium font-playfair">Personal Operating System</span>
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
