@@ -101,7 +101,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 font-playfair">
       <div className="w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -113,29 +113,29 @@ const AuthPage = () => {
             <Button
               variant="ghost"
               onClick={() => navigate('/')}
-              className="mb-6 text-muted-foreground hover:text-foreground old-money-button"
+              className="mb-6 text-muted-foreground hover:text-foreground font-playfair"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Button>
             
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-accent to-primary rounded-xl flex items-center justify-center soft-shadow">
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center soft-shadow">
                 <img 
                   src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
                   alt="GalyarderOS Logo" 
                   className="h-8 w-8 object-contain"
                 />
               </div>
-              <span className="text-2xl font-bold old-money-heading" style={{ fontFamily: 'Playfair Display' }}>
+              <span className="text-2xl font-bold text-foreground font-playfair">
                 GalyarderOS
               </span>
             </div>
             
-            <h1 className="text-3xl font-bold old-money-heading mb-2" style={{ fontFamily: 'Playfair Display' }}>
+            <h1 className="text-3xl font-bold text-foreground mb-2 font-playfair">
               {isLogin ? 'Welcome Back' : 'Join the Elite'}
             </h1>
-            <p className="old-money-subheading">
+            <p className="text-muted-foreground font-playfair">
               {isLogin 
                 ? 'Access your personal operating system' 
                 : 'Begin your journey to refined productivity'
@@ -144,15 +144,15 @@ const AuthPage = () => {
           </div>
 
           {/* Auth Form */}
-          <Card className="old-money-card border-2">
+          <Card className="border-2 border-border soft-shadow">
             <CardHeader className="space-y-1 text-center">
               <div className="flex items-center justify-center space-x-2 mb-4">
-                {isLogin ? <Shield className="h-5 w-5 text-primary" /> : <Crown className="h-5 w-5 text-accent" />}
-                <CardTitle className="text-2xl old-money-heading">
+                {isLogin ? <Shield className="h-5 w-5 text-muted-foreground" /> : <Crown className="h-5 w-5 text-muted-foreground" />}
+                <CardTitle className="text-2xl text-foreground font-playfair">
                   {isLogin ? 'Sign In' : 'Create Account'}
                 </CardTitle>
               </div>
-              <CardDescription className="old-money-subheading">
+              <CardDescription className="text-muted-foreground font-playfair">
                 {isLogin 
                   ? 'Enter your credentials to continue' 
                   : 'Join the exclusive community of achievers'
@@ -164,7 +164,7 @@ const AuthPage = () => {
               <Button
                 type="button"
                 variant="outline"
-                className="w-full mb-6 h-12 old-money-button border-2 hover:bg-muted/50"
+                className="w-full mb-6 h-12 border-2 hover:bg-muted/50 font-playfair"
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
               >
@@ -191,14 +191,14 @@ const AuthPage = () => {
                   <Separator className="w-full" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-3 text-muted-foreground font-medium">Or continue with email</span>
+                  <span className="bg-card px-3 text-muted-foreground font-medium font-playfair">Or continue with email</span>
                 </div>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {!isLogin && (
                   <div className="space-y-2">
-                    <Label htmlFor="fullName" className="text-sm font-medium text-foreground">Full Name</Label>
+                    <Label htmlFor="fullName" className="text-sm font-medium text-foreground font-playfair">Full Name</Label>
                     <Input
                       id="fullName"
                       type="text"
@@ -206,13 +206,13 @@ const AuthPage = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       required={!isLogin}
-                      className="h-12 border-2 focus:border-accent transition-all duration-300"
+                      className="h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair"
                     />
                   </div>
                 )}
                 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-foreground">Email Address</Label>
+                  <Label htmlFor="email" className="text-sm font-medium text-foreground font-playfair">Email Address</Label>
                   <Input
                     id="email"
                     type="email"
@@ -220,12 +220,12 @@ const AuthPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-12 border-2 focus:border-accent transition-all duration-300"
+                    className="h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-foreground">Password</Label>
+                  <Label htmlFor="password" className="text-sm font-medium text-foreground font-playfair">Password</Label>
                   <div className="relative">
                     <Input
                       id="password"
@@ -234,7 +234,7 @@ const AuthPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="h-12 border-2 focus:border-accent pr-12 transition-all duration-300"
+                      className="h-12 border-2 focus:border-muted-foreground pr-12 transition-all duration-300 font-playfair"
                     />
                     <Button
                       type="button"
@@ -254,12 +254,12 @@ const AuthPage = () => {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-accent-foreground font-semibold soft-shadow-lg transition-all duration-300"
+                  className="w-full h-12 bg-foreground hover:bg-foreground/90 text-background soft-shadow font-playfair text-base transition-all duration-300"
                   disabled={loading}
                 >
                   {loading ? (
                     <div className="flex items-center space-x-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-foreground"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-background"></div>
                       <span>{isLogin ? 'Signing in...' : 'Creating account...'}</span>
                     </div>
                   ) : (
@@ -269,12 +269,12 @@ const AuthPage = () => {
               </form>
 
               <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground font-playfair">
                   {isLogin ? "New to our exclusive platform?" : "Already part of the community?"}
                   <Button
                     variant="link"
                     onClick={() => setIsLogin(!isLogin)}
-                    className="ml-1 p-0 h-auto text-accent hover:text-accent/80 font-medium"
+                    className="ml-1 p-0 h-auto text-foreground hover:text-foreground/80 font-medium font-playfair"
                   >
                     {isLogin ? 'Create account' : 'Sign in'}
                   </Button>
@@ -285,7 +285,7 @@ const AuthPage = () => {
 
           {/* Footer */}
           <div className="mt-8 text-center">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground font-playfair">
               By continuing, you agree to our refined terms of service
             </p>
           </div>
