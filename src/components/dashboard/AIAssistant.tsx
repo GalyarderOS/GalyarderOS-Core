@@ -13,7 +13,8 @@ import {
   Bot, 
   User,
   Sparkles,
-  Loader2
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 
 interface AIAssistantProps {
@@ -33,12 +34,13 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
     {
       id: '1',
       role: 'assistant',
-      content: 'Hello! I\'m your GalyarderOS AI Assistant. I\'m here to help you with productivity, goal setting, habit tracking, and personal development. How can I assist you today?',
+      content: 'Halo! Saya adalah AI Assistant GalyarderOS. Saya siap membantu Anda dengan produktivitas, penetapan tujuan, pelacakan kebiasaan, dan pengembangan diri. Bagaimana saya bisa membantu Anda hari ini?',
       timestamp: new Date()
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [connectionError, setConnectionError] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user, session } = useAuth();
   const { toast } = useToast();
@@ -69,8 +71,11 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
+    setConnectionError(false);
 
     try {
+      console.log('Sending message to AI:', userMessage.content);
+      
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: { message: userMessage.content },
         headers: {
@@ -78,12 +83,20 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
         },
       });
 
+      console.log('Response from edge function:', { data, error });
+
       if (error) {
-        throw error;
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Terjadi kesalahan saat menghubungi server');
       }
 
-      if (data.error) {
+      if (data?.error) {
+        console.error('API error:', data.error);
         throw new Error(data.error);
+      }
+
+      if (!data?.response) {
+        throw new Error('Tidak ada respons dari AI');
       }
 
       const assistantMessage: Message = {
@@ -97,11 +110,16 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
 
     } catch (error) {
       console.error('Error sending message:', error);
+      setConnectionError(true);
       
-      let errorMessage = 'Sorry, I encountered an error. Please try again.';
+      let errorMessage = 'Maaf, terjadi kesalahan. Silakan coba lagi.';
       
-      if (error.message?.includes('Gemini API key')) {
-        errorMessage = 'Please add your Gemini API key in Settings to use the AI Assistant.';
+      if (error.message?.includes('API key')) {
+        errorMessage = 'Silakan tambahkan API key Gemini Anda di Settings untuk menggunakan AI Assistant.';
+      } else if (error.message?.includes('tidak valid')) {
+        errorMessage = 'API key Gemini tidak valid. Silakan periksa dan perbarui di Settings.';
+      } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
+        errorMessage = 'Masalah koneksi. Periksa koneksi internet Anda dan coba lagi.';
       }
 
       toast({
@@ -113,7 +131,7 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: errorMessage,
+        content: `❌ ${errorMessage}`,
         timestamp: new Date()
       };
 
@@ -139,6 +157,9 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
               <Sparkles className="h-5 w-5 text-[#1a1a1a]" />
             </div>
             <span>AI Assistant</span>
+            {connectionError && (
+              <AlertCircle className="h-4 w-4 text-red-500" title="Connection Error" />
+            )}
           </DialogTitle>
         </DialogHeader>
 
@@ -194,7 +215,7 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
                     <div className="bg-gray-100 text-gray-900 rounded-lg px-4 py-3">
                       <div className="flex items-center space-x-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        <span className="text-sm">Thinking...</span>
+                        <span className="text-sm">Sedang berpikir...</span>
                       </div>
                     </div>
                   </div>
@@ -209,7 +230,7 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask me anything about productivity, goals, or habits..."
+                placeholder="Tanya saya tentang produktivitas, tujuan, atau kebiasaan..."
                 className="flex-1 min-h-[40px] max-h-32 resize-none"
                 disabled={isLoading || !user}
               />
@@ -224,7 +245,13 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
             
             {!user && (
               <p className="text-xs text-gray-500 mt-2">
-                Please sign in to use the AI Assistant
+                Silakan masuk untuk menggunakan AI Assistant
+              </p>
+            )}
+            
+            {connectionError && (
+              <p className="text-xs text-red-500 mt-2">
+                ⚠️ Masalah koneksi terdeteksi. Periksa API key Gemini di Settings.
               </p>
             )}
           </div>
