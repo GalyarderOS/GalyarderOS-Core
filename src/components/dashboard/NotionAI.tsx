@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -241,6 +240,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
 
   const viewPage = (page: NotionPage) => {
     setSelectedPage(page);
+    setActiveTab('view');
   };
 
   const openInNotion = (pageId: string) => {
@@ -391,7 +391,12 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                       ) : (
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900 mb-2">{page.title}</h4>
+                            <h4 
+                              className="font-medium text-gray-900 mb-2 cursor-pointer hover:text-blue-600 transition-colors"
+                              onClick={() => viewPage(page)}
+                            >
+                              {page.title}
+                            </h4>
                             <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
                               <div className="flex items-center space-x-1">
                                 <Calendar className="h-4 w-4" />
