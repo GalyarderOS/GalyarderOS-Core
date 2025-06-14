@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -6,6 +7,15 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -18,7 +28,11 @@ import {
   Loader2,
   AlertCircle,
   Save,
-  X
+  X,
+  Calendar,
+  Clock,
+  Eye,
+  ExternalLink
 } from 'lucide-react';
 
 interface NotionAIProps {
@@ -32,6 +46,7 @@ interface NotionPage {
   content?: string;
   created_time: string;
   last_edited_time: string;
+  url?: string;
 }
 
 const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
@@ -44,6 +59,12 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [connectionError, setConnectionError] = useState(false);
   const [activeTab, setActiveTab] = useState('browse');
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { user, session } = useAuth();
   const { toast } = useToast();
@@ -102,7 +123,9 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     
     try {
       const response = await callNotionAPI('list_pages');
-      setPages(response.pages || []);
+      const allPages = response.pages || [];
+      setPages(allPages);
+      setTotalPages(Math.ceil(allPages.length / itemsPerPage));
     } catch (error) {
       console.error('Error fetching pages:', error);
     } finally {
@@ -205,12 +228,24 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       const response = await callNotionAPI('search_pages', {
         query: searchQuery.trim()
       });
-      setPages(response.pages || []);
+      const searchResults = response.pages || [];
+      setPages(searchResults);
+      setTotalPages(Math.ceil(searchResults.length / itemsPerPage));
+      setCurrentPage(1);
     } catch (error) {
       console.error('Error searching pages:', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const viewPage = (page: NotionPage) => {
+    setSelectedPage(page);
+  };
+
+  const openInNotion = (pageId: string) => {
+    const notionUrl = `https://notion.so/${pageId.replace(/-/g, '')}`;
+    window.open(notionUrl, '_blank');
   };
 
   useEffect(() => {
@@ -228,19 +263,65 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     }
   }, [searchQuery]);
 
-  const filteredPages = pages.filter(page =>
-    page.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Calculate paginated pages
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedPages = pages.slice(startIndex, endIndex);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('id-ID', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const generatePageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[700px] flex flex-col p-0">
+      <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0">
         <DialogHeader className="p-6 pb-4 border-b">
           <DialogTitle className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
               <FileText className="h-5 w-5 text-white" />
             </div>
-            <span>Notion AI</span>
+            <span>Notion AI Management</span>
             {connectionError && (
               <AlertCircle className="h-4 w-4 text-red-500" />
             )}
@@ -250,10 +331,11 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
         <div className="flex-1 flex flex-col min-h-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
             <div className="px-6 py-2 border-b">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="browse">Browse Pages</TabsTrigger>
                 <TabsTrigger value="create">Create Page</TabsTrigger>
                 <TabsTrigger value="search">Search</TabsTrigger>
+                <TabsTrigger value="view" disabled={!selectedPage}>View Page</TabsTrigger>
               </TabsList>
             </div>
 
@@ -267,7 +349,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
 
               <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {filteredPages.map((page) => (
+                  {paginatedPages.map((page) => (
                     <motion.div
                       key={page.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -309,19 +391,40 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                       ) : (
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <h4 className="font-medium text-gray-900">{page.title}</h4>
-                            <p className="text-sm text-gray-500 mt-1">
-                              Dibuat: {new Date(page.created_time).toLocaleDateString('id-ID')}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              Diedit: {new Date(page.last_edited_time).toLocaleDateString('id-ID')}
-                            </p>
+                            <h4 className="font-medium text-gray-900 mb-2">{page.title}</h4>
+                            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                              <div className="flex items-center space-x-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>Created: {formatDate(page.created_time)}</span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Clock className="h-4 w-4" />
+                                <span>Edited: {formatDate(page.last_edited_time)}</span>
+                              </div>
+                            </div>
                           </div>
                           <div className="flex space-x-2">
                             <Button 
                               size="sm" 
                               variant="outline"
+                              onClick={() => viewPage(page)}
+                              title="View details"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              onClick={() => openInNotion(page.id)}
+                              title="Open in Notion"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
                               onClick={() => setEditingPage({...page, content: page.content || ''})}
+                              title="Edit page"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -330,6 +433,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                               variant="outline"
                               onClick={() => deletePage(page.id)}
                               className="text-red-600 hover:text-red-700"
+                              title="Delete page"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -339,36 +443,76 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                     </motion.div>
                   ))}
                   
-                  {filteredPages.length === 0 && !isLoading && (
+                  {paginatedPages.length === 0 && !isLoading && (
                     <div className="text-center py-8 text-gray-500">
-                      Tidak ada halaman ditemukan
+                      <FileText className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                      <p className="text-lg font-medium">No pages found</p>
+                      <p className="text-sm">Create your first page or adjust your search</p>
                     </div>
                   )}
                 </div>
               </ScrollArea>
+
+              {totalPages > 1 && (
+                <div className="flex justify-center mt-4">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                      
+                      {generatePageNumbers().map((page, index) => (
+                        <PaginationItem key={index}>
+                          {page === 'ellipsis' ? (
+                            <PaginationEllipsis />
+                          ) : (
+                            <PaginationLink
+                              onClick={() => setCurrentPage(page as number)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          )}
+                        </PaginationItem>
+                      ))}
+                      
+                      <PaginationItem>
+                        <PaginationNext 
+                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="create" className="flex-1 p-6 space-y-4">
-              <h3 className="text-lg font-semibold">Buat Halaman Baru</h3>
+              <h3 className="text-lg font-semibold">Create New Page</h3>
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Judul Halaman</label>
+                  <label className="block text-sm font-medium mb-2">Page Title</label>
                   <Input
                     value={newPageTitle}
                     onChange={(e) => setNewPageTitle(e.target.value)}
-                    placeholder="Masukkan judul halaman..."
+                    placeholder="Enter page title..."
                     disabled={isLoading}
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Konten</label>
+                  <label className="block text-sm font-medium mb-2">Content</label>
                   <Textarea
                     value={newPageContent}
                     onChange={(e) => setNewPageContent(e.target.value)}
-                    placeholder="Masukkan konten halaman..."
-                    className="min-h-[200px]"
+                    placeholder="Enter page content..."
+                    className="min-h-[300px]"
                     disabled={isLoading}
                   />
                 </div>
@@ -383,19 +527,19 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                   ) : (
                     <Plus className="h-4 w-4 mr-2" />
                   )}
-                  Buat Halaman
+                  Create Page
                 </Button>
               </div>
             </TabsContent>
 
             <TabsContent value="search" className="flex-1 p-6 space-y-4">
-              <h3 className="text-lg font-semibold">Cari Halaman</h3>
+              <h3 className="text-lg font-semibold">Search Pages</h3>
               
               <div className="flex space-x-2">
                 <Input
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari halaman..."
+                  placeholder="Search pages..."
                   disabled={isLoading}
                 />
                 <Button onClick={searchPages} disabled={isLoading}>
@@ -403,30 +547,89 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
                 </Button>
               </div>
 
-              <ScrollArea className="h-[300px]">
+              <ScrollArea className="h-[400px]">
                 <div className="space-y-3">
-                  {filteredPages.map((page) => (
+                  {pages.map((page) => (
                     <motion.div
                       key={page.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="border rounded-lg p-4 hover:bg-gray-50"
+                      className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer"
+                      onClick={() => viewPage(page)}
                     >
                       <h4 className="font-medium text-gray-900">{page.title}</h4>
                       <p className="text-sm text-gray-500 mt-1">
-                        Diedit: {new Date(page.last_edited_time).toLocaleDateString('id-ID')}
+                        Edited: {formatDate(page.last_edited_time)}
                       </p>
                     </motion.div>
                   ))}
+                  
+                  {pages.length === 0 && !isLoading && searchQuery && (
+                    <div className="text-center py-8 text-gray-500">
+                      <Search className="h-12 w-12 mx-auto mb-3 text-gray-300" />
+                      <p className="text-lg font-medium">No results found</p>
+                      <p className="text-sm">Try a different search term</p>
+                    </div>
+                  )}
                 </div>
               </ScrollArea>
+            </TabsContent>
+
+            <TabsContent value="view" className="flex-1 p-6 space-y-4">
+              {selectedPage && (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-semibold">{selectedPage.title}</h3>
+                      <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
+                        <div className="flex items-center space-x-1">
+                          <Calendar className="h-4 w-4" />
+                          <span>Created: {formatDate(selectedPage.created_time)}</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          <Clock className="h-4 w-4" />
+                          <span>Last edited: {formatDate(selectedPage.last_edited_time)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => openInNotion(selectedPage.id)}
+                      >
+                        <ExternalLink className="h-4 w-4 mr-1" />
+                        Open in Notion
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => {
+                          setEditingPage({...selectedPage, content: selectedPage.content || ''});
+                          setActiveTab('browse');
+                        }}
+                      >
+                        <Edit className="h-4 w-4 mr-1" />
+                        Edit
+                      </Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4 bg-gray-50 min-h-[300px]">
+                    <h4 className="font-medium mb-2">Content Preview</h4>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {selectedPage.content || 'No content available'}
+                    </div>
+                  </div>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
 
           {!user && (
             <div className="p-6 pt-4 border-t">
               <p className="text-xs text-gray-500">
-                Silakan masuk untuk menggunakan Notion AI
+                Please sign in to use Notion AI
               </p>
             </div>
           )}
@@ -434,7 +637,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
           {connectionError && (
             <div className="p-6 pt-4 border-t">
               <p className="text-xs text-red-500">
-                ⚠️ Masalah koneksi terdeteksi. Silakan coba lagi atau hubungi administrator.
+                ⚠️ Connection issues detected. Please try again or contact administrator.
               </p>
             </div>
           )}
