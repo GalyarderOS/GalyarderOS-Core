@@ -15,12 +15,8 @@ import {
   Calendar, 
   Clock, 
   BookOpen, 
-  Settings,
-  MessageCircle,
-  FileText
+  Settings
 } from 'lucide-react';
-import AIAssistant from './AIAssistant';
-import NotionAI from './NotionAI';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -28,8 +24,6 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [showAIAssistant, setShowAIAssistant] = useState(false);
-  const [showNotionAI, setShowNotionAI] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -154,23 +148,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </Button>
           </div>
 
+          {/* Removed the AI Assistant and Notion AI buttons */}
           <div className="flex space-x-2">
-            <Button
-              onClick={() => setShowNotionAI(true)}
-              variant="outline"
-              className="bg-black hover:bg-gray-800 text-white border-black"
-            >
-              <FileText className="h-4 w-4 mr-2" />
-              Notion AI
-            </Button>
-            
-            <Button
-              onClick={() => setShowAIAssistant(true)}
-              className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]"
-            >
-              <MessageCircle className="h-4 w-4 mr-2" />
-              AI Assistant
-            </Button>
+            {/* Empty div to maintain layout */}
           </div>
         </header>
 
@@ -179,18 +159,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           {children}
         </main>
       </div>
-
-      {/* AI Assistant Modal */}
-      <AIAssistant 
-        isOpen={showAIAssistant} 
-        onClose={() => setShowAIAssistant(false)} 
-      />
-
-      {/* Notion AI Modal */}
-      <NotionAI 
-        isOpen={showNotionAI} 
-        onClose={() => setShowNotionAI(false)} 
-      />
     </div>
   );
 };
