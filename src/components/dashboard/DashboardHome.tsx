@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
@@ -26,7 +25,9 @@ import {
   Activity,
   Zap,
   Sparkles,
-  Award
+  Award,
+  Star,
+  Trophy
 } from 'lucide-react';
 import AIAssistant from './AIAssistant';
 import NotionAI from './NotionAI';
@@ -123,8 +124,8 @@ const DashboardHome = () => {
       total: stats.goalsCompleted.total, 
       icon: Target, 
       color: 'text-primary',
-      bgColor: 'bg-primary/10',
-      description: 'Completed objectives'
+      bgColor: 'bg-gradient-to-br from-primary/5 to-primary/10',
+      description: 'Objectives completed with distinction'
     },
     { 
       label: 'Active Habits', 
@@ -132,8 +133,8 @@ const DashboardHome = () => {
       total: stats.activeHabits.total, 
       icon: Calendar, 
       color: 'text-accent',
-      bgColor: 'bg-accent/10',
-      description: 'Daily rituals maintained'
+      bgColor: 'bg-gradient-to-br from-accent/5 to-accent/10',
+      description: 'Daily rituals maintained elegantly'
     },
     { 
       label: 'Focus Hours Today', 
@@ -141,8 +142,8 @@ const DashboardHome = () => {
       total: stats.focusHours.total, 
       icon: Clock, 
       color: 'text-secondary-foreground',
-      bgColor: 'bg-secondary/50',
-      description: 'Deep work sessions'
+      bgColor: 'bg-gradient-to-br from-secondary/20 to-secondary/30',
+      description: 'Deep work sessions accomplished'
     },
     { 
       label: 'Memories Captured', 
@@ -150,176 +151,195 @@ const DashboardHome = () => {
       total: stats.memoriesCaptured.total, 
       icon: BookOpen, 
       color: 'text-muted-foreground',
-      bgColor: 'bg-muted/30',
-      description: 'Knowledge preserved'
+      bgColor: 'bg-gradient-to-br from-muted/20 to-muted/30',
+      description: 'Knowledge preserved with care'
     }
   ];
 
   const quickActions = [
     {
       icon: <Timer className="h-5 w-5 text-primary" />,
-      title: 'Start Focus Session',
-      description: 'Begin deep work',
-      badge: '25 min',
-      bgColor: 'bg-primary/5 hover:bg-primary/10 border border-primary/20',
+      title: 'Begin Focus Session',
+      description: 'Engage in purposeful deep work',
+      badge: '25 minutes',
+      bgColor: 'bg-gradient-to-br from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 border border-primary/15',
       textColor: 'text-primary'
     },
     {
       icon: <CheckCircle className="h-5 w-5 text-accent" />,
-      title: 'Review Habits',
-      description: 'Check daily progress',
-      badge: `${stats.activeHabits.value} active`,
-      bgColor: 'bg-accent/5 hover:bg-accent/10 border border-accent/20',
+      title: 'Review Daily Habits',
+      description: 'Assess progress with intention',
+      badge: `${stats.activeHabits.value} rituals`,
+      bgColor: 'bg-gradient-to-br from-accent/5 to-accent/10 hover:from-accent/10 hover:to-accent/15 border border-accent/15',
       textColor: 'text-accent'
     },
     {
       icon: <Brain className="h-5 w-5 text-secondary-foreground" />,
-      title: 'Capture Memory',
-      description: 'Store new insight',
-      badge: 'Quick add',
-      bgColor: 'bg-secondary/20 hover:bg-secondary/30 border border-secondary/30',
+      title: 'Capture New Memory',
+      description: 'Preserve valuable insights',
+      badge: 'Quick entry',
+      bgColor: 'bg-gradient-to-br from-secondary/15 to-secondary/25 hover:from-secondary/20 hover:to-secondary/30 border border-secondary/20',
       textColor: 'text-secondary-foreground'
     }
   ];
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-[500px]">
         <div className="relative">
-          <div className="w-16 h-16 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
-          <Crown className="h-6 w-6 text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          <div className="w-20 h-20 border-4 border-accent/20 border-t-accent rounded-full animate-spin"></div>
+          <Crown className="h-8 w-8 text-accent absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
-      {/* Welcome Header */}
+    <div className="space-y-10 max-w-7xl mx-auto">
+      {/* Distinguished Welcome Header */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative"
+        transition={{ duration: 0.6 }}
+        className="relative overflow-hidden"
       >
-        <div className="bg-gradient-to-r from-accent/10 via-primary/5 to-transparent rounded-2xl p-8 border border-accent/20 old-money-card">
-          <div className="flex items-center justify-between">
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Crown className="h-7 w-7 text-accent" />
-                <span className="text-sm font-medium text-muted-foreground tracking-wide">Welcome back, distinguished member</span>
+        <div className="bg-gradient-to-br from-accent/8 via-primary/5 to-accent/3 rounded-3xl p-10 border border-accent/20 relative">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent/10 to-primary/10 rounded-full blur-3xl"></div>
+          <div className="relative">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
+              <div className="space-y-6 flex-1">
+                <div className="flex items-center space-x-4">
+                  <div className="p-3 bg-gradient-to-br from-accent to-accent/80 rounded-2xl shadow-lg">
+                    <Crown className="h-8 w-8 text-accent-foreground" />
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-muted-foreground tracking-wider uppercase">Distinguished Member</span>
+                    <p className="text-lg font-serif text-accent">Welcome back to excellence</p>
+                  </div>
+                </div>
+                <div>
+                  <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: 'Playfair Display' }}>
+                    <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                      Ready for Greatness?
+                    </span>
+                  </h1>
+                  <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed font-serif">
+                    Your personal operating system stands ready. Transform ambition into achievement with sophisticated precision.
+                  </p>
+                </div>
               </div>
-              <h1 className="text-4xl font-bold old-money-heading" style={{ fontFamily: 'Playfair Display' }}>
-                Ready to Achieve Greatness?
-              </h1>
-              <p className="text-lg text-muted-foreground max-w-2xl old-money-subheading">
-                Your personal operating system awaits your command. Transform ambition into achievement.
-              </p>
-            </div>
-            <div className="hidden lg:block">
-              <div className="w-24 h-24 bg-gradient-to-br from-accent to-primary rounded-full flex items-center justify-center soft-shadow-lg">
-                <Award className="h-12 w-12 text-accent-foreground" />
+              <div className="hidden lg:block">
+                <div className="w-32 h-32 bg-gradient-to-br from-accent via-primary to-accent rounded-full flex items-center justify-center shadow-2xl border-4 border-white/20">
+                  <Trophy className="h-16 w-16 text-accent-foreground" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* AI Tools */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Sophisticated AI Tools */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <Card className="old-money-card group cursor-pointer border-2 border-primary/20 hover:border-primary/40" 
+          <Card className="group cursor-pointer border-2 border-primary/15 hover:border-primary/30 transition-all duration-500 bg-gradient-to-br from-primary/3 to-primary/8 hover:from-primary/8 hover:to-primary/12" 
                 onClick={() => setShowAIAssistant(true)}>
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="p-3 bg-gradient-to-br from-primary to-primary/80 rounded-xl soft-shadow group-hover:scale-110 transition-transform duration-300">
-                  <MessageCircle className="h-6 w-6 text-primary-foreground" />
+            <CardHeader className="pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="p-4 bg-gradient-to-br from-primary to-primary/80 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-500">
+                    <MessageCircle className="h-7 w-7 text-primary-foreground" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display' }}>AI Concierge</CardTitle>
+                    <CardDescription className="text-primary font-semibold font-serif">Your strategic counsel</CardDescription>
+                  </div>
                 </div>
-                <div>
-                  <CardTitle className="text-xl font-bold old-money-heading">AI Concierge</CardTitle>
-                  <CardDescription className="text-primary font-medium old-money-subheading">Personal guidance</CardDescription>
-                </div>
+                <Star className="h-6 w-6 text-accent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <p className="text-muted-foreground old-money-subheading">
-                Your sophisticated assistant for strategic insights and productivity counsel
+              <p className="text-muted-foreground leading-relaxed font-serif">
+                Sophisticated artificial intelligence at your service, providing strategic insights and productivity guidance with distinguished expertise.
               </p>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground soft-shadow-lg old-money-button">
-                Consult Assistant
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+              <Button className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 text-primary-foreground shadow-lg font-serif text-base">
+                Consult Your Assistant
+                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
               </Button>
             </CardContent>
           </Card>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
         >
-          <Card className="old-money-card group cursor-pointer border-2 border-accent/20 hover:border-accent/40" 
+          <Card className="group cursor-pointer border-2 border-accent/15 hover:border-accent/30 transition-all duration-500 bg-gradient-to-br from-accent/3 to-accent/8 hover:from-accent/8 hover:to-accent/12" 
                 onClick={() => setShowNotionAI(true)}>
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-3 mb-3">
-                <div className="p-3 bg-gradient-to-br from-accent to-accent/80 rounded-xl soft-shadow group-hover:scale-110 transition-transform duration-300">
-                  <FileText className="h-6 w-6 text-accent-foreground" />
+            <CardHeader className="pb-6">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="p-4 bg-gradient-to-br from-accent to-accent/80 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-500">
+                    <FileText className="h-7 w-7 text-accent-foreground" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display' }}>Workspace Butler</CardTitle>
+                    <CardDescription className="text-accent font-semibold font-serif">Content mastery service</CardDescription>
+                  </div>
                 </div>
-                <div>
-                  <CardTitle className="text-xl font-bold old-money-heading">Workspace Butler</CardTitle>
-                  <CardDescription className="text-accent font-medium old-money-subheading">Content mastery</CardDescription>
-                </div>
+                <Sparkles className="h-6 w-6 text-primary opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <p className="text-muted-foreground old-money-subheading">
-                Elegant knowledge management and content curation at your service
+              <p className="text-muted-foreground leading-relaxed font-serif">
+                Elegant knowledge management and content curation, providing seamless organization of your intellectual endeavors with refined precision.
               </p>
             </CardHeader>
             <CardContent>
-              <Button className="w-full bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 text-accent-foreground soft-shadow-lg old-money-button">
-                Access Workspace
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+              <Button className="w-full h-12 bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent/80 text-accent-foreground shadow-lg font-serif text-base">
+                Access Your Workspace
+                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
               </Button>
             </CardContent>
           </Card>
         </motion.div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Refined Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statsArray.map((stat, index) => (
           <motion.div
             key={index}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 + 0.3 }}
-            whileHover={{ y: -5 }}
+            transition={{ delay: index * 0.1 + 0.4, duration: 0.6 }}
+            whileHover={{ y: -8, scale: 1.02 }}
           >
-            <Card className="old-money-card border-2 border-border hover:border-accent/30">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <div className="space-y-1">
-                  <CardTitle className="text-sm font-semibold text-muted-foreground old-money-subheading">{stat.label}</CardTitle>
-                  <p className="text-xs text-muted-foreground/80 old-money-subheading">{stat.description}</p>
+            <Card className="border-2 border-border/30 hover:border-accent/20 transition-all duration-500 bg-gradient-to-br from-card to-card/80 hover:shadow-xl">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <div className="space-y-2">
+                  <CardTitle className="text-sm font-semibold text-muted-foreground font-serif tracking-wide">{stat.label}</CardTitle>
+                  <p className="text-xs text-muted-foreground/70 font-serif leading-relaxed">{stat.description}</p>
                 </div>
-                <div className={`p-3 rounded-xl ${stat.bgColor} border border-border/50`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                <div className={`p-4 rounded-2xl ${stat.bgColor} border border-border/20 shadow-sm`}>
+                  <stat.icon className={`h-6 w-6 ${stat.color}`} />
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <div className="text-3xl font-bold old-money-heading">
+                <div className="space-y-4">
+                  <div className="text-3xl font-bold" style={{ fontFamily: 'Playfair Display' }}>
                     {stat.total ? `${stat.value}/${stat.total}` : stat.value}
                   </div>
                   {stat.total && (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <Progress 
                         value={stat.total > 0 ? (stat.value / stat.total) * 100 : 0} 
-                        className="h-2"
+                        className="h-3 bg-muted/30"
                       />
-                      <p className="text-xs text-muted-foreground old-money-subheading">
-                        {Math.round(stat.total > 0 ? (stat.value / stat.total) * 100 : 0)}% complete
+                      <p className="text-xs text-muted-foreground font-serif">
+                        {Math.round(stat.total > 0 ? (stat.value / stat.total) * 100 : 0)}% accomplished with distinction
                       </p>
                     </div>
                   )}
@@ -330,41 +350,45 @@ const DashboardHome = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        {/* Elegant Quick Actions */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.8, duration: 0.6 }}
         >
-          <Card className="old-money-card border-2 border-border hover:border-accent/30">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-2">
-                <Zap className="h-6 w-6 text-accent" />
-                <CardTitle className="text-xl font-bold old-money-heading">Quick Actions</CardTitle>
+          <Card className="border-2 border-border/30 hover:border-accent/20 transition-all duration-500 bg-gradient-to-br from-card to-card/95">
+            <CardHeader className="pb-6">
+              <div className="flex items-center space-x-3">
+                <div className="p-3 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl">
+                  <Zap className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display' }}>Swift Actions</CardTitle>
+                  <CardDescription className="font-serif text-base">
+                    Immediate access to your essential activities
+                  </CardDescription>
+                </div>
               </div>
-              <CardDescription className="old-money-subheading">
-                Swift access to your most essential activities
-              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-4">
               {quickActions.map((action, index) => (
                 <motion.div
                   key={index}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all duration-300 ${action.bgColor}`}
+                  whileHover={{ scale: 1.03, x: 5 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`flex items-center justify-between p-5 rounded-2xl cursor-pointer transition-all duration-400 ${action.bgColor} shadow-sm hover:shadow-md`}
                 >
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-card rounded-lg soft-shadow">
+                  <div className="flex items-center space-x-4">
+                    <div className="p-3 bg-card/80 rounded-xl shadow-sm border border-border/20">
                       {action.icon}
                     </div>
                     <div>
-                      <span className={`font-semibold ${action.textColor} old-money-subheading`}>{action.title}</span>
-                      <p className="text-sm text-muted-foreground old-money-subheading">{action.description}</p>
+                      <span className={`font-semibold text-base ${action.textColor} font-serif`}>{action.title}</span>
+                      <p className="text-sm text-muted-foreground font-serif mt-1">{action.description}</p>
                     </div>
                   </div>
-                  <Badge variant="secondary" className="bg-card/80 soft-shadow border border-border/50">
+                  <Badge variant="secondary" className="bg-card/90 shadow-sm border border-border/30 font-serif px-3 py-1">
                     {action.badge}
                   </Badge>
                 </motion.div>
@@ -373,41 +397,45 @@ const DashboardHome = () => {
           </Card>
         </motion.div>
 
-        {/* Recent Activity */}
+        {/* Distinguished Recent Activity */}
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.9, duration: 0.6 }}
         >
-          <Card className="old-money-card border-2 border-border hover:border-accent/30">
-            <CardHeader className="pb-4">
-              <div className="flex items-center space-x-2">
-                <TrendingUp className="h-6 w-6 text-accent" />
-                <CardTitle className="text-xl font-bold old-money-heading">Recent Activity</CardTitle>
+          <Card className="border-2 border-border/30 hover:border-accent/20 transition-all duration-500 bg-gradient-to-br from-card to-card/95">
+            <CardHeader className="pb-6">
+              <div className="flex items-center space-x-3">
+                <div className="p-3 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-primary" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-bold" style={{ fontFamily: 'Playfair Display' }}>Recent Achievements</CardTitle>
+                  <CardDescription className="font-serif text-base">
+                    Your distinguished progress and accomplishments
+                  </CardDescription>
+                </div>
               </div>
-              <CardDescription className="old-money-subheading">
-                Your latest achievements and distinguished progress
-              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {recentActivities.length > 0 ? (
                   recentActivities.map((activity, index) => (
                     <motion.div 
                       key={index} 
-                      initial={{ opacity: 0, x: -10 }}
+                      initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="flex items-start space-x-3 pb-4 border-b border-border last:border-0"
+                      transition={{ delay: index * 0.1 + 1 }}
+                      className="flex items-start space-x-4 pb-5 border-b border-border/20 last:border-0"
                     >
-                      <div className="w-3 h-3 bg-gradient-to-r from-accent to-primary rounded-full mt-2 soft-shadow"></div>
+                      <div className="w-4 h-4 bg-gradient-to-r from-accent to-primary rounded-full mt-2 shadow-sm border-2 border-card"></div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm old-money-subheading">{activity.action}</p>
-                        <div className="flex items-center space-x-2 mt-2">
-                          <Badge variant="outline" className="text-xs border-accent/30 text-foreground old-money-subheading">
+                        <p className="font-semibold text-base font-serif">{activity.action}</p>
+                        <div className="flex items-center space-x-3 mt-3">
+                          <Badge variant="outline" className="text-xs border-accent/20 text-foreground font-serif px-2 py-1">
                             {activity.module}
                           </Badge>
-                          <span className="text-xs text-muted-foreground old-money-subheading">
+                          <span className="text-xs text-muted-foreground font-serif">
                             {formatDistanceToNow(new Date(activity.created_at), { addSuffix: true })}
                           </span>
                         </div>
@@ -415,10 +443,14 @@ const DashboardHome = () => {
                     </motion.div>
                   ))
                 ) : (
-                  <div className="text-center py-8">
-                    <Sparkles className="h-12 w-12 text-muted-foreground/50 mx-auto mb-3" />
-                    <p className="text-sm font-medium text-muted-foreground mb-1 old-money-subheading">Your journey begins now</p>
-                    <p className="text-xs text-muted-foreground/80 old-money-subheading">Start using the platform to see your distinguished progress here</p>
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-gradient-to-br from-accent/10 to-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Sparkles className="h-10 w-10 text-accent" />
+                    </div>
+                    <p className="text-lg font-semibold text-muted-foreground mb-2 font-serif" style={{ fontFamily: 'Playfair Display' }}>Your distinguished journey begins</p>
+                    <p className="text-sm text-muted-foreground/80 font-serif max-w-xs mx-auto leading-relaxed">
+                      Commence your elegant productivity journey to witness your sophisticated progress unfold here
+                    </p>
                   </div>
                 )}
               </div>
