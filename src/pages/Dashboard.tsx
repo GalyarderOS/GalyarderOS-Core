@@ -22,7 +22,6 @@ import RitualEngine from "@/components/dashboard/RitualEngine";
 import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
 import Reflection from "@/components/dashboard/Reflection";
 import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
-import NotionSync from "@/components/dashboard/NotionSync";
 import CalendarModule from "@/components/dashboard/CalendarModule";
 
 const Dashboard = () => {
@@ -49,7 +48,6 @@ const Dashboard = () => {
         <Route path="/knowledge" element={<KnowledgeHub />} />
         <Route path="/reflection" element={<Reflection />} />
         <Route path="/analytics" element={<LifeAnalytics />} />
-        <Route path="/notion" element={<NotionSync />} />
         <Route path="/memory" element={<MemoryVault />} />
         {/* Finance Individual Modules */}
         <Route path="/investments" element={<InvestmentTracker />} />
