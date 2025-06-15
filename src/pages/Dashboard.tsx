@@ -24,6 +24,7 @@ import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
 import Reflection from "@/components/dashboard/Reflection";
 import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
 import NotionSync from "@/components/dashboard/NotionSync";
+import CalendarModule from "@/components/dashboard/CalendarModule";
 
 const Dashboard = () => {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
@@ -45,6 +46,7 @@ const Dashboard = () => {
         <Route path="/ritual" element={<RitualEngine />} />
         <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
         <Route path="/focus" element={<FocusTimer />} />
+        <Route path="/calendar" element={<CalendarModule />} />
         <Route path="/knowledge" element={<KnowledgeHub />} />
         <Route path="/reflection" element={<Reflection />} />
         <Route path="/analytics" element={<LifeAnalytics />} />

@@ -95,10 +95,10 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       color: 'from-teal-500 to-cyan-600'
     },
     { 
-      id: 'habits', 
-      label: language === 'id' ? 'Kebiasaan' : 'Habits', 
+      id: 'calendar', 
+      label: language === 'id' ? 'Kalender' : 'Calendar', 
       icon: Calendar, 
-      path: '/dashboard/habits',
+      path: '/dashboard/calendar',
       category: 'personal',
       color: 'from-orange-500 to-red-600'
     },

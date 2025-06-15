@@ -14,7 +14,7 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
   const dockModules = modules.filter(m => 
     [
       'dashboard', 'identity', 'vision', 'balance', 'ritual', 
-      'habits', 'focus', 'knowledge', 'reflection', 'analytics', 
+      'calendar', 'focus', 'knowledge', 'reflection', 'analytics', 
       'notion', 'ai-assistant', 'investments', 'wealth', 'settings'
     ].includes(m.id)
   );
