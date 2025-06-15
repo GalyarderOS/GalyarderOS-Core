@@ -1,6 +1,5 @@
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
@@ -28,35 +27,28 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
     system: 'System'
   };
 
-  const ModuleCard = ({ module, index }: { module: any; index: number }) => {
+  const ModuleCard = ({ module }: { module: any }) => {
     const Icon = module.icon;
     
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-        whileHover={{ scale: 1.02, y: -5 }}
-        whileTap={{ scale: 0.98 }}
-        className="group cursor-pointer"
+      <div
+        className="group cursor-pointer transition-all"
         onClick={() => onModuleClick(module)}
         onDoubleClick={() => onModuleOpen(module.id)}
       >
-        <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/50 transition-all duration-300 bg-card/60 group-hover:bg-card/80 backdrop-blur-md h-40">
-          {/* Static background - only opacity change on hover */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} />
-
+        <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/60 transition-all duration-200 bg-card h-40 shadow-sm group-hover:shadow-md">
+          {/* Static very subtle gradient on hover only */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-10 transition-opacity duration-200 pointer-events-none`} />
           <CardContent className="p-6 h-full flex flex-col justify-between relative z-10">
             <div>
-              <div className={`w-12 h-12 bg-gradient-to-br ${module.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                <Icon className="h-6 w-6 text-white drop-shadow-lg" />
+              <div className={`w-12 h-12 bg-gradient-to-br ${module.color} rounded-2xl flex items-center justify-center mb-4`}>
+                <Icon className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors duration-300">
+              <h3 className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors duration-200">
                 {module.label}
               </h3>
             </div>
-            
-            {/* Live indicator for real-time modules - completely static */}
+            {/* Live indicator for real-time modules (static only) */}
             {isConnected && ['habits', 'focus', 'investments'].includes(module.id) && (
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
@@ -64,24 +56,15 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
               </div>
             )}
           </CardContent>
-
-          {/* Simple glow effect - only on hover */}
-          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${module.color} opacity-20 blur-xl`} />
-          </div>
         </Card>
-      </motion.div>
+      </div>
     );
   };
 
   return (
     <div className="space-y-12">
       {/* Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4 mb-12"
-      >
+      <div className="text-center space-y-4 mb-12">
         <h1 className="text-5xl font-bold font-playfair bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
           Welcome to GalyarderOS
         </h1>
@@ -100,17 +83,10 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
             </span>
           </div>
         </div>
-      </motion.div>
-
+      </div>
       {/* Module Categories */}
       {Object.entries(groupedModules).map(([category, categoryModules]) => (
-        <motion.div
-          key={category}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-6"
-        >
+        <div key={category} className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h2 className="text-3xl font-bold font-playfair text-foreground">
@@ -121,26 +97,19 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
               </Badge>
             </div>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {categoryModules.map((module, index) => (
-              <ModuleCard key={module.id} module={module} index={index} />
+            {categoryModules.map((module) => (
+              <ModuleCard key={module.id} module={module} />
             ))}
           </div>
-        </motion.div>
+        </div>
       ))}
-
       {/* Quick Actions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="text-center space-y-4 pt-8"
-      >
+      <div className="text-center space-y-4 pt-8">
         <p className="text-muted-foreground">
           Double-click modules to open in windows • Press ⌘K for quick search • Drag to customize layout
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 };
