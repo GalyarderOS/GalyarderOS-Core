@@ -30,6 +30,7 @@ export interface DashboardHeaderProps {
   };
 }
 
+// Explicitly type the props here!
 const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
   const { language } = useTheme();
 
