@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,7 +17,7 @@ import {
   Building, 
   Calculator, 
   Search,
-  FileText
+  DollarSign
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -147,7 +148,7 @@ const DashboardLayout = () => {
     {
       id: 'notion',
       label: 'NotionAI',
-      icon: FileText,
+      icon: DollarSign,
       action: handleOpenNotionAI,
       category: 'ai',
       color: 'from-gray-500 to-slate-600'
@@ -333,3 +334,4 @@ const DashboardLayout = () => {
 };
 
 export default DashboardLayout;
+
