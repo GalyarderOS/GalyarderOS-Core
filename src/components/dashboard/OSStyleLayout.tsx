@@ -34,13 +34,10 @@ import {
   BookMarked
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import TopBar from './os/TopBar';
 import Dock from './os/Dock';
 import DesktopGrid from './os/DesktopGrid';
 import WindowManager from './os/WindowManager';
-import { useCommandPalette } from '@/hooks/useCommandPalette';
-import CommandPalette from './home/CommandPalette';
 
 interface OSStyleLayoutProps {
   children: React.ReactNode;
@@ -55,15 +52,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { theme, setTheme, language } = useTheme();
-
-  const {
-    isOpen: isCommandPaletteOpen,
-    search,
-    setSearch,
-    commands,
-    togglePalette,
-    executeCommand
-  } = useCommandPalette(onOpenAIAssistant, onOpenNotionAI);
 
   const modules = [
     { 
@@ -271,8 +259,10 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
         theme={theme}
         setTheme={setTheme}
         language={language}
-        onSearch={togglePalette}
+        onSearch={() => {}} // Empty function since search is now handled internally
         onSignOut={handleSignOut}
+        onOpenAIAssistant={onOpenAIAssistant}
+        onOpenNotionAI={onOpenNotionAI}
       />
 
       {/* Main Content Area */}
@@ -305,15 +295,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
         modules={modules}
         onClose={closeWindow}
         onActivate={setActiveWindow}
-      />
-
-      {/* Command Palette */}
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        search={search}
-        setSearch={setSearch}
-        commands={commands}
-        executeCommand={executeCommand}
       />
     </div>
   );
