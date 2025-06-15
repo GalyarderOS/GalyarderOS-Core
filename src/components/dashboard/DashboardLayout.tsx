@@ -112,10 +112,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     }
   };
 
-  // Get current module from route
-  const currentPath = location.pathname;
-  const currentModule = modules.find(m => m.path === currentPath);
-
   const modules = [
     { 
       id: 'dashboard', 
@@ -238,6 +234,9 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       color: 'from-gray-500 to-slate-600'
     }
   ];
+
+  const currentPath = location.pathname;
+  const currentModule = modules.find(m => m.path === currentPath);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
