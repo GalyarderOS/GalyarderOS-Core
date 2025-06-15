@@ -1,5 +1,4 @@
-
-import { Wifi, WifiOff, Battery, BatteryLow, Volume2, VolumeX, Volume1 } from 'lucide-react';
+import { Wifi, WifiOff, Battery, BatteryLow, Volume2, VolumeX, Volume1, BatteryCharging } from 'lucide-react';
 import { useSystemStatus } from '@/hooks/useSystemStatus';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -8,11 +7,13 @@ const SystemStatusIndicator = () => {
   const { battery, wifi, volume } = useSystemStatus();
 
   const getBatteryIcon = () => {
+    if (battery.charging) return BatteryCharging;
     if (battery.level <= 20) return BatteryLow;
     return Battery;
   };
 
   const getBatteryColor = () => {
+    if (battery.charging) return 'text-green-500';
     if (battery.level <= 20) return 'text-red-500';
     if (battery.level <= 50) return 'text-yellow-500';
     return 'text-green-500';
@@ -44,6 +45,7 @@ const SystemStatusIndicator = () => {
         </TooltipTrigger>
         <TooltipContent>
           <p>{wifi.online ? 'Connected' : 'Offline'} - {wifi.connectionType}</p>
+          {wifi.downlink !== undefined && <p className="text-xs text-muted-foreground">Speed: ~{wifi.downlink} Mbps</p>}
         </TooltipContent>
       </Tooltip>
 
@@ -63,7 +65,6 @@ const SystemStatusIndicator = () => {
         </TooltipTrigger>
         <TooltipContent>
           <p>Volume: {volume.muted ? 'Muted' : `${volume.level}%`}</p>
-          {!volume.supported && <p className="text-xs text-muted-foreground">Simulated</p>}
         </TooltipContent>
       </Tooltip>
 
@@ -77,15 +78,11 @@ const SystemStatusIndicator = () => {
                 {battery.level}%
               </Badge>
             )}
-            {battery.charging && (
-              <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
-            )}
           </div>
         </TooltipTrigger>
         <TooltipContent>
           <p>Battery: {battery.level}%</p>
           <p>{battery.charging ? 'Charging' : 'Not charging'}</p>
-          {!battery.supported && <p className="text-xs text-muted-foreground">Simulated</p>}
         </TooltipContent>
       </Tooltip>
     </div>

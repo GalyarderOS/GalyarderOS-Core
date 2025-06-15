@@ -10,6 +10,7 @@ interface SystemStatus {
   wifi: {
     online: boolean;
     connectionType: string;
+    downlink?: number;
   };
   volume: {
     level: number;
@@ -28,6 +29,7 @@ export const useSystemStatus = () => {
     wifi: {
       online: navigator.onLine,
       connectionType: 'wifi',
+      downlink: undefined,
     },
     volume: {
       level: 75,
@@ -76,6 +78,8 @@ export const useSystemStatus = () => {
           online: navigator.onLine,
           // @ts-ignore - Connection API is experimental
           connectionType: navigator.connection?.effectiveType || 'wifi',
+          // @ts-ignore - Connection API is experimental
+          downlink: navigator.connection?.downlink,
         },
       }));
     };
