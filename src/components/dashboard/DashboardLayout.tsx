@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -260,7 +261,7 @@ const DashboardLayout = () => {
                 <Route path="/tax" element={<TaxOptimizer />} />
                 <Route path="/debt" element={<DebtManager />} />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/notion-sync" element={<NotionSync />} />
+                <Route path="/notion" element={<NotionSync />} />
               </Routes>
             </motion.div>
           )}
