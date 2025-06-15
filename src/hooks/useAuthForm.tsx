@@ -1,8 +1,10 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { RateLimiter } from '@/utils/security';
+
+const loginRateLimiter = new RateLimiter(5, 15 * 60 * 1000); // 5 attempts per 15 minutes
 
 export const useAuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,6 +20,17 @@ export const useAuthForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isLogin && !loginRateLimiter.isAllowed(email)) {
+      const remainingTime = Math.ceil(loginRateLimiter.getRemainingTime(email) / 1000 / 60);
+      toast({
+        title: "Too many login attempts",
+        description: `Please wait for about ${remainingTime} minute(s) before trying again.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {

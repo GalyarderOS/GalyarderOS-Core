@@ -1,8 +1,10 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Tables } from '@/integrations/supabase/types';
+import { SessionManager } from '@/utils/security';
+import { toast } from '@/hooks/use-toast';
 
 export type Profile = Tables<'profiles'>;
 
@@ -35,6 +37,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingProfile, setLoadingProfile] = useState(true);
+
+  const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
+    setProfile(null);
+  }, []);
+
+  useEffect(() => {
+    let sessionManager: SessionManager | null = null;
+    if (user) {
+      sessionManager = new SessionManager(30 * 60 * 1000, () => {
+        toast({
+          title: 'Session Expired',
+          description: 'You have been logged out due to inactivity.',
+        });
+        signOut();
+      });
+    }
+    return () => {
+      sessionManager?.destroy();
+    };
+  }, [user, signOut]);
 
   const fetchProfile = async (userId: string) => {
     setLoadingProfile(true);
