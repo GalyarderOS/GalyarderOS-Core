@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Wifi, Battery, Volume2, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
+import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useCommandPalette } from '@/hooks/useCommandPalette';
 import NotificationCenter from './NotificationCenter';
+import SystemStatusIndicator from './SystemStatusIndicator';
 
 interface TopBarProps {
   user: any;
@@ -161,12 +162,8 @@ const TopBar = ({ user, theme, setTheme, language, onSearch, onSignOut, onOpenAI
 
         {/* Right Section - Status and Controls */}
         <div className="flex items-center space-x-4">
-          {/* System Status */}
-          <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-            <Wifi className="h-4 w-4" />
-            <Volume2 className="h-4 w-4" />
-            <Battery className="h-4 w-4" />
-          </div>
+          {/* System Status - Real-time indicators */}
+          <SystemStatusIndicator />
 
           {/* Notification Center */}
           <NotificationCenter />
