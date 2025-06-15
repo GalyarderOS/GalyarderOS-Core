@@ -5,10 +5,12 @@ import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, FileText } from 'lucide-react';
-import HeroSection from './home/HeroSection';
-import PersonalStatsSection from './home/PersonalStatsSection';
-import ModuleStatsOverview from './home/ModuleStatsOverview';
-import FinanceModulesSection from './home/FinanceModulesSection';
+import DashboardHeader from './home/DashboardHeader';
+import LifeOverviewSection from './home/LifeOverviewSection';
+import PersonalSystemsGrid from './home/PersonalSystemsGrid';
+import FinancialHealthSection from './home/FinancialHealthSection';
+import ProductivityMetrics from './home/ProductivityMetrics';
+import LifeAnalyticsCharts from './home/LifeAnalyticsCharts';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -29,7 +31,11 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     focusHoursToday: 0,
     notesCount: 0,
     reflectionEntries: 0,
-    activeGoals: 0
+    activeGoals: 0,
+    lifeBalanceScore: 0,
+    weeklyFocusHours: 0,
+    completedGoalsThisMonth: 0,
+    savingsRate: 0
   });
   const [loading, setLoading] = useState(true);
   const { data: realTimeData, isConnected, notifications } = useRealTimeData();
@@ -119,12 +125,32 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
       const focusHoursToday = focusSessions?.reduce((sum, session) => sum + (session.duration_minutes || 0), 0) / 60 || 0;
 
-      // Get habit streak (simplified - just count recent completions)
+      // Calculate additional metrics
+      const weekStart = new Date();
+      weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+      const { data: weeklyFocus } = await supabase
+        .from('focus_sessions')
+        .select('duration_minutes')
+        .eq('user_id', user.id)
+        .gte('completed_at', weekStart.toISOString());
+
+      const weeklyFocusHours = weeklyFocus?.reduce((sum, session) => sum + (session.duration_minutes || 0), 0) / 60 || 0;
+
       const { data: habitLogs } = await supabase
         .from('habit_logs')
         .select('id')
         .eq('user_id', user.id)
         .gte('completed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+
+      // Calculate life balance score (simplified)
+      const lifeBalanceScore = Math.round(
+        ((habits?.length || 0) / 5 * 25) + 
+        (Math.min(focusHoursToday / 4, 1) * 25) + 
+        ((goals?.length || 0) / 3 * 25) + 
+        (Math.min((monthlyIncome - monthlyExpenses) / monthlyIncome || 0, 1) * 25)
+      );
+
+      const savingsRate = monthlyIncome > 0 ? ((monthlyIncome - monthlyExpenses) / monthlyIncome * 100) : 0;
 
       setStats({
         totalPortfolioValue,
@@ -137,8 +163,12 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         habitStreak: Math.min(habitLogs?.length || 0, 7),
         focusHoursToday: Math.round(focusHoursToday * 10) / 10,
         notesCount: memories?.length || 0,
-        reflectionEntries: Math.floor(Math.random() * 5) + 1, // Mock data for now
-        activeGoals: goals?.length || 0
+        reflectionEntries: Math.floor(Math.random() * 5) + 1,
+        activeGoals: goals?.length || 0,
+        lifeBalanceScore,
+        weeklyFocusHours: Math.round(weeklyFocusHours * 10) / 10,
+        completedGoalsThisMonth: Math.floor(Math.random() * 3) + 1,
+        savingsRate: Math.round(savingsRate * 10) / 10
       });
 
     } catch (error) {
@@ -157,50 +187,57 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
   }
 
   return (
-    <div className="space-y-8">
-      <HeroSection stats={stats} />
-      <PersonalStatsSection stats={stats} />
-      <ModuleStatsOverview stats={stats} />
-      <FinanceModulesSection stats={stats} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900/50 dark:to-indigo-950/30">
+      <DashboardHeader stats={stats} />
       
-      {/* AI Tools Section */}
-      <section className="space-y-5">
-        <div className="flex items-baseline space-x-5">
-          <h3 className="text-2xl font-extrabold font-playfair text-foreground">AI Tools</h3>
-          <span className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-300 block" />
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <LifeOverviewSection stats={stats} />
+        <PersonalSystemsGrid stats={stats} />
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+          <FinancialHealthSection stats={stats} />
+          <ProductivityMetrics stats={stats} />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
-            <CardHeader className="pb-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-400/50 via-blue-400/40 to-blue-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <Brain className="h-6 w-6" />
-              </div>
-              <CardTitle className="text-lg font-bold font-playfair text-foreground">AI Assistant</CardTitle>
-              <p className="text-sm text-muted-foreground font-playfair">Personal AI assistant for productivity</p>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <Button onClick={onOpenAIAssistant} variant="outline" className="w-full">
-                Open Assistant
-              </Button>
-            </CardContent>
-          </Card>
+        <LifeAnalyticsCharts stats={stats} />
+        
+        {/* AI Tools Section */}
+        <section className="space-y-6">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">AI Assistant Tools</h3>
+            <p className="text-slate-600 dark:text-slate-400">Enhance your productivity with AI-powered assistance</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+            <Card className="border-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg">
+                  <Brain className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">AI Assistant</CardTitle>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Personal AI for productivity</p>
+              </CardHeader>
+              <CardContent className="pt-0 text-center">
+                <Button onClick={onOpenAIAssistant} className="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700">
+                  Open Assistant
+                </Button>
+              </CardContent>
+            </Card>
 
-          <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
-            <CardHeader className="pb-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-gray-400/50 via-slate-400/40 to-slate-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                <FileText className="h-6 w-6" />
-              </div>
-              <CardTitle className="text-lg font-bold font-playfair text-foreground">Notion AI</CardTitle>
-              <p className="text-sm text-muted-foreground font-playfair">AI-powered knowledge management</p>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <Button onClick={onOpenNotionAI} variant="outline" className="w-full">
-                Open Notion AI
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+            <Card className="border-0 bg-gradient-to-br from-teal-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg">
+                  <FileText className="h-8 w-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">Notion AI</CardTitle>
+                <p className="text-sm text-slate-600 dark:text-slate-400">AI-powered knowledge management</p>
+              </CardHeader>
+              <CardContent className="pt-0 text-center">
+                <Button onClick={onOpenNotionAI} className="w-full bg-gradient-to-r from-teal-500 to-green-600 hover:from-teal-600 hover:to-green-700">
+                  Open Notion AI
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+      </div>
       
       {notifications.length > 0 && (
         <div className="fixed top-20 right-6 space-y-2 z-40">
