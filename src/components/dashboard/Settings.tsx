@@ -15,7 +15,8 @@ import {
   Check,
   Settings as SettingsIcon,
   Brain,
-  Sparkles
+  Sparkles,
+  FileText
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import NotionSync from '@/components/dashboard/NotionSync';
@@ -120,6 +121,8 @@ const Settings = () => {
       appearanceDesc: 'Customize your interface',
       integrations: 'AI Integrations',
       integrationsDesc: 'Connect external services',
+      notionSection: 'Notion Workspace',
+      notionSectionDesc: 'Manage your Notion integration',
       darkMode: 'Dark Mode',
       darkModeDesc: 'Switch between light and dark themes',
       language: 'Language',
@@ -140,6 +143,8 @@ const Settings = () => {
       appearanceDesc: 'Sesuaikan antarmuka Anda',
       integrations: 'Integrasi AI',
       integrationsDesc: 'Hubungkan layanan eksternal',
+      notionSection: 'Workspace Notion',
+      notionSectionDesc: 'Kelola integrasi Notion Anda',
       darkMode: 'Mode Gelap',
       darkModeDesc: 'Beralih antara tema terang dan gelap',
       language: 'Bahasa',
@@ -235,6 +240,16 @@ const Settings = () => {
               className="font-playfair"
             />
           </div>
+        </div>
+      )
+    },
+    {
+      title: t.notionSection,
+      description: t.notionSectionDesc,
+      icon: <FileText className="h-6 w-6" />,
+      content: (
+        <div className="space-y-4">
+          <NotionSync />
         </div>
       )
     }

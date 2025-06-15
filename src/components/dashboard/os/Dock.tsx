@@ -10,12 +10,12 @@ interface DockProps {
 }
 
 const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
-  // Only show "AI Assistant" (id: 'ai-assistant') and exclude 'notion' (Notion Sync)
+  // Replace AI Assistant with Notion in dock
   const dockModules = modules.filter(m =>
     [
       'dashboard', 'identity', 'vision', 'balance', 'ritual',
       'calendar', 'focus', 'knowledge', 'reflection', 'analytics',
-      'ai-assistant', // add AI Assistant to dock
+      'notion', // add Notion to dock instead of ai-assistant
       'investments', 'wealth', 'settings'
     ].includes(m.id)
   );

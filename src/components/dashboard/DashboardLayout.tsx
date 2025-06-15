@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,14 +12,10 @@ import {
   Edit, 
   BarChart2, 
   TrendingUp, 
-  DollarSign, 
-  Receipt, 
   Building, 
   Calculator, 
-  CreditCard, 
-  FileText, 
-  Sparkles,
-  Search
+  Search,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -65,7 +60,7 @@ const Dashboard = () => {
   const handleOpenAIAssistant = () => setIsAIAssistantOpen(true);
   const handleOpenNotionAI = () => setIsNotionAIOpen(true);
 
-  // Main modules (order similar with PersonalSystemsGrid, add Notion & AI Assistant)
+  // Main modules (replace AI Assistant with Notion in main modules list)
   const modules = [
     {
       id: 'dashboard',
@@ -148,12 +143,12 @@ const Dashboard = () => {
       color: 'from-pink-500 to-rose-600'
     },
     {
-      id: 'ai-assistant',
-      label: 'AI Assistant',
-      icon: Sparkles,
-      action: handleOpenAIAssistant,
+      id: 'notion',
+      label: 'Notion Sync',
+      icon: FileText,
+      action: handleOpenNotionAI,
       category: 'ai',
-      color: 'from-purple-500 to-blue-600'
+      color: 'from-gray-500 to-slate-600'
     },
     {
       id: 'investments',
