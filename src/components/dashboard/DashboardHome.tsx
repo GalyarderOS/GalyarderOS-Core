@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
@@ -238,32 +237,10 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         <LifeAnalyticsCharts stats={stats} />
         
         {/* Notion AI as a single card only */}
-        <section className="space-y-6">
-          <div className="text-center">
-            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Notion AI</h3>
-            <p className="text-slate-600 dark:text-slate-400">AI-powered knowledge management</p>
-          </div>
-          <div className="max-w-lg mx-auto grid grid-cols-1 gap-6">
-            <Card className="group border-0 bg-gradient-to-br from-teal-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02]">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform">
-                  <FileText className="h-8 w-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">Notion AI</CardTitle>
-                <p className="text-sm text-slate-600 dark:text-slate-400">AI-powered knowledge management</p>
-              </CardHeader>
-              <CardContent className="pt-0 text-center">
-                <Button onClick={onOpenNotionAI} className="w-full bg-gradient-to-r from-teal-500 to-green-600 hover:from-teal-600 hover:to-green-700">
-                  Open Notion AI
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+        {/* === Notion AI card removed per instructions === */}
       </div>
     </div>
   );
 };
 
 export default DashboardHome;
-

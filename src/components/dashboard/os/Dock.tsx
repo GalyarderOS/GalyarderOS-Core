@@ -10,12 +10,13 @@ interface DockProps {
 }
 
 const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
-  // Include all Digital Soul modules and frequently used finance modules
-  const dockModules = modules.filter(m => 
+  // Only show "AI Assistant" (id: 'ai-assistant') and exclude 'notion' (Notion Sync)
+  const dockModules = modules.filter(m =>
     [
-      'dashboard', 'identity', 'vision', 'balance', 'ritual', 
-      'calendar', 'focus', 'knowledge', 'reflection', 'analytics', 
-      'notion', 'ai-assistant', 'investments', 'wealth', 'settings'
+      'dashboard', 'identity', 'vision', 'balance', 'ritual',
+      'calendar', 'focus', 'knowledge', 'reflection', 'analytics',
+      'ai-assistant', // add AI Assistant to dock
+      'investments', 'wealth', 'settings'
     ].includes(m.id)
   );
 
@@ -32,7 +33,7 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
             {dockModules.map((module) => {
               const Icon = module.icon;
               const isActive = module.path === currentPath;
-              
+
               return (
                 <Tooltip key={module.id}>
                   <TooltipTrigger asChild>
@@ -45,8 +46,8 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
                         size="sm"
                         onClick={() => onModuleClick(module)}
                         className={`w-12 h-12 rounded-xl relative ${
-                          isActive 
-                            ? 'bg-primary/20 text-primary' 
+                          isActive
+                            ? 'bg-primary/20 text-primary'
                             : 'hover:bg-muted text-muted-foreground hover:text-foreground'
                         }`}
                       >

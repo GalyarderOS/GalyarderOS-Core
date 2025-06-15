@@ -18,6 +18,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import NotionSync from '@/components/dashboard/NotionSync';
 
 const Settings = () => {
   const { user } = useAuth();
