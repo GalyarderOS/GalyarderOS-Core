@@ -217,19 +217,19 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
           <InteractiveAIChatbot />
         </div> */}
 
-        {/* Ensure notionPagesCount gets passed */}
-        <PersonalSystemsGrid stats={{
-          activeRituals: stats.activeRituals,
-          ritualStreak: stats.ritualStreak,
-          focusHoursToday: stats.focusHoursToday,
-          weeklyFocusHours: stats.weeklyFocusHours,
-          notesCount: stats.notesCount,
-          reflectionEntries: stats.reflectionEntries,
-          activeGoals: stats.activeGoals,
-          completedGoalsThisMonth: stats.completedGoalsThisMonth,
-          calendarEventsThisWeek: stats.calendarEventsThisWeek,
-          notionPagesCount: stats.notionPagesCount
-        }} />
+        {/* Pass stats fields as separate props instead of an object */}
+        <PersonalSystemsGrid
+          activeRituals={stats.activeRituals}
+          ritualStreak={stats.ritualStreak}
+          focusHoursToday={stats.focusHoursToday}
+          weeklyFocusHours={stats.weeklyFocusHours}
+          notesCount={stats.notesCount}
+          reflectionEntries={stats.reflectionEntries}
+          activeGoals={stats.activeGoals}
+          completedGoalsThisMonth={stats.completedGoalsThisMonth}
+          calendarEventsThisWeek={stats.calendarEventsThisWeek}
+          notionPagesCount={stats.notionPagesCount}
+        />
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           <FinancialHealthSection stats={stats} />
           <ProductivityMetrics stats={stats} />
