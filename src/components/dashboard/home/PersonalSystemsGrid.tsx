@@ -10,22 +10,30 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 
 interface PersonalSystemsGridProps {
-  stats: {
-    activeRituals: number;
-    ritualStreak: number;
-    focusHoursToday: number;
-    weeklyFocusHours: number;
-    notesCount: number;
-    reflectionEntries: number;
-    activeGoals: number;
-    completedGoalsThisMonth: number;
-    calendarEventsThisWeek: number;
-    // Add notionPages if needed
-    notionPagesCount?: number;
-  };
+  activeRituals: number;
+  ritualStreak: number;
+  focusHoursToday: number;
+  weeklyFocusHours: number;
+  notesCount: number;
+  reflectionEntries: number;
+  activeGoals: number;
+  completedGoalsThisMonth: number;
+  calendarEventsThisWeek: number;
+  notionPagesCount: number;
 }
 
-const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
+const PersonalSystemsGrid = ({
+  activeRituals,
+  ritualStreak,
+  focusHoursToday,
+  weeklyFocusHours,
+  notesCount,
+  reflectionEntries,
+  activeGoals,
+  completedGoalsThisMonth,
+  calendarEventsThisWeek,
+  notionPagesCount,
+}: PersonalSystemsGridProps) => {
   const { language } = useTheme();
 
   const t = {
@@ -81,7 +89,6 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
     }
   }[language];
 
-  // TAMBAH Notion module dan urutkan dengan urutan dan icon yang konsisten dengan Dock!
   const personalModules = [
     {
       id: "identity",
@@ -98,9 +105,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "vision",
       title: t.vision,
       icon: <Target className="h-5 w-5" />,
-      value: stats.activeGoals,
-      metric: `${stats.completedGoalsThisMonth} completed ${t.month}`,
-      progress: Math.min((stats.activeGoals / 5) * 100, 100),
+      value: activeGoals,
+      metric: `${completedGoalsThisMonth} completed ${t.month}`,
+      progress: Math.min((activeGoals / 5) * 100, 100),
       gradient: "from-green-500/20 to-emerald-500/20",
       borderGradient: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10"
@@ -120,9 +127,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "ritual",
       title: t.ritual,
       icon: <CheckCircle className="h-5 w-5" />,
-      value: `${stats.activeRituals}`,
-      metric: `${stats.ritualStreak} day ${t.streak}`,
-      progress: Math.min((stats.ritualStreak / 30) * 100, 100),
+      value: `${activeRituals}`,
+      metric: `${ritualStreak} day ${t.streak}`,
+      progress: Math.min((ritualStreak / 30) * 100, 100),
       gradient: "from-teal-500/20 to-cyan-500/20",
       borderGradient: "from-teal-500 to-cyan-500",
       bgGradient: "from-teal-500/10 to-cyan-500/10"
@@ -131,9 +138,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "calendar",
       title: t.calendar,
       icon: <Calendar className="h-5 w-5" />,
-      value: `${stats.calendarEventsThisWeek}`,
+      value: `${calendarEventsThisWeek}`,
       metric: `${t.events} ${t.week}`,
-      progress: Math.min((stats.calendarEventsThisWeek / 20) * 100, 100),
+      progress: Math.min((calendarEventsThisWeek / 20) * 100, 100),
       gradient: "from-orange-500/20 to-red-500/20",
       borderGradient: "from-orange-500 to-red-500",
       bgGradient: "from-orange-500/10 to-red-500/10"
@@ -142,9 +149,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "focus",
       title: t.focus,
       icon: <Timer className="h-5 w-5" />,
-      value: `${stats.focusHoursToday}h`,
-      metric: `${stats.weeklyFocusHours}h ${t.week}`,
-      progress: Math.min((stats.focusHoursToday / 8) * 100, 100),
+      value: `${focusHoursToday}h`,
+      metric: `${weeklyFocusHours}h ${t.week}`,
+      progress: Math.min((focusHoursToday / 8) * 100, 100),
       gradient: "from-blue-500/20 to-cyan-500/20",
       borderGradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10"
@@ -153,9 +160,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "knowledge",
       title: t.knowledge,
       icon: <BookOpen className="h-5 w-5" />,
-      value: stats.notesCount,
+      value: notesCount,
       metric: `${t.entries} saved`,
-      progress: Math.min((stats.notesCount / 50) * 100, 100),
+      progress: Math.min((notesCount / 50) * 100, 100),
       gradient: "from-violet-500/20 to-purple-500/20",
       borderGradient: "from-violet-500 to-purple-500",
       bgGradient: "from-violet-500/10 to-purple-500/10"
@@ -164,7 +171,7 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "notion",
       title: t.notion,
       icon: <FileText className="h-5 w-5" />,
-      value: stats.notionPagesCount ?? 0,
+      value: notionPagesCount ?? 0,
       metric: `${t.pages}`,
       progress: 50,
       gradient: "from-teal-500/20 to-green-500/20",
@@ -175,9 +182,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "reflection",
       title: t.reflection,
       icon: <BookMarked className="h-5 w-5" />,
-      value: stats.reflectionEntries,
+      value: reflectionEntries,
       metric: `${t.entries} ${t.week}`,
-      progress: Math.min((stats.reflectionEntries / 7) * 100, 100),
+      progress: Math.min((reflectionEntries / 7) * 100, 100),
       gradient: "from-indigo-500/20 to-purple-500/20",
       borderGradient: "from-indigo-500 to-purple-500",
       bgGradient: "from-indigo-500/10 to-purple-500/10"
@@ -238,3 +245,4 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
 };
 
 export default PersonalSystemsGrid;
+
