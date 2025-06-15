@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import HeroSection from './home/HeroSection';
 import PersonalStatsSection from './home/PersonalStatsSection';
+import ModuleStatsOverview from './home/ModuleStatsOverview';
 import FinanceModulesSection from './home/FinanceModulesSection';
 
 interface DashboardHomeProps {
@@ -161,6 +162,7 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         onOpenAIAssistant={onOpenAIAssistant}
         onOpenNotionAI={onOpenNotionAI}
       />
+      <ModuleStatsOverview stats={stats} />
       <FinanceModulesSection stats={stats} />
       
       {notifications.length > 0 && (
