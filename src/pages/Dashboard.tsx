@@ -51,6 +51,7 @@ const Dashboard = () => {
         <Route path="/reflection" element={<Reflection />} />
         <Route path="/analytics" element={<LifeAnalytics />} />
         <Route path="/notion" element={<NotionSync />} />
+        <Route path="/memory" element={<MemoryVault />} />
         {/* Finance Individual Modules */}
         <Route path="/investments" element={<InvestmentTracker />} />
         <Route path="/cashflow" element={<CashflowTracker />} />
