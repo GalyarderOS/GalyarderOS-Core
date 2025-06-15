@@ -1,5 +1,3 @@
-
-
 import { useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -156,7 +154,7 @@ const DashboardLayout = () => {
     {
       id: 'investments',
       label: language === 'id' ? 'Investments' : 'Investments',
-      icon: TrendingUp,
+      icon: DollarSign,
       path: '/dashboard/investments',
       category: 'finance',
       color: 'from-yellow-500 to-orange-600'
@@ -334,4 +332,3 @@ const DashboardLayout = () => {
 };
 
 export default DashboardLayout;
-
