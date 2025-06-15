@@ -112,123 +112,157 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     }
   };
 
+  // --- Update modules: AI Assistant is full screen module, Notion is a main module, and Notion Sync is removed ---
+  // Main modules (order similar with PersonalSystemsGrid, add Notion & AI Assistant)
   const modules = [
-    { 
-      id: 'dashboard', 
-      label: language === 'id' ? 'Command Center' : 'Command Center', 
-      icon: LayoutDashboard, 
+    {
+      id: 'dashboard',
+      label: language === 'id' ? 'Command Center' : 'Command Center',
+      icon: LayoutDashboard,
       path: '/dashboard',
       category: 'personal',
       color: 'from-blue-500 to-indigo-600'
     },
-    { 
-      id: 'identity-core', 
-      label: language === 'id' ? 'Identity Core' : 'Identity Core', 
-      icon: User, 
+    {
+      id: 'identity-core',
+      label: language === 'id' ? 'Identity Core' : 'Identity Core',
+      icon: User,
       path: '/dashboard/identity',
       category: 'personal',
       color: 'from-purple-500 to-pink-600'
     },
-    { 
-      id: 'vision-architecture', 
-      label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture', 
-      icon: Target, 
+    {
+      id: 'vision-architecture',
+      label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture',
+      icon: Target,
       path: '/dashboard/vision',
       category: 'personal',
       color: 'from-green-500 to-emerald-600'
     },
-    { 
-      id: 'ritual-engine', 
-      label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine', 
-      icon: Calendar, 
+    {
+      id: 'life-balance',
+      label: language === 'id' ? 'Life Balance' : 'Life Balance',
+      icon: Brain,
+      path: '/dashboard/balance',
+      category: 'personal',
+      color: 'from-emerald-500 to-teal-600'
+    },
+    {
+      id: 'ritual-engine',
+      label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine',
+      icon: Calendar,
       path: '/dashboard/ritual',
       category: 'personal',
       color: 'from-orange-500 to-red-600'
     },
-    { 
-      id: 'flow-state', 
-      label: language === 'id' ? 'Flow State' : 'Flow State', 
-      icon: Timer, 
-      path: '/dashboard/flow',
+    {
+      id: 'calendar',
+      label: language === 'id' ? 'Calendar' : 'Calendar',
+      icon: Calendar,
+      path: '/dashboard/calendar',
       category: 'personal',
-      color: 'from-cyan-500 to-blue-600'
+      color: 'from-orange-500 to-pink-500'
     },
-    { 
-      id: 'knowledge-hub', 
-      label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub', 
-      icon: Brain, 
+    {
+      id: 'focus-engine',
+      label: language === 'id' ? 'Focus Engine' : 'Focus Engine',
+      icon: Timer,
+      path: '/dashboard/focus',
+      category: 'personal',
+      color: 'from-blue-500 to-cyan-600'
+    },
+    {
+      id: 'knowledge-hub',
+      label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub',
+      icon: BookOpen,
       path: '/dashboard/knowledge',
       category: 'personal',
       color: 'from-violet-500 to-purple-600'
     },
-    { 
-      id: 'ai-assistant', 
-      label: 'AI Assistant', 
-      icon: Sparkles, 
-      action: onOpenAIAssistant,
-      category: 'ai',
-      color: 'from-pink-500 to-rose-600'
-    },
-    { 
-      id: 'notion-ai', 
-      label: 'Notion AI', 
-      icon: FileText, 
-      action: onOpenNotionAI,
-      category: 'ai',
+    {
+      id: 'notion',
+      label: language === 'id' ? 'Notion' : 'Notion',
+      icon: FileText,
+      path: '/dashboard/notion',
+      category: 'main',
       color: 'from-teal-500 to-green-600'
     },
-    { 
-      id: 'investments', 
-      label: language === 'id' ? 'Investments' : 'Investments', 
-      icon: TrendingUp, 
+    {
+      id: 'reflection',
+      label: language === 'id' ? 'Reflection' : 'Reflection',
+      icon: Edit,
+      path: '/dashboard/reflection',
+      category: 'personal',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    {
+      id: 'life-analytics',
+      label: language === 'id' ? 'Life Analytics' : 'Life Analytics',
+      icon: BarChart2,
+      path: '/dashboard/analytics',
+      category: 'analytics',
+      color: 'from-pink-500 to-rose-600'
+    },
+    {
+      id: 'ai-assistant',
+      label: 'AI Assistant',
+      icon: Sparkles,
+      path: '/dashboard/ai-assistant',
+      category: 'ai',
+      color: 'from-purple-500 to-blue-600'
+    },
+    {
+      id: 'investments',
+      label: language === 'id' ? 'Investments' : 'Investments',
+      icon: TrendingUp,
       path: '/dashboard/investments',
       category: 'finance',
       color: 'from-yellow-500 to-orange-600'
     },
-    { 
-      id: 'cashflow', 
-      label: language === 'id' ? 'Cashflow' : 'Cashflow', 
-      icon: DollarSign, 
+    {
+      id: 'cashflow',
+      label: language === 'id' ? 'Cashflow' : 'Cashflow',
+      icon: DollarSign,
       path: '/dashboard/cashflow',
       category: 'finance',
       color: 'from-emerald-500 to-teal-600'
     },
-    { 
-      id: 'expenses', 
-      label: language === 'id' ? 'Expenses' : 'Expenses', 
-      icon: Receipt, 
+    {
+      id: 'expenses',
+      label: language === 'id' ? 'Expenses' : 'Expenses',
+      icon: Receipt,
       path: '/dashboard/expenses',
       category: 'finance',
       color: 'from-red-500 to-pink-600'
     },
-    { 
-      id: 'wealth', 
-      label: language === 'id' ? 'Wealth' : 'Wealth', 
-      icon: Building, 
+    {
+      id: 'wealth',
+      label: language === 'id' ? 'Wealth' : 'Wealth',
+      icon: Building,
       path: '/dashboard/wealth',
       category: 'finance',
       color: 'from-indigo-500 to-purple-600'
     },
-    { 
-      id: 'tax', 
-      label: language === 'id' ? 'Tax Optimizer' : 'Tax Optimizer', 
-      icon: Calculator, 
+    {
+      id: 'tax',
+      label: language === 'id' ? 'Tax Optimizer' : 'Tax Optimizer',
+      icon: Calculator,
       path: '/dashboard/tax',
       category: 'finance',
       color: 'from-blue-500 to-cyan-600'
     },
-    { 
-      id: 'debt', 
-      label: language === 'id' ? 'Debt Manager' : 'Debt Manager', 
-      icon: CreditCard, 
+    {
+      id: 'debt',
+      label: language === 'id' ? 'Debt Manager' : 'Debt Manager',
+      icon: CreditCard,
       path: '/dashboard/debt',
       category: 'finance',
       color: 'from-orange-500 to-yellow-600'
     },
-    { 
-      id: 'settings', 
-      label: language === 'id' ? 'Settings' : 'Settings', 
-      icon: Settings, 
+    {
+      id: 'settings',
+      label: language === 'id' ? 'Settings' : 'Settings',
+      icon: Settings,
       path: '/dashboard/settings',
       category: 'system',
       color: 'from-gray-500 to-slate-600'

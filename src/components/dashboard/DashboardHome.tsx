@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
@@ -57,7 +56,6 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
   const loadAllUserStats = async () => {
     if (!user) return;
-
     try {
       // Load financial data
       const { data: portfolios } = await supabase
@@ -121,6 +119,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         .select('id')
         .eq('user_id', user.id);
 
+      // Simulasi Notion pages count
+      const notionPagesCount = Math.floor(Math.random() * 8) + 1; // Demo stat
+
       // Calculate focus hours for today
       const today = new Date().toISOString().slice(0, 10);
       const { data: focusSessions } = await supabase
@@ -182,7 +183,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         weeklyFocusHours: Math.round(weeklyFocusHours * 10) / 10,
         completedGoalsThisMonth: Math.floor(Math.random() * 3) + 1,
         savingsRate: Math.round(savingsRate * 10) / 10,
-        calendarEventsThisWeek
+        calendarEventsThisWeek,
+        notionPagesCount // tambahkan notionPagesCount
       });
 
     } catch (error) {
@@ -200,12 +202,40 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     );
   }
 
+  // ---- ChatBot AI Greeting Section (after Hero) ----
+  // You may want to move this to a separate component for maintainability if file gets too long
+  function AIGreetingChat() {
+    return (
+      <div className="w-full max-w-2xl mx-auto mb-8">
+        <div className="rounded-2xl border border-primary/60 bg-card/60 px-6 py-6 shadow-lg flex flex-col items-start gap-4 animate-fade-in">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#fff" strokeWidth="2.5"/><circle cx="12" cy="12" r="4.5" fill="#fff" /></svg>
+            </div>
+            <div className="font-semibold text-base">AI Assistant</div>
+          </div>
+          <div className="text-lg text-muted-foreground font-playfair flex flex-col gap-2">
+            <span>👋 Welcome back!</span>
+            <span>
+              I'm your personal assistant—ready to help you master life by design.<br/>Ask me anything, get personalized productivity tips, and control your dashboard with natural language.
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900/50 dark:to-indigo-950/30">
       <DashboardHeader stats={stats} />
       
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <LifeOverviewSection stats={stats} />
+
+        {/* AI Chatbot Greeting (large, visible at the top, instead of modal AI section) */}
+        <AIGreetingChat />
+
+        {/* Ensure notionPagesCount gets passed */}
         <PersonalSystemsGrid stats={{
           activeRituals: stats.activeRituals,
           ritualStreak: stats.ritualStreak,
@@ -215,7 +245,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
           reflectionEntries: stats.reflectionEntries,
           activeGoals: stats.activeGoals,
           completedGoalsThisMonth: stats.completedGoalsThisMonth,
-          calendarEventsThisWeek: stats.calendarEventsThisWeek
+          calendarEventsThisWeek: stats.calendarEventsThisWeek,
+          notionPagesCount: stats.notionPagesCount
         }} />
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           <FinancialHealthSection stats={stats} />
@@ -223,28 +254,13 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         </div>
         <LifeAnalyticsCharts stats={stats} />
         
-        {/* AI Tools Section */}
+        {/* Notion AI as a single card only */}
         <section className="space-y-6">
           <div className="text-center">
-            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">AI Assistant Tools</h3>
-            <p className="text-slate-600 dark:text-slate-400">Enhance your productivity with AI-powered assistance</p>
+            <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">Notion AI</h3>
+            <p className="text-slate-600 dark:text-slate-400">AI-powered knowledge management</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <Card className="group border-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02]">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform">
-                  <Brain className="h-8 w-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">AI Assistant</CardTitle>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Personal AI for productivity</p>
-              </CardHeader>
-              <CardContent className="pt-0 text-center">
-                <Button onClick={onOpenAIAssistant} className="w-full bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700">
-                  Open Assistant
-                </Button>
-              </CardContent>
-            </Card>
-
+          <div className="max-w-lg mx-auto grid grid-cols-1 gap-6">
             <Card className="group border-0 bg-gradient-to-br from-teal-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02]">
               <CardHeader className="text-center pb-4">
                 <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform">

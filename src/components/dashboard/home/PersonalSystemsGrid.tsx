@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { 
-  User, Target, Calendar, Timer, BookOpen, Brain, 
-  Activity, CheckCircle, Zap, BookMarked, TrendingUp, Clock 
+import {
+  User, Target, Calendar, Timer, BookOpen, Brain,
+  Activity, CheckCircle, TrendingUp, BookMarked, LayoutDashboard, FileText
 } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -20,6 +20,8 @@ interface PersonalSystemsGridProps {
     activeGoals: number;
     completedGoalsThisMonth: number;
     calendarEventsThisWeek: number;
+    // Add notionPages if needed
+    notionPagesCount?: number;
   };
 }
 
@@ -37,6 +39,7 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       calendar: "Calendar",
       focus: "Focus Engine",
       knowledge: "Knowledge Hub",
+      notion: "Notion",
       reflection: "Reflection",
       analytics: "Life Analytics",
       active: "Active",
@@ -48,7 +51,8 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       complete: "Complete",
       sessions: "Sessions",
       improvement: "Improvement",
-      events: "Events"
+      events: "Events",
+      pages: "Pages",
     },
     id: {
       personalSystems: "Sistem Pengembangan Pribadi",
@@ -60,6 +64,7 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       calendar: "Kalender",
       focus: "Mesin Fokus",
       knowledge: "Hub Pengetahuan",
+      notion: "Notion",
       reflection: "Refleksi",
       analytics: "Analitik Hidup",
       active: "Aktif",
@@ -71,10 +76,12 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       complete: "Lengkap",
       sessions: "Sesi",
       improvement: "Peningkatan",
-      events: "Acara"
+      events: "Acara",
+      pages: "Halaman",
     }
   }[language];
 
+  // TAMBAH Notion module dan urutkan dengan urutan dan icon yang konsisten dengan Dock!
   const personalModules = [
     {
       id: "identity",
@@ -154,6 +161,17 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       bgGradient: "from-violet-500/10 to-purple-500/10"
     },
     {
+      id: "notion",
+      title: t.notion,
+      icon: <FileText className="h-5 w-5" />,
+      value: stats.notionPagesCount ?? 0,
+      metric: `${t.pages}`,
+      progress: 50,
+      gradient: "from-teal-500/20 to-green-500/20",
+      borderGradient: "from-teal-500 to-green-500",
+      bgGradient: "from-teal-500/10 to-green-500/10"
+    },
+    {
       id: "reflection",
       title: t.reflection,
       icon: <BookMarked className="h-5 w-5" />,
@@ -188,7 +206,6 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
         <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">{t.personalSystems}</h2>
         <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">{t.description}</p>
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {personalModules.map((module, index) => (
           <motion.div
