@@ -19,7 +19,6 @@ import {
   FileText
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import NotionSync from '@/components/dashboard/NotionSync';
 
 const Settings = () => {
   const { user } = useAuth();
@@ -83,6 +82,8 @@ const Settings = () => {
           theme: settings.dark_mode ? 'dark' : 'light',
           language: settings.language,
           updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
         });
 
       if (error) throw error;
@@ -249,7 +250,6 @@ const Settings = () => {
       icon: <FileText className="h-6 w-6" />,
       content: (
         <div className="space-y-4">
-          <NotionSync />
         </div>
       )
     }

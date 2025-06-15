@@ -16,7 +16,7 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
     [
       'dashboard', 'identity', 'vision', 'balance', 'ritual',
       'calendar', 'focus', 'knowledge', 'reflection', 'analytics',
-      'notion', // add Notion to dock instead of ai-assistant
+      'notion-ai', // Replaced notion with notion-ai
       'investments', 'wealth', 'settings'
     ].includes(m.id)
   );

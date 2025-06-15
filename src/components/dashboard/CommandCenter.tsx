@@ -1,4 +1,3 @@
-
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -103,15 +102,6 @@ const SOUL_MODULES = [
     color: "from-yellow-600 to-yellow-800",
     description: "Visualize your progress",
     stats: { usage: "63%", lastUsed: "Yesterday" }
-  },
-  {
-    id: "notion-sync",
-    label: "Notion Sync",
-    icon: FileText,
-    path: "/dashboard/notion",
-    color: "from-teal-600 to-teal-800",
-    description: "Connect external workspace", 
-    stats: { usage: "45%", lastUsed: "3 days ago" }
   }
 ];
 

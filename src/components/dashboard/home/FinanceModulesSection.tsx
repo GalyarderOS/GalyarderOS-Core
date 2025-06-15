@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -37,7 +36,7 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
         {
           title: language === 'id' ? 'Portofolio Investasi' : 'Investment Portfolio',
           description: language === 'id' ? 'Total nilai investasi aktif' : 'Total active investment value',
-          icon: TrendingUp,
+          icon: DollarSign,
           value: `$${stats.totalPortfolioValue.toLocaleString()}`,
           change: "+12.5%",
           changeType: "positive",

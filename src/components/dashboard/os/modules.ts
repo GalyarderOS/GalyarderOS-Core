@@ -107,14 +107,6 @@ export const getDashboardModules = (
       color: 'from-pink-500 to-rose-600'
     },
     { 
-      id: 'notion', 
-      label: 'Notion Sync', 
-      icon: FileText, 
-      path: '/dashboard/notion',
-      category: 'ai',
-      color: 'from-teal-500 to-green-600'
-    },
-    { 
       id: 'ai-assistant', 
       label: 'AI Assistant', 
       icon: Sparkles, 
@@ -133,7 +125,7 @@ export const getDashboardModules = (
     { 
       id: 'investments', 
       label: language === 'id' ? 'Investasi' : 'Investments', 
-      icon: TrendingUp, 
+      icon: DollarSign, 
       path: '/dashboard/investments',
       category: 'finance',
       color: 'from-yellow-500 to-orange-600'
