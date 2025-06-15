@@ -41,7 +41,7 @@ const Dashboard = () => {
       onOpenNotionAI={handleOpenNotionAI}
     >
       <Routes>
-        <Route path="/" element={<CommandCenter />} />
+        <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
         <Route path="/identity" element={<IdentityCore />} />
         <Route path="/profile" element={<ProfileModule />} />
         <Route path="/vision" element={<VisionArchitecture />} />
