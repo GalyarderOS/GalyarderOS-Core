@@ -1,0 +1,45 @@
+
+export const productivityTranslations = {
+  en: {
+    productivity: "Productivity Engine",
+    description: "Track your focus, habits, and mental performance",
+    focusScore: "Focus Score",
+    weeklyHours: "Weekly Hours",
+    dailyGoal: "Daily Goal",
+    habits: "Active Habits",
+    streak: "Current Streak",
+    knowledge: "Knowledge Base",
+    today: "Today",
+    week: "This Week",
+    excellent: "Excellent",
+    good: "Good",
+    needsWork: "Needs Work",
+    sessions: "Sessions",
+    entries: "Entries",
+    overallProductivity: "Overall Productivity",
+    weeklyFocusTrend: "Weekly Focus Trend",
+    notes: "Notes",
+    reflections: "Reflections"
+  },
+  id: {
+    productivity: "Mesin Produktivitas",
+    description: "Lacak fokus, kebiasaan, dan performa mental Anda",
+    focusScore: "Skor Fokus",
+    weeklyHours: "Jam Mingguan",
+    dailyGoal: "Target Harian",
+    habits: "Kebiasaan Aktif",
+    streak: "Streak Saat Ini",
+    knowledge: "Basis Pengetahuan",
+    today: "Hari Ini",
+    week: "Minggu Ini",
+    excellent: "Sangat Baik",
+    good: "Baik",
+    needsWork: "Perlu Perbaikan",
+    sessions: "Sesi",
+    entries: "Entri",
+    overallProductivity: "Produktivitas Keseluruhan",
+    weeklyFocusTrend: "Tren Fokus Mingguan",
+    notes: "Catatan",
+    reflections: "Refleksi"
+  }
+};

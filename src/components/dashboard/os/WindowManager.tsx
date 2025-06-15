@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Module } from './types';
 
 interface WindowManagerProps {
   openWindows: string[];
   activeWindow: string | null;
-  modules: any[];
+  modules: Module[];
   onClose: (moduleId: string) => void;
   onActivate: (moduleId: string) => void;
 }

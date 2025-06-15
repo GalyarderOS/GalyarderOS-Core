@@ -1,4 +1,3 @@
-
 import { 
   LayoutDashboard,
   User,
@@ -19,16 +18,7 @@ import {
   BookOpen,
   BookMarked
 } from 'lucide-react';
-
-type Module = {
-  id: string;
-  label: string;
-  icon: React.ElementType;
-  path?: string;
-  action?: (() => void) | undefined;
-  category: string;
-  color: string;
-}
+import { Module } from './types';
 
 export const getDashboardModules = (
   language: string, 

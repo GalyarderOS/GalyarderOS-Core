@@ -2,11 +2,12 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Module } from './types';
 
 interface DockProps {
-  modules: any[];
+  modules: Module[];
   currentPath: string;
-  onModuleClick: (module: any) => void;
+  onModuleClick: (module: Module) => void;
 }
 
 const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
