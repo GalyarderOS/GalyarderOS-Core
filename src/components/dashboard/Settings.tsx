@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,7 +29,7 @@ const Settings = () => {
     notion_token: '',
     notifications_enabled: true,
     dark_mode: theme === 'dark',
-    language: language
+    language: language as 'en' | 'id'
   });
 
   useEffect(() => {
@@ -60,7 +59,7 @@ const Settings = () => {
           notion_token: data.notion_token || '',
           notifications_enabled: true,
           dark_mode: data.theme === 'dark',
-          language: data.language || 'en'
+          language: (data.language || 'en') as 'en' | 'id'
         });
       }
     } catch (error) {
@@ -91,9 +90,9 @@ const Settings = () => {
         setTheme(settings.dark_mode ? 'dark' : 'light');
       }
 
-      // Update language context with proper type casting
+      // Update language context
       if (settings.language !== language) {
-        setLanguage(settings.language as 'en' | 'id');
+        setLanguage(settings.language);
       }
 
       toast({
