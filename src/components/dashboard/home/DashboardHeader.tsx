@@ -18,12 +18,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
 
   const t = {
     en: {
+      welcome: "Welcome Back",
       subtitle: "Master life by design, powered by data",
       lifeBalance: "Life Balance Score",
       todaysFocus: "Today's Focus",
       activeElements: "Active Systems"
     },
     id: {
+      welcome: "Selamat Datang Kembali",
       subtitle: "Kuasai hidup dengan desain, didukung data",
       lifeBalance: "Skor Keseimbangan Hidup",
       todaysFocus: "Fokus Hari Ini",
@@ -40,6 +42,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
+          <motion.p
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="text-xl text-muted-foreground mb-4"
+          >
+            {t.welcome}
+          </motion.p>
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
               {loadingProfile ? (
@@ -59,7 +69,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
           >
             {loadingProfile ? (
               <div className="flex flex-col items-center gap-2">
@@ -87,7 +97,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
         >
           {/* Life Balance Score */}
