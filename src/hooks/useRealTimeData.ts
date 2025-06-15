@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
+import { useNotifications } from '@/contexts/NotificationContext';
 
 interface RealTimeData {
   [key: string]: any;
@@ -8,20 +9,10 @@ interface RealTimeData {
 export const useRealTimeData = () => {
   const [data, setData] = useState<RealTimeData>({});
   const [isConnected, setIsConnected] = useState(false);
-  const [notifications, setNotifications] = useState<Array<{ id: string; message: string; type: 'info' | 'success' | 'warning' | 'error'; timestamp: Date }>>([]);
+  const { addNotification } = useNotifications();
 
   const updateData = useCallback((key: string, value: any) => {
     setData(prev => ({ ...prev, [key]: value }));
-  }, []);
-
-  const addNotification = useCallback((message: string, type: 'info' | 'success' | 'warning' | 'error' = 'info') => {
-    const notification = {
-      id: Math.random().toString(36).substr(2, 9),
-      message,
-      type,
-      timestamp: new Date()
-    };
-    setNotifications(prev => [notification, ...prev.slice(0, 4)]);
   }, []);
 
   useEffect(() => {
@@ -32,17 +23,21 @@ export const useRealTimeData = () => {
       // Simulate random data updates
       if (Math.random() > 0.7) {
         const updates = [
-          { key: 'portfolio', value: Math.random() * 10000 + 50000 },
-          { key: 'habits', value: Math.floor(Math.random() * 100) },
-          { key: 'focus', value: Math.random() * 8 },
-          { key: 'income', value: Math.random() * 5000 + 3000 }
+          { key: 'portfolio', value: Math.random() * 10000 + 50000, title: 'Portfolio Updated' },
+          { key: 'habits', value: Math.floor(Math.random() * 100), title: 'Habits Progress' },
+          { key: 'focus', value: Math.random() * 8, title: 'Focus Session' },
+          { key: 'income', value: Math.random() * 5000 + 3000, title: 'Income Updated' }
         ];
         
         const update = updates[Math.floor(Math.random() * updates.length)];
         updateData(update.key, update.value);
         
         if (Math.random() > 0.8) {
-          addNotification(`${update.key} updated: ${update.value}`, 'info');
+          addNotification({
+            title: update.title,
+            message: `${update.key} updated: ${typeof update.value === 'number' ? update.value.toFixed(2) : update.value}`,
+            type: 'info'
+          });
         }
       }
     }, 3000);
@@ -53,7 +48,6 @@ export const useRealTimeData = () => {
   return {
     data,
     isConnected,
-    notifications,
     updateData,
     addNotification
   };

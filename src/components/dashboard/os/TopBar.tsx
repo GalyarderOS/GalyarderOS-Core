@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Wifi, Battery, Volume2, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useCommandPalette } from '@/hooks/useCommandPalette';
+import NotificationCenter from './NotificationCenter';
 
 interface TopBarProps {
   user: any;
@@ -167,6 +167,9 @@ const TopBar = ({ user, theme, setTheme, language, onSearch, onSignOut, onOpenAI
             <Volume2 className="h-4 w-4" />
             <Battery className="h-4 w-4" />
           </div>
+
+          {/* Notification Center */}
+          <NotificationCenter />
 
           {/* Theme Toggle */}
           <Button
