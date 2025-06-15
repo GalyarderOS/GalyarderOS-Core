@@ -1,13 +1,9 @@
-
 import { motion } from 'framer-motion';
-import { Crown, User } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
 import InteractiveAIChatbot from './InteractiveAIChatbot';
 import { DashboardStats } from '@/types/dashboard';
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export interface DashboardHeaderProps {
@@ -16,7 +12,7 @@ export interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
   const { language } = useTheme();
-  const { user, profile, loadingProfile } = useAuth();
+  const { loadingProfile } = useAuth();
 
   const t = {
     en: {
@@ -35,9 +31,6 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
     }
   }[language];
 
-  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
-  const displayName = profile?.full_name || user?.email;
-
   return (
     <div className="relative overflow-hidden border-b bg-gradient-to-b from-muted/20 to-background">
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
@@ -50,19 +43,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
               {loadingProfile ? (
-                <Skeleton className="w-20 h-20 rounded-3xl" />
+                <Skeleton className="w-20 h-20 rounded-full" />
               ) : (
-                <>
-                  <Avatar className="w-20 h-20 border-2 border-primary/20 shadow-lg">
-                    <AvatarImage src={avatarUrl} alt="User avatar" />
-                    <AvatarFallback className="bg-card">
-                      <User className="w-10 h-10 text-muted-foreground" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Crown className="h-4 w-4 text-white" />
-                  </div>
-                </>
+                <img src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" alt="Galyarder Logo" className="w-20 h-20 object-contain" />
               )}
             </div>
           </div>
@@ -75,18 +58,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
           >
             {loadingProfile ? (
               <div className="flex flex-col items-center gap-2">
-                <Skeleton className="h-7 w-40" />
                 <Skeleton className="h-12 w-3/4" />
               </div>
             ) : (
-              <>
-                <Badge variant="outline" className="mb-4 bg-card/80 backdrop-blur-md">
-                  {displayName}
-                </Badge>
-                <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
-                  {t.welcome}
-                </h1>
-              </>
+              <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
+                Galyarder Architect Intellegent
+              </h1>
             )}
           </motion.div>
 
