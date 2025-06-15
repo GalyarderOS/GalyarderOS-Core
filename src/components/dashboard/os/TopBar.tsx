@@ -54,7 +54,7 @@ const TopBar = ({ user, theme, setTheme, language, onSearch, onSignOut }: TopBar
             className="w-full justify-start text-muted-foreground hover:text-foreground"
           >
             <Search className="h-4 w-4 mr-2" />
-            Search modules... (⌘K)
+            Search modules...
           </Button>
         </div>
 

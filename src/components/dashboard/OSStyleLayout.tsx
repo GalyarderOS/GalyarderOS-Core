@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -35,10 +34,13 @@ import {
   BookMarked
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import TopBar from './os/TopBar';
 import Dock from './os/Dock';
 import DesktopGrid from './os/DesktopGrid';
 import WindowManager from './os/WindowManager';
+import { useCommandPalette } from '@/hooks/useCommandPalette';
+import CommandPalette from './home/CommandPalette';
 
 interface OSStyleLayoutProps {
   children: React.ReactNode;
@@ -49,11 +51,19 @@ interface OSStyleLayoutProps {
 const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleLayoutProps) => {
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { theme, setTheme, language } = useTheme();
+
+  const {
+    isOpen: isCommandPaletteOpen,
+    search,
+    setSearch,
+    commands,
+    togglePalette,
+    executeCommand
+  } = useCommandPalette(onOpenAIAssistant, onOpenNotionAI);
 
   const modules = [
     { 
@@ -261,7 +271,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
         theme={theme}
         setTheme={setTheme}
         language={language}
-        onSearch={() => setIsSearchOpen(true)}
+        onSearch={togglePalette}
         onSignOut={handleSignOut}
       />
 
@@ -297,40 +307,14 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
         onActivate={setActiveWindow}
       />
 
-      {/* Search Overlay */}
-      <AnimatePresence>
-        {isSearchOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
-              onClick={() => setIsSearchOpen(false)}
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              className="fixed top-1/4 left-1/2 transform -translate-x-1/2 w-full max-w-2xl z-50 mx-4"
-            >
-              <div className="bg-card border border-border rounded-2xl soft-shadow-lg overflow-hidden">
-                <div className="p-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <input
-                      type="text"
-                      placeholder="Search modules..."
-                      className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-lg"
-                      autoFocus
-                    />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        search={search}
+        setSearch={setSearch}
+        commands={commands}
+        executeCommand={executeCommand}
+      />
     </div>
   );
 };
