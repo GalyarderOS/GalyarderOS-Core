@@ -27,7 +27,13 @@ import {
   Receipt,
   Wallet,
   Shield,
-  CreditCard
+  CreditCard,
+  AlertTriangle,
+  CheckCircle,
+  Lightbulb,
+  Heart,
+  Rocket,
+  Sparkles
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -146,84 +152,90 @@ const LandingPage = () => {
     }
   ];
 
-  const features = [
-    {
-      title: "AI-Powered Intelligence",
-      description: "Advanced AI that learns your patterns and provides personalized insights",
-      icon: <Brain className="h-6 w-6" />
-    },
-    {
-      title: "Unified Dashboard",
-      description: "All your life management tools in one beautiful, intuitive interface",
-      icon: <Target className="h-6 w-6" />
-    },
-    {
-      title: "Real-time Sync",
-      description: "Seamless integration with your favorite tools and platforms",
-      icon: <Zap className="h-6 w-6" />
-    },
-    {
-      title: "Global Community",
-      description: "Connect with like-minded individuals on their growth journey",
-      icon: <Users className="h-6 w-6" />
-    }
-  ];
-
   const marketStats = [
     {
-      title: "Market Size",
-      value: "$4.2B",
+      title: "Productivity Market",
+      value: "Billions",
       description: "Personal productivity software market",
       icon: <Globe className="h-8 w-8" />,
-      growth: "+23% YoY"
+      growth: "Growing fast"
     },
     {
-      title: "Active Users",
-      value: "2.1M+",
-      description: "People seeking integrated life management",
-      icon: <Users className="h-8 w-8" />,
-      growth: "+45% growth"
+      title: "Mental Health Tech",
+      value: "Billions", 
+      description: "Digital wellness and mental health",
+      icon: <Heart className="h-8 w-8" />,
+      growth: "Exploding"
     },
     {
-      title: "Revenue Potential",
-      value: "$150/user",
-      description: "Average annual value per premium user",
-      icon: <DollarSign className="h-8 w-8" />,
-      growth: "Premium tier"
-    },
-    {
-      title: "Market Gap",
-      value: "78%",
-      description: "Users want unified life management platform",
+      title: "Self-Development",
+      value: "Billions",
+      description: "Personal development industry",
       icon: <Target className="h-8 w-8" />,
-      growth: "Unmet demand"
+      growth: "Massive market"
+    },
+    {
+      title: "Combined Potential",
+      value: "Huge!",
+      description: "That's where we're playing",
+      icon: <Rocket className="h-8 w-8" />,
+      growth: "Our playground"
     }
   ];
 
-  const competitorAnalysis = [
+  const monetizationModel = [
     {
-      name: "Notion",
-      strength: "Note-taking & organization",
-      weakness: "No AI assistant, limited finance tools",
-      score: 7.5
+      title: "SaaS Subscription",
+      description: "Tiered personalization model",
+      icon: <DollarSign className="h-8 w-8" />,
+      pricing: "$9-49/month"
     },
     {
-      name: "Todoist + Mint",
-      strength: "Task management + budgeting",
-      weakness: "Fragmented experience, no AI",
-      score: 6.8
+      title: "Plugin Marketplace",
+      description: "Templates and extensions",
+      icon: <Zap className="h-8 w-8" />,
+      pricing: "Revenue share"
     },
     {
-      name: "Apple Health + Stocks",
-      strength: "Health tracking + investments",
-      weakness: "No personal development focus",
-      score: 6.2
+      title: "IoT Integration",
+      description: "Wearables and smart devices",
+      icon: <Globe className="h-8 w-8" />,
+      pricing: "Premium features"
+    }
+  ];
+
+  const roadmapPhases = [
+    {
+      phase: "Phase 1",
+      timeline: "Q3-Q4 2025",
+      title: "MVP Launch",
+      description: "Life Dashboard with AI-driven workflows & journaling",
+      deliverables: ["Main dashboard UI", "Beta AI journaling", "Basic workflow automation"],
+      status: "In Progress"
     },
     {
-      name: "GalyarderOS",
-      strength: "Unified AI-powered life management",
-      weakness: "New to market",
-      score: 9.2
+      phase: "Phase 2", 
+      timeline: "Q1 2026",
+      title: "Early Access",
+      description: "Launch to founders, students, creators",
+      deliverables: ["User onboarding", "Community features", "Feedback loops"],
+      status: "Planned"
+    },
+    {
+      phase: "Phase 3",
+      timeline: "Q2-Q3 2026", 
+      title: "AI Personality Engine",
+      description: "Modular Plugin Ecosystem development",
+      deliverables: ["AI personality matching", "Plugin architecture", "Marketplace beta"],
+      status: "Planned"
+    },
+    {
+      phase: "Phase 4",
+      timeline: "Q4 2026+",
+      title: "Digital Soul Layer",
+      description: "Cross-device, blockchain-secured platform",
+      deliverables: ["Multi-device sync", "Blockchain integration", "Global expansion"],
+      status: "Vision"
     }
   ];
 
@@ -239,11 +251,11 @@ const LandingPage = () => {
   };
 
   const handleLearnMore = () => {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('solution')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-hidden">
       {/* Navigation */}
       <motion.nav 
         initial={{ opacity: 0, y: -20 }}
@@ -252,9 +264,13 @@ const LandingPage = () => {
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center">
+            <motion.div 
+              className="w-10 h-10 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center"
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
               <Crown className="h-6 w-6 text-background" />
-            </div>
+            </motion.div>
             <span className="text-xl font-bold font-playfair text-foreground">GalyarderOS</span>
           </div>
           
@@ -265,142 +281,101 @@ const LandingPage = () => {
             <Button variant="outline" onClick={() => navigate('/auth')}>
               Sign In
             </Button>
-            <Button onClick={handleGetStarted}>
+            <Button onClick={handleGetStarted} className="bg-gradient-to-r from-foreground to-muted-foreground hover:from-foreground/90 hover:to-muted-foreground/90">
               Get Started
             </Button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-7xl mx-auto">
+      {/* Hero Section - Opening Pitch */}
+      <section className="py-20 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/5 to-background"></div>
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <Badge variant="outline" className="mb-6 font-playfair border-muted-foreground/20">
-              The Future of Personal Operating Systems
-            </Badge>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <Badge variant="outline" className="mb-6 font-playfair border-muted-foreground/20 text-lg px-4 py-2">
+                <Sparkles className="h-4 w-4 mr-2" />
+                The Personal Operating System Revolution
+              </Badge>
+            </motion.div>
             
-            <h1 className="text-6xl md:text-7xl font-bold mb-8 font-playfair bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <motion.h1 
+              className="text-6xl md:text-8xl font-bold mb-8 font-playfair bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text text-transparent"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
+            >
               GalyarderOS
-            </h1>
+            </motion.h1>
             
-            <p className="text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto font-playfair leading-relaxed">
-              A personalized, AI-powered life management system that combines the best of Notion, ChatGPT, Apple Health, TradingView, Asana, and spiritual journaling.
-            </p>
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+              className="space-y-6 mb-12"
+            >
+              <p className="text-2xl md:text-3xl text-foreground font-playfair leading-relaxed max-w-5xl mx-auto">
+                "Imagine a world where everyone has their own personal operating system."
+              </p>
+              <p className="text-xl text-muted-foreground font-playfair max-w-4xl mx-auto">
+                Not just your average productivity tools, okay? We're talking a full-stack digital system, powered by AI, totally customizable, super adaptive, and completely in sync with who you are, your values, and your biggest life goals!
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.7, duration: 0.8 }}
+              className="mb-12"
+            >
+              <div className="bg-gradient-to-r from-muted/30 to-muted/10 rounded-2xl p-8 max-w-4xl mx-auto border border-border">
+                <p className="text-xl md:text-2xl font-bold text-foreground font-playfair mb-4">
+                  "I'm Galyarder, and I'm building a system that's going to totally revolutionize how we live, work, and grow."
+                </p>
+                <p className="text-lg text-muted-foreground font-playfair">
+                  It's not just software; it's an entire ecosystem. It's all about empowering people to hit their absolute maximum potential – mentally, spiritually, financially, and physically. The whole shebang!
+                </p>
+              </div>
+            </motion.div>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" onClick={handleGetStarted} className="bg-foreground hover:bg-foreground/90 text-background text-lg px-8 py-6 font-playfair">
-                Start Your Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.9, duration: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <Button 
+                size="lg" 
+                onClick={handleGetStarted} 
+                className="bg-gradient-to-r from-foreground to-muted-foreground hover:from-foreground/90 hover:to-muted-foreground/90 text-background text-lg px-8 py-6 font-playfair group"
+              >
+                Start Your Transformation
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button size="lg" variant="outline" onClick={handleLearnMore} className="text-lg px-8 py-6 font-playfair">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                onClick={handleLearnMore} 
+                className="text-lg px-8 py-6 font-playfair border-2"
+              >
                 Learn More
               </Button>
-            </div>
-          </motion.div>
-
-          {/* Market Opportunity Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-20"
-          >
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 font-playfair text-foreground">Market Opportunity</h2>
-              <p className="text-xl text-muted-foreground font-playfair max-w-2xl mx-auto">
-                Addressing a $4.2B market with unprecedented integration
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {marketStats.map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.3 }}
-                  className="text-center"
-                >
-                  <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-300 h-full">
-                    <CardHeader className="text-center pb-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-foreground/20 to-muted-foreground/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        {stat.icon}
-                      </div>
-                      <CardTitle className="text-3xl font-bold font-playfair text-foreground">
-                        {stat.value}
-                      </CardTitle>
-                      <Badge variant="secondary" className="font-playfair">
-                        {stat.growth}
-                      </Badge>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <CardDescription className="font-playfair text-muted-foreground">
-                        {stat.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Core Modules Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mb-20"
-          >
-            <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 font-playfair text-foreground">Comprehensive Life Management</h2>
-              <p className="text-xl text-muted-foreground font-playfair max-w-2xl mx-auto">
-                13 integrated modules covering every aspect of personal and financial growth
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {coreModules.map((module, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.7 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group"
-                >
-                  <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-500 bg-card/80 hover:bg-card h-full">
-                    <CardHeader className="text-center pb-4">
-                      <div className={`w-full h-20 bg-gradient-to-br ${module.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
-                        <div className="text-foreground">
-                          {module.icon}
-                        </div>
-                      </div>
-                      
-                      <CardTitle className="text-lg font-bold font-playfair text-foreground">
-                        {module.title}
-                      </CardTitle>
-                    </CardHeader>
-                    
-                    <CardContent className="text-center">
-                      <CardDescription className="font-playfair text-muted-foreground text-sm">
-                        {module.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Competitive Analysis */}
+      {/* The Problem Section */}
       <section className="py-20 px-6 bg-muted/20">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -409,44 +384,77 @@ const LandingPage = () => {
             transition={{ delay: 0.2 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-6 font-playfair text-foreground">Competitive Advantage</h2>
-            <p className="text-xl text-muted-foreground font-playfair max-w-3xl mx-auto">
-              Where existing solutions fall short, GalyarderOS excels with unified AI-powered integration
-            </p>
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-red-500/20 to-orange-500/20 rounded-2xl flex items-center justify-center border border-red-500/20">
+                <AlertTriangle className="h-8 w-8 text-red-600" />
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Problem I'm Solving</h2>
+            <div className="max-w-4xl mx-auto space-y-6">
+              <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair">
+                "Let's be real, 95% of people are living life on default mode, not by their own design..."
+              </p>
+              <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
+                They're just reacting, not being proactive. The world's getting more complicated, and honestly, people are overwhelmed. Most productivity tools are fragmented, impersonal, and don't understand YOU as a unique individual.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* The Solution Section */}
+      <section id="solution" className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-16"
+          >
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center border border-green-500/20">
+                <CheckCircle className="h-8 w-8 text-green-600" />
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Solution: GalyarderOS!</h2>
+            <div className="max-w-4xl mx-auto space-y-6">
+              <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair">
+                "A personalized, AI-powered life management system..."
+              </p>
+              <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
+                Imagine mashing up Notion, ChatGPT, Apple Health, TradingView, Asana, and a spiritual journal – but it's all seamlessly integrated and tweaked to fit your personality and your needs.
+              </p>
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {competitorAnalysis.map((competitor, index) => (
+          {/* Core Modules Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-20">
+            {coreModules.map((module, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 + 0.4 }}
-                className={`${competitor.name === 'GalyarderOS' ? 'ring-2 ring-foreground' : ''}`}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group"
               >
-                <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 h-full">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg font-bold font-playfair text-foreground">
-                        {competitor.name}
-                      </CardTitle>
-                      <Badge 
-                        variant={competitor.name === 'GalyarderOS' ? 'default' : 'secondary'} 
-                        className="font-playfair"
-                      >
-                        {competitor.score}/10
-                      </Badge>
+                <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-500 bg-card/80 hover:bg-card h-full">
+                  <CardHeader className="text-center pb-4">
+                    <div className={`w-full h-20 bg-gradient-to-br ${module.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
+                      <div className="text-foreground">
+                        {module.icon}
+                      </div>
                     </div>
+                    
+                    <CardTitle className="text-lg font-bold font-playfair text-foreground">
+                      {module.title}
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <p className="text-sm font-medium text-green-600 mb-1">Strength:</p>
-                      <p className="text-sm text-muted-foreground font-playfair">{competitor.strength}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-red-600 mb-1">Weakness:</p>
-                      <p className="text-sm text-muted-foreground font-playfair">{competitor.weakness}</p>
-                    </div>
+                  
+                  <CardContent className="text-center">
+                    <CardDescription className="font-playfair text-muted-foreground text-sm">
+                      {module.description}
+                    </CardDescription>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -455,8 +463,8 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 px-6">
+      {/* Why Now & Why Me Section */}
+      <section className="py-20 px-6 bg-muted/20">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -464,26 +472,182 @@ const LandingPage = () => {
             transition={{ delay: 0.2 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold mb-6 font-playfair text-foreground">Why Choose GalyarderOS?</h2>
+            <div className="flex justify-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center border border-purple-500/20">
+                <Lightbulb className="h-8 w-8 text-purple-600" />
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">Why Now? And Why Me?</h2>
+            <div className="max-w-4xl mx-auto space-y-8">
+              <div className="bg-gradient-to-r from-muted/50 to-muted/20 rounded-2xl p-8 border border-border">
+                <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair mb-4">
+                  "Look, I didn't dream this up in some boardroom."
+                </p>
+                <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
+                  I built this system from the trenches of my own life. I'm user number one, and I'm living proof this system works! I live by this system every single day.
+                </p>
+              </div>
+              <p className="text-lg text-muted-foreground font-playfair">
+                This isn't theory – it's battle-tested in the real world of someone who's actually using it to level up their life.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Market Potential Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Market Potential</h2>
+            <p className="text-2xl font-bold text-foreground font-playfair mb-4">
+              "Anyone and everyone who wants to live a more structured, meaningful, and efficient life."
+            </p>
             <p className="text-xl text-muted-foreground font-playfair max-w-3xl mx-auto">
-              Experience the future of personal productivity with our comprehensive life management platform
+              The productivity market? Billions. Mental health tech? Billions. Self-development? Billions. Combine all of those. That's where we're playing, and it's huge!
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
+            {marketStats.map((stat, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 + 0.4 }}
+                transition={{ delay: index * 0.1 + 0.3 }}
                 className="text-center"
               >
-                <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mx-auto mb-6 border border-border">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-bold mb-4 font-playfair text-foreground">{feature.title}</h3>
-                <p className="text-muted-foreground font-playfair">{feature.description}</p>
+                <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-300 h-full group">
+                  <CardHeader className="text-center pb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-foreground/20 to-muted-foreground/20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                      {stat.icon}
+                    </div>
+                    <CardTitle className="text-3xl font-bold font-playfair text-foreground">
+                      {stat.value}
+                    </CardTitle>
+                    <Badge variant="secondary" className="font-playfair">
+                      {stat.growth}
+                    </Badge>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <CardDescription className="font-playfair text-muted-foreground">
+                      {stat.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Monetization Section */}
+      <section className="py-20 px-6 bg-muted/20">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">How We'll Make Money</h2>
+            <p className="text-xl text-muted-foreground font-playfair max-w-3xl mx-auto">
+              Multiple revenue streams designed for sustainable growth and maximum value delivery
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {monetizationModel.map((model, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.3 }}
+              >
+                <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-300 h-full">
+                  <CardHeader className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      {model.icon}
+                    </div>
+                    <CardTitle className="text-xl font-bold font-playfair text-foreground">
+                      {model.title}
+                    </CardTitle>
+                    <Badge variant="outline" className="font-playfair">
+                      {model.pricing}
+                    </Badge>
+                  </CardHeader>
+                  <CardContent className="text-center">
+                    <CardDescription className="font-playfair text-muted-foreground">
+                      {model.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Roadmap</h2>
+            <p className="text-xl text-muted-foreground font-playfair max-w-3xl mx-auto">
+              Where we're headed: From MVP to Digital Soul Layer
+            </p>
+          </motion.div>
+
+          <div className="space-y-8">
+            {roadmapPhases.map((phase, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.2 + 0.3 }}
+                className={`flex ${index % 2 === 0 ? 'justify-start' : 'justify-end'}`}
+              >
+                <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-300 max-w-2xl w-full">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <Badge variant={phase.status === 'In Progress' ? 'default' : 'secondary'} className="font-playfair mb-2">
+                          {phase.status}
+                        </Badge>
+                        <CardTitle className="text-2xl font-bold font-playfair text-foreground">
+                          {phase.phase}: {phase.title}
+                        </CardTitle>
+                        <CardDescription className="text-lg font-playfair text-muted-foreground">
+                          {phase.timeline}
+                        </CardDescription>
+                      </div>
+                      <div className="w-12 h-12 bg-gradient-to-br from-foreground/20 to-muted-foreground/20 rounded-xl flex items-center justify-center">
+                        <span className="text-xl font-bold font-playfair">{index + 1}</span>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground font-playfair mb-4">{phase.description}</p>
+                    <div>
+                      <p className="font-semibold text-foreground font-playfair mb-2">Key Deliverables:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        {phase.deliverables.map((deliverable, i) => (
+                          <li key={i} className="text-sm text-muted-foreground font-playfair">{deliverable}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -499,9 +663,9 @@ const LandingPage = () => {
             transition={{ delay: 0.2 }}
             className="mb-16"
           >
-            <h2 className="text-4xl font-bold mb-6 font-playfair text-foreground">What Our Users Say</h2>
+            <h2 className="text-4xl font-bold mb-6 font-playfair text-foreground">What Early Users Say</h2>
             <p className="text-xl text-muted-foreground font-playfair">
-              Join thousands of users who have transformed their lives with GalyarderOS
+              Real people, real transformations with GalyarderOS
             </p>
           </motion.div>
 
@@ -550,7 +714,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Closing Statement */}
       <section className="py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -558,16 +722,25 @@ const LandingPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-4xl font-bold mb-6 font-playfair text-foreground">
-              Ready to Transform Your Life?
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8 font-playfair">
-              Join the future of personal productivity and start living by design.
-            </p>
+            <div className="bg-gradient-to-r from-muted/30 to-muted/10 rounded-3xl p-12 mb-12 border border-border">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">
+                The Closing Statement
+              </h2>
+              <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair mb-6">
+                "I'm not just making software here. I'm laying the foundation for a whole new way of living..."
+              </p>
+              <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
+                GalyarderOS isn't just a tool; it's the key to unlocking that massive transformation. Ready to stop living on default mode and start designing your life?
+              </p>
+            </div>
             
-            <Button size="lg" onClick={handleGetStarted} className="bg-foreground hover:bg-foreground/90 text-background text-lg px-12 py-6 font-playfair">
-              Start Your Journey Today
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button 
+              size="lg" 
+              onClick={handleGetStarted} 
+              className="bg-gradient-to-r from-foreground to-muted-foreground hover:from-foreground/90 hover:to-muted-foreground/90 text-background text-xl px-16 py-8 font-playfair group"
+            >
+              Join the Revolution
+              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
             </Button>
           </motion.div>
         </div>
