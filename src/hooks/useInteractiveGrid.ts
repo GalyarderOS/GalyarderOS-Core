@@ -13,6 +13,7 @@ export interface GridItem {
   gradient: string;
   size?: 'small' | 'medium' | 'large';
   position: { x: number; y: number };
+  group: string; // <-- Added group property
 }
 
 export const useInteractiveGrid = (initialItems: GridItem[]) => {
