@@ -4,30 +4,10 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
 import InteractiveAIChatbot from './InteractiveAIChatbot';
+import { DashboardStats } from '@/types/dashboard';
 
 export interface DashboardHeaderProps {
-  stats: {
-    lifeBalanceScore: number;
-    activeHabits: number;
-    activeGoals: number;
-    focusHoursToday: number;
-    totalPortfolioValue: number;
-    monthlyIncome: number;
-    monthlyExpenses: number;
-    totalDebt: number;
-    wealthGoals: number;
-    investments: number;
-    activeRituals: number;
-    habitStreak: number;
-    ritualStreak: number;
-    notesCount: number;
-    reflectionEntries: number;
-    weeklyFocusHours: number;
-    completedGoalsThisMonth: number;
-    savingsRate: number;
-    calendarEventsThisWeek: number;
-    notionPagesCount: number;
-  };
+  stats: DashboardStats;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {

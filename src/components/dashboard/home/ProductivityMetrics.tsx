@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -7,17 +6,10 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, RadialBarChart, RadialBar } from 'recharts';
 import { Timer, Brain, Zap, Target, Calendar, BookOpen, TrendingUp } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { DashboardStats } from '@/types/dashboard';
 
 interface ProductivityMetricsProps {
-  stats: {
-    focusHoursToday: number;
-    weeklyFocusHours: number;
-    activeHabits: number;
-    habitStreak: number;
-    activeGoals: number;
-    notesCount: number;
-    reflectionEntries: number;
-  };
+  stats: DashboardStats;
 }
 
 const ProductivityMetrics = ({ stats }: ProductivityMetricsProps) => {

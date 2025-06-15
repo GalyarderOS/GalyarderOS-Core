@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
@@ -39,7 +38,7 @@ const Dashboard = () => {
       onOpenNotionAI={handleOpenNotionAI}
     >
       <Routes>
-        <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
+        <Route path="/" element={<DashboardHome />} />
         <Route path="/identity" element={<IdentityCore />} />
         <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/balance" element={<LifeBalance />} />
