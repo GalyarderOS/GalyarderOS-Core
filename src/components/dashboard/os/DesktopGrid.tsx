@@ -13,7 +13,6 @@ interface DesktopGridProps {
 
 const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps) => {
   const { data: realTimeData, isConnected } = useRealTimeData();
-  const [hoveredModule, setHoveredModule] = useState<string | null>(null);
 
   const groupedModules = {
     personal: modules.filter(m => m.category === 'personal'),
@@ -31,38 +30,33 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
 
   const ModuleCard = ({ module, index }: { module: any; index: number }) => {
     const Icon = module.icon;
-    const isHovered = hoveredModule === module.id;
     
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.8, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: index * 0.1, type: "spring", stiffness: 100 }}
-        whileHover={{ scale: 1.05, y: -10 }}
-        whileTap={{ scale: 0.95 }}
-        onHoverStart={() => setHoveredModule(module.id)}
-        onHoverEnd={() => setHoveredModule(null)}
+        whileHover={{ scale: 1.02, y: -5 }}
+        whileTap={{ scale: 0.98 }}
         className="group cursor-pointer"
         onClick={() => onModuleClick(module)}
         onDoubleClick={() => onModuleOpen(module.id)}
       >
-        <Card className="relative overflow-hidden border-2 border-border hover:border-primary/50 transition-all duration-500 bg-card/60 hover:bg-card/80 backdrop-blur-md h-40">
-          {/* Static background - only animates on hover */}
-          <motion.div
-            className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
-          />
+        <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/50 transition-all duration-300 bg-card/60 group-hover:bg-card/80 backdrop-blur-md h-40">
+          {/* Static background - only opacity change on hover */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} />
 
           <CardContent className="p-6 h-full flex flex-col justify-between relative z-10">
             <div>
               <div className={`w-12 h-12 bg-gradient-to-br ${module.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                 <Icon className="h-6 w-6 text-white drop-shadow-lg" />
               </div>
-              <h3 className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors">
+              <h3 className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors duration-300">
                 {module.label}
               </h3>
             </div>
             
-            {/* Live indicator for real-time modules - static dot, no auto-animation */}
+            {/* Live indicator for real-time modules - completely static */}
             {isConnected && ['habits', 'focus', 'investments'].includes(module.id) && (
               <div className="flex items-center space-x-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
@@ -71,8 +65,8 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
             )}
           </CardContent>
 
-          {/* Glow effect - only on hover */}
-          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+          {/* Simple glow effect - only on hover */}
+          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${module.color} opacity-20 blur-xl`} />
           </div>
         </Card>

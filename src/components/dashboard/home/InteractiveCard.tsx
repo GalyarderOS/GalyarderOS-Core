@@ -38,7 +38,6 @@ const InteractiveCard = ({
   onContextMenu,
   isDragging = false
 }: InteractiveCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const rippleRef = useRef<HTMLSpanElement>(null);
 
   const triggerRipple = (e: React.MouseEvent) => {
@@ -94,14 +93,10 @@ const InteractiveCard = ({
       className={`group cursor-pointer select-none relative transition-all duration-500 will-change-transform ${getSizeClasses()} ${
         isDragging ? 'brightness-90 pointer-events-none' : ''
       }`}
-      onPointerMove={onPointerMove}
-      onPointerLeave={onPointerLeave}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
       onContextMenu={onContextMenu}
     >
-      <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/70 transition-all duration-700 bg-card/85 group-hover:bg-card/95 soft-shadow group-hover:soft-shadow-2xl h-full backdrop-blur-md">
+      <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/70 transition-all duration-300 bg-card/85 group-hover:bg-card/95 soft-shadow group-hover:soft-shadow-lg h-full backdrop-blur-md">
         {/* Ripple effect - only on click */}
         <span
           ref={rippleRef}
@@ -109,27 +104,22 @@ const InteractiveCard = ({
           style={{ transform: "scale(0)", transition: "transform 0.6s cubic-bezier(0.4,0,0.2,1)" }}
         />
 
-        {/* Static background gradient - only animate on hover */}
-        <div className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-gradient-to-br ${item.gradient}`} />
+        {/* Static background gradient - only fade in/out on hover */}
+        <div className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300 bg-gradient-to-br ${item.gradient}`} />
 
         {/* Context menu indicator */}
-        <motion.div
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          whileHover={{ scale: 1.1 }}
-        >
-          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:scale-110 transition-transform duration-200">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
-        </motion.div>
+        </div>
 
         <CardHeader className="pb-4 relative z-10">
           <div
-            className={`w-full h-24 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-700 border border-border relative overflow-hidden`}
+            className={`w-full h-24 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300 border border-border relative overflow-hidden`}
           >
-            {/* Icon glow effect - only on hover */}
-            {isHovered && (
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-100 transition-opacity duration-500" />
-            )}
+            {/* Static icon glow effect - only on hover */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             <div className="text-foreground drop-shadow-lg relative z-10">
               {item.icon}
             </div>
@@ -153,15 +143,15 @@ const InteractiveCard = ({
                 {item.change.includes('-') && <Badge variant="secondary" className="text-xs bg-red-500/10 text-red-600">↘</Badge>}
               </div>
             </div>
-            {/* Static arrow - no continuous animation */}
+            {/* Static arrow - only simple transform on hover */}
             <div className="group-hover:translate-x-1 group-hover:scale-105 transition-transform duration-300">
               <ArrowRight className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
         </CardContent>
 
-        {/* Enhanced border glow - only on hover */}
-        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+        {/* Simple border glow - only on hover */}
+        <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div className="absolute inset-0 rounded-xl border-2 border-primary/50" />
         </div>
       </Card>
