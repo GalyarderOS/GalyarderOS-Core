@@ -115,49 +115,49 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
   const modules = [
     { 
       id: 'dashboard', 
-      label: language === 'id' ? 'Beranda' : 'Home', 
+      label: language === 'id' ? 'Command Center' : 'Command Center', 
       icon: LayoutDashboard, 
       path: '/dashboard',
       category: 'personal',
       color: 'from-blue-500 to-indigo-600'
     },
     { 
-      id: 'profile', 
-      label: language === 'id' ? 'Profil' : 'Profile', 
+      id: 'identity-core', 
+      label: language === 'id' ? 'Identity Core' : 'Identity Core', 
       icon: User, 
-      path: '/dashboard/profile',
+      path: '/dashboard/identity',
       category: 'personal',
       color: 'from-purple-500 to-pink-600'
     },
     { 
-      id: 'vision', 
-      label: language === 'id' ? 'Visi' : 'Vision', 
+      id: 'vision-architecture', 
+      label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture', 
       icon: Target, 
       path: '/dashboard/vision',
       category: 'personal',
       color: 'from-green-500 to-emerald-600'
     },
     { 
-      id: 'habits', 
-      label: language === 'id' ? 'Kebiasaan' : 'Habits', 
+      id: 'ritual-engine', 
+      label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine', 
       icon: Calendar, 
-      path: '/dashboard/habits',
+      path: '/dashboard/ritual',
       category: 'personal',
       color: 'from-orange-500 to-red-600'
     },
     { 
-      id: 'focus', 
-      label: language === 'id' ? 'Timer Fokus' : 'Focus Timer', 
+      id: 'flow-state', 
+      label: language === 'id' ? 'Flow State' : 'Flow State', 
       icon: Timer, 
-      path: '/dashboard/focus',
+      path: '/dashboard/flow',
       category: 'personal',
       color: 'from-cyan-500 to-blue-600'
     },
     { 
-      id: 'memory', 
-      label: language === 'id' ? 'Vault Memori' : 'Memory Vault', 
+      id: 'knowledge-hub', 
+      label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub', 
       icon: Brain, 
-      path: '/dashboard/memory',
+      path: '/dashboard/knowledge',
       category: 'personal',
       color: 'from-violet-500 to-purple-600'
     },
@@ -179,7 +179,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'investments', 
-      label: language === 'id' ? 'Investasi' : 'Investments', 
+      label: language === 'id' ? 'Investments' : 'Investments', 
       icon: TrendingUp, 
       path: '/dashboard/investments',
       category: 'finance',
@@ -187,7 +187,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'cashflow', 
-      label: language === 'id' ? 'Arus Kas' : 'Cashflow', 
+      label: language === 'id' ? 'Cashflow' : 'Cashflow', 
       icon: DollarSign, 
       path: '/dashboard/cashflow',
       category: 'finance',
@@ -195,7 +195,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'expenses', 
-      label: language === 'id' ? 'Pengeluaran' : 'Expenses', 
+      label: language === 'id' ? 'Expenses' : 'Expenses', 
       icon: Receipt, 
       path: '/dashboard/expenses',
       category: 'finance',
@@ -203,7 +203,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'wealth', 
-      label: language === 'id' ? 'Kekayaan' : 'Wealth', 
+      label: language === 'id' ? 'Wealth' : 'Wealth', 
       icon: Building, 
       path: '/dashboard/wealth',
       category: 'finance',
@@ -211,7 +211,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'tax', 
-      label: language === 'id' ? 'Pajak' : 'Tax', 
+      label: language === 'id' ? 'Tax Optimizer' : 'Tax Optimizer', 
       icon: Calculator, 
       path: '/dashboard/tax',
       category: 'finance',
@@ -219,7 +219,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'debt', 
-      label: language === 'id' ? 'Hutang' : 'Debt', 
+      label: language === 'id' ? 'Debt Manager' : 'Debt Manager', 
       icon: CreditCard, 
       path: '/dashboard/debt',
       category: 'finance',
@@ -227,7 +227,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'settings', 
-      label: language === 'id' ? 'Pengaturan' : 'Settings', 
+      label: language === 'id' ? 'Settings' : 'Settings', 
       icon: Settings, 
       path: '/dashboard/settings',
       category: 'system',

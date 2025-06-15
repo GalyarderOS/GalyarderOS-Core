@@ -18,36 +18,44 @@ export const useCommandPalette = (onOpenAIAssistant?: () => void, onOpenNotionAI
 
   const commands: Command[] = [
     {
-      id: 'profile',
-      label: 'Open Profile',
-      action: () => navigate('/dashboard/profile'),
+      id: 'identity-core',
+      label: 'Open Identity Core',
+      action: () => navigate('/dashboard/identity'),
       category: 'Navigation',
-      keywords: ['profile', 'user', 'settings'],
-      shortcut: 'P'
+      keywords: ['identity', 'core', 'profile', 'user'],
+      shortcut: 'I'
     },
     {
-      id: 'vision',
-      label: 'Open Vision & Roadmap',
+      id: 'vision-architecture',
+      label: 'Open Vision Architecture',
       action: () => navigate('/dashboard/vision'),
       category: 'Navigation',
       keywords: ['vision', 'goals', 'roadmap'],
       shortcut: 'V'
     },
     {
-      id: 'habits',
-      label: 'Open Daily Rituals',
-      action: () => navigate('/dashboard/habits'),
+      id: 'ritual-engine',
+      label: 'Open Ritual Engine',
+      action: () => navigate('/dashboard/ritual'),
       category: 'Navigation',
-      keywords: ['habits', 'daily', 'rituals'],
-      shortcut: 'H'
+      keywords: ['ritual', 'habits', 'daily'],
+      shortcut: 'R'
     },
     {
-      id: 'focus',
-      label: 'Open Focus Timer',
-      action: () => navigate('/dashboard/focus'),
+      id: 'flow-state',
+      label: 'Open Flow State',
+      action: () => navigate('/dashboard/flow'),
       category: 'Navigation',
-      keywords: ['focus', 'timer', 'productivity'],
+      keywords: ['flow', 'timer', 'focus'],
       shortcut: 'F'
+    },
+    {
+      id: 'knowledge-hub',
+      label: 'Open Knowledge Hub',
+      action: () => navigate('/dashboard/knowledge'),
+      category: 'Navigation',
+      keywords: ['knowledge', 'memory', 'archive'],
+      shortcut: 'K'
     },
     {
       id: 'ai-assistant',
