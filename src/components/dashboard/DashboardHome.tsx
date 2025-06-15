@@ -3,9 +3,9 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
-import SystemStats from './home/SystemStats';
 import HeroSection from './home/HeroSection';
 import FinanceModulesSection from './home/FinanceModulesSection';
+import PersonalStatsSection from './home/PersonalStatsSection';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -107,14 +107,13 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
   return (
     <div className="space-y-8">
-      <HeroSection />
+      <HeroSection stats={stats} />
+      <PersonalStatsSection 
+        onOpenAIAssistant={onOpenAIAssistant}
+        onOpenNotionAI={onOpenNotionAI}
+      />
       <FinanceModulesSection stats={stats} />
-      {/* SystemStats component (if you want more stats below, else remove) */}
-      {/* <SystemStats 
-        stats={stats}
-        realTimeData={realTimeData}
-        isConnected={isConnected}
-      /> */}
+      
       {notifications.length > 0 && (
         <div className="fixed top-20 right-6 space-y-2 z-40">
           {notifications.slice(0, 3).map((notification) => (
@@ -140,4 +139,3 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 };
 
 export default DashboardHome;
-

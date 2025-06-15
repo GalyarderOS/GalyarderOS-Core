@@ -25,7 +25,13 @@ import {
   Search,
   Maximize2,
   Minimize2,
-  X
+  X,
+  Compass,
+  Activity,
+  CheckCircle,
+  Zap,
+  BookOpen,
+  BookMarked
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import TopBar from './os/TopBar';
@@ -58,6 +64,14 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       color: 'from-blue-500 to-indigo-600'
     },
     { 
+      id: 'identity', 
+      label: language === 'id' ? 'Identitas' : 'Identity Core', 
+      icon: User, 
+      path: '/dashboard/identity',
+      category: 'personal',
+      color: 'from-purple-500 to-pink-600'
+    },
+    { 
       id: 'profile', 
       label: language === 'id' ? 'Profil' : 'Profile', 
       icon: User, 
@@ -67,11 +81,27 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     },
     { 
       id: 'vision', 
-      label: language === 'id' ? 'Visi' : 'Vision', 
+      label: language === 'id' ? 'Visi' : 'Vision Architecture', 
       icon: Target, 
       path: '/dashboard/vision',
       category: 'personal',
       color: 'from-green-500 to-emerald-600'
+    },
+    { 
+      id: 'balance', 
+      label: language === 'id' ? 'Keseimbangan' : 'Life Balance', 
+      icon: Activity, 
+      path: '/dashboard/balance',
+      category: 'personal',
+      color: 'from-emerald-500 to-teal-600'
+    },
+    { 
+      id: 'ritual', 
+      label: language === 'id' ? 'Ritual' : 'Ritual Engine', 
+      icon: CheckCircle, 
+      path: '/dashboard/ritual',
+      category: 'personal',
+      color: 'from-teal-500 to-cyan-600'
     },
     { 
       id: 'habits', 
@@ -90,12 +120,44 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       color: 'from-cyan-500 to-blue-600'
     },
     { 
-      id: 'memory', 
-      label: language === 'id' ? 'Vault Memori' : 'Memory Vault', 
-      icon: Brain, 
-      path: '/dashboard/memory',
+      id: 'flow', 
+      label: language === 'id' ? 'Flow State' : 'Flow State', 
+      icon: Zap, 
+      path: '/dashboard/flow',
+      category: 'personal',
+      color: 'from-yellow-500 to-orange-600'
+    },
+    { 
+      id: 'knowledge', 
+      label: language === 'id' ? 'Pengetahuan' : 'Knowledge Hub', 
+      icon: BookOpen, 
+      path: '/dashboard/knowledge',
       category: 'personal',
       color: 'from-violet-500 to-purple-600'
+    },
+    { 
+      id: 'reflection', 
+      label: language === 'id' ? 'Refleksi' : 'Reflection', 
+      icon: BookMarked, 
+      path: '/dashboard/reflection',
+      category: 'personal',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    { 
+      id: 'analytics', 
+      label: language === 'id' ? 'Analitik' : 'Life Analytics', 
+      icon: TrendingUp, 
+      path: '/dashboard/analytics',
+      category: 'personal',
+      color: 'from-pink-500 to-rose-600'
+    },
+    { 
+      id: 'notion', 
+      label: 'Notion Sync', 
+      icon: FileText, 
+      path: '/dashboard/notion',
+      category: 'ai',
+      color: 'from-teal-500 to-green-600'
     },
     { 
       id: 'ai-assistant', 
@@ -208,8 +270,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
-      {/* Remove animated background particles completely */}
-
       {/* Top Bar */}
       <TopBar 
         user={user}

@@ -1,10 +1,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
-import { useNavigate } from 'react-router-dom';
-import { TrendingUp, DollarSign, Receipt, Building, Calculator, CreditCard, Star, ArrowRight } from 'lucide-react';
+import { TrendingUp, DollarSign, Receipt, Building, Calculator, CreditCard, Star } from 'lucide-react';
 
 interface Stats {
   totalPortfolioValue: number;
@@ -21,70 +19,75 @@ interface FinanceModulesSectionProps {
 
 const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
     const { language } = useTheme();
-    const navigate = useNavigate();
 
     const t = {
-        en: { financeModules: "Financial Core", description: "Build and manage your wealth with these modules" },
-        id: { financeModules: "Inti Finansial", description: "Bangun dan kelola kekayaan Anda lewat modul-modul ini" }
+        en: { 
+          financeModules: "Financial Overview", 
+          description: "Your wealth building progress and financial health metrics"
+        },
+        id: { 
+          financeModules: "Ikhtisar Finansial", 
+          description: "Progres membangun kekayaan dan metrik kesehatan finansial"
+        }
     }[language];
 
     const financeModules = [
         {
-          title: language === 'id' ? 'Pelacak Investasi' : 'Investment Tracker',
-          description: language === 'id' ? 'Pantau kinerja portofolio dengan presisi' : 'Monitor portfolio performance with precision',
+          title: language === 'id' ? 'Portofolio Investasi' : 'Investment Portfolio',
+          description: language === 'id' ? 'Total nilai investasi aktif' : 'Total active investment value',
           icon: TrendingUp,
           value: `$${stats.totalPortfolioValue.toLocaleString()}`,
           change: "+12.5%",
-          path: "/dashboard/investments",
+          changeType: "positive",
+          subtitle: `${stats.investments} investments`
         },
         {
-          title: language === 'id' ? 'Pelacak Arus Kas' : 'Cashflow Tracker',
-          description: language === 'id' ? 'Lacak pendapatan dan pengeluaran secara cerdas' : 'Track income and expenses intelligently',
+          title: language === 'id' ? 'Arus Kas Bulanan' : 'Monthly Cashflow',
+          description: language === 'id' ? 'Pendapatan dikurangi pengeluaran' : 'Income minus expenses',
           icon: DollarSign,
           value: `$${(stats.monthlyIncome - stats.monthlyExpenses).toLocaleString()}`,
           change: "+8.2%",
-          path: "/dashboard/cashflow",
+          changeType: "positive",
+          subtitle: language === 'id' ? 'Surplus bulan ini' : 'This month surplus'
         },
         {
-          title: language === 'id' ? 'Manajer Pengeluaran' : 'Expense Manager',
-          description: language === 'id' ? 'Optimalkan pengeluaran dengan wawasan AI' : 'Optimize spending with AI insights',
+          title: language === 'id' ? 'Pengeluaran Bulanan' : 'Monthly Expenses',
+          description: language === 'id' ? 'Total pengeluaran bulan ini' : 'Total expenses this month',
           icon: Receipt,
           value: `$${stats.monthlyExpenses.toLocaleString()}`,
           change: "-3.1%",
-          path: "/dashboard/expenses",
+          changeType: "negative",
+          subtitle: language === 'id' ? 'Dari bulan lalu' : 'From last month'
         },
         {
-          title: language === 'id' ? 'Pembangun Kekayaan' : 'Wealth Builder',
-          description: language === 'id' ? 'Tetapkan dan capai tujuan keuangan' : 'Set and achieve financial goals',
+          title: language === 'id' ? 'Target Kekayaan' : 'Wealth Goals',
+          description: language === 'id' ? 'Target keuangan yang aktif' : 'Active financial targets',
           icon: Building,
-          value: `${stats.wealthGoals} Goals`,
-          change: "75% Complete",
-          path: "/dashboard/wealth",
+          value: `${stats.wealthGoals}`,
+          change: "75% avg",
+          changeType: "neutral",
+          subtitle: language === 'id' ? 'Target aktif' : 'Active goals'
         },
         {
-          title: language === 'id' ? 'Optimisasi Pajak' : 'Tax Optimizer',
-          description: language === 'id' ? 'Minimalkan beban pajak secara strategis' : 'Minimize tax burden strategically',
+          title: language === 'id' ? 'Penghematan Pajak' : 'Tax Savings',
+          description: language === 'id' ? 'Optimisasi pajak tahun ini' : 'Tax optimization this year',
           icon: Calculator,
           value: "$15,240",
           change: "Saved",
-          path: "/dashboard/tax",
+          changeType: "positive",
+          subtitle: language === 'id' ? 'Total hemat' : 'Total saved'
         },
         {
-          title: language === 'id' ? 'Manajer Utang' : 'Debt Manager',
-          description: language === 'id' ? 'Hilangkan utang secara efisien' : 'Eliminate debt efficiently',
+          title: language === 'id' ? 'Sisa Hutang' : 'Remaining Debt',
+          description: language === 'id' ? 'Total hutang yang tersisa' : 'Total outstanding debt',
           icon: CreditCard,
           value: `$${stats.totalDebt.toLocaleString()}`,
           change: "-15.8%",
-          path: "/dashboard/debt",
+          changeType: "negative",
+          subtitle: language === 'id' ? 'Pengurangan YTD' : 'YTD reduction'
         }
     ];
 
-    const handleModuleClick = (module: any) => {
-        if (module.path) {
-            navigate(module.path);
-        }
-    };
-    
     return (
         <div>
             <div className="mb-8">
@@ -96,34 +99,29 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
             {financeModules.map((module, index) => {
                 const Icon = module.icon;
                 return (
-                <div
-                  key={index}
-                  className="cursor-pointer select-none group"
-                  onClick={() => handleModuleClick(module)}
-                >
-                    <Card className="border bg-card hover:border-primary transition duration-150 h-full overflow-hidden flex flex-col justify-between group">
-                        <CardHeader className="pb-3">
-                          <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                            <Icon className="h-7 w-7 text-primary" />
+                <Card key={index} className="border bg-card hover:shadow-lg transition-shadow duration-200 h-full">
+                    <CardHeader className="pb-3">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                        <Icon className="h-7 w-7 text-primary" />
+                      </div>
+                      <CardTitle className="text-lg font-bold font-playfair text-foreground">{module.title}</CardTitle>
+                      <CardDescription className="font-playfair text-sm text-muted-foreground">{module.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-0">
+                      <div className="space-y-2">
+                        <div className="text-2xl font-bold font-playfair text-foreground">{module.value}</div>
+                        <div className="flex items-center justify-between">
+                          <div className={`text-sm font-medium font-playfair flex items-center space-x-2`}>
+                            <span>{module.change}</span>
+                            {module.changeType === "positive" && <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-600">↗</Badge>}
+                            {module.changeType === "negative" && <Badge variant="secondary" className="text-xs bg-red-500/10 text-red-600">↘</Badge>}
+                            {module.changeType === "neutral" && <Badge variant="secondary" className="text-xs bg-blue-500/10 text-blue-600">●</Badge>}
                           </div>
-                          <CardTitle className="text-lg font-bold font-playfair text-foreground truncate">{module.title}</CardTitle>
-                          <CardDescription className="font-playfair text-sm text-muted-foreground truncate">{module.description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4 pt-0">
-                          <div>
-                            <div className="text-xl font-bold font-playfair text-foreground">{module.value}</div>
-                            <div className={`text-xs font-medium font-playfair flex items-center space-x-1`}>
-                              <span>{module.change}</span>
-                              {module.change && module.change.startsWith("+") && <Badge variant="secondary" className="text-xs bg-green-500/10 text-green-600">↗</Badge>}
-                              {module.change && module.change.startsWith("-") && <Badge variant="secondary" className="text-xs bg-red-500/10 text-red-600">↘</Badge>}
-                            </div>
-                          </div>
-                          <Button className="w-full h-10 bg-foreground hover:bg-primary text-background soft-shadow font-playfair text-base group-hover:bg-primary/90 transition-colors">
-                            Access <ArrowRight className="ml-2 h-4 w-4" />
-                          </Button>
-                        </CardContent>
-                    </Card>
-                </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground font-playfair">{module.subtitle}</p>
+                      </div>
+                    </CardContent>
+                </Card>
                 )
             })}
             </div>
@@ -132,4 +130,3 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
 };
 
 export default FinanceModulesSection;
-

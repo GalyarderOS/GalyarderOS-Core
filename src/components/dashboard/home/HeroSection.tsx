@@ -1,45 +1,66 @@
 
-// Minimal hero, clean structure, consistent with "Digital Soul Layer"
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Crown, Sparkles, Award, TrendingUp, Wifi } from 'lucide-react';
+import { Crown, Sparkles, Award, TrendingUp, Wifi, Calendar, Target, Brain } from 'lucide-react';
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  stats?: {
+    totalPortfolioValue: number;
+    monthlyIncome: number;
+    monthlyExpenses: number;
+    totalDebt: number;
+    wealthGoals: number;
+    investments: number;
+  };
+}
+
+const HeroSection = ({ stats }: HeroSectionProps) => {
     const { language } = useTheme();
     const t = {
         en: {
           welcomeTitle: "Your Personal OS",
           welcomeSubtitle: "Master life by design",
-          welcomeDescription: "Access all your personal development and wealth tools from one dashboard.",
-          totalModules: "Active Modules",
+          welcomeDescription: "Your complete life system dashboard with real-time insights.",
+          activeModules: "Active Modules",
           portfolioValue: "Portfolio Value",
-          connection: "Connection"
+          habitsStreak: "Habits Streak",
+          focusToday: "Focus Today"
         },
         id: {
           welcomeTitle: "OS Pribadi Anda",
           welcomeSubtitle: "Hidup terancang, dikuasai!",
-          welcomeDescription: "Akses seluruh alat pengembangan diri & keuangan di satu dashboard.",
-          totalModules: "Modul Aktif",
-          portfolioValue: "Nilai Portofolio",
-          connection: "Koneksi"
+          welcomeDescription: "Dashboard sistem hidup lengkap dengan wawasan real-time.",
+          activeModules: "Modul Aktif",
+          portfolioValue: "Nilai Portofolio", 
+          habitsStreak: "Streak Kebiasaan",
+          focusToday: "Fokus Hari Ini"
         }
       }[language];
 
     const heroStats = [
         { 
-            label: t.totalModules, 
-            value: "13", 
-            icon: <Award className="h-5 w-5" /> 
+            label: t.activeModules, 
+            value: "15", 
+            icon: <Award className="h-5 w-5" />,
+            color: "text-blue-600"
         },
         { 
             label: t.portfolioValue, 
-            value: "$0", 
-            icon: <TrendingUp className="h-5 w-5" /> 
+            value: `$${stats?.totalPortfolioValue?.toLocaleString() || '0'}`, 
+            icon: <TrendingUp className="h-5 w-5" />,
+            color: "text-green-600"
         },
         { 
-            label: t.connection, 
-            value: "Online", 
-            icon: <Wifi className="h-5 w-5" /> 
+            label: t.habitsStreak, 
+            value: "7 days", 
+            icon: <Calendar className="h-5 w-5" />,
+            color: "text-orange-600"
+        },
+        { 
+            label: t.focusToday, 
+            value: "2.5 hrs", 
+            icon: <Brain className="h-5 w-5" />,
+            color: "text-purple-600"
         }
     ];
 
@@ -60,14 +81,14 @@ const HeroSection = () => {
                 <h1 className="text-4xl md:text-5xl font-extrabold font-playfair leading-tight text-foreground">{t.welcomeTitle}</h1>
                 <h2 className="text-xl font-medium text-muted-foreground font-playfair">{t.welcomeSubtitle}</h2>
                 <p className="text-base md:text-lg text-muted-foreground max-w-2xl font-playfair">{t.welcomeDescription}</p>
-                <div className="flex gap-8 mt-2">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
                   {heroStats.map((stat, idx) => (
-                    <div key={idx} className="flex flex-col items-start">
-                        <div className="flex items-center gap-2 text-foreground font-playfair">
+                    <div key={idx} className="flex flex-col items-start p-4 bg-muted/20 rounded-xl border border-border">
+                        <div className={`flex items-center gap-2 font-playfair ${stat.color}`}>
                           <span>{stat.icon}</span>
                           <span className="font-bold text-lg">{stat.value}</span>
                         </div>
-                        <div className="text-xs text-muted-foreground font-playfair">{stat.label}</div>
+                        <div className="text-xs text-muted-foreground font-playfair mt-1">{stat.label}</div>
                     </div>
                   ))}
                 </div>
@@ -82,4 +103,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-

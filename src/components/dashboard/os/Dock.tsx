@@ -10,9 +10,13 @@ interface DockProps {
 }
 
 const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
-  // Show only frequently used modules in dock
+  // Include all Digital Soul modules and frequently used finance modules
   const dockModules = modules.filter(m => 
-    ['dashboard', 'profile', 'vision', 'habits', 'focus', 'memory', 'ai-assistant', 'investments'].includes(m.id)
+    [
+      'dashboard', 'profile', 'identity', 'vision', 'balance', 'ritual', 
+      'habits', 'focus', 'flow', 'knowledge', 'reflection', 'analytics', 
+      'notion', 'ai-assistant', 'investments', 'wealth', 'settings'
+    ].includes(m.id)
   );
 
   return (
@@ -22,7 +26,7 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
       transition={{ delay: 0.3 }}
       className="fixed bottom-6 left-0 right-0 z-30 flex justify-center"
     >
-      <div className="bg-card/80 backdrop-blur-md border border-border rounded-2xl p-3 shadow-2xl">
+      <div className="bg-card/80 backdrop-blur-md border border-border rounded-2xl p-3 shadow-2xl max-w-6xl overflow-x-auto">
         <div className="flex items-center space-x-2">
           <TooltipProvider>
             {dockModules.map((module) => {
