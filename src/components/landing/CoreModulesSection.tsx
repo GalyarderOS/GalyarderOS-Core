@@ -6,7 +6,7 @@ import React from 'react';
 interface CoreModule {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: React.ElementType;
   gradient: string;
 }
 
@@ -31,36 +31,39 @@ const CoreModulesSection = ({ coreModules }: CoreModulesSectionProps) => {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {coreModules.map((module, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 + 0.4 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="group"
-            >
-              <Card className="border-2 border-border hover:border-primary/30 transition-all duration-500 bg-card/80 hover:bg-card h-full">
-                <CardHeader className="text-center pb-4">
-                  <div className={`w-full h-20 bg-gradient-to-br ${module.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
-                    <div className="text-primary group-hover:text-accent-foreground">
-                      {module.icon}
+          {coreModules.map((module, index) => {
+            const IconComponent = module.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 + 0.4 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="group"
+              >
+                <Card className="border-2 border-border hover:border-primary/30 transition-all duration-500 bg-card/80 hover:bg-card h-full">
+                  <CardHeader className="text-center pb-4">
+                    <div className={`w-full h-20 bg-gradient-to-br ${module.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
+                      <div className="text-primary group-hover:text-accent-foreground">
+                        <IconComponent className="h-8 w-8" />
+                      </div>
                     </div>
-                  </div>
+                    
+                    <CardTitle className="text-lg font-bold font-playfair text-foreground">
+                      {module.title}
+                    </CardTitle>
+                  </CardHeader>
                   
-                  <CardTitle className="text-lg font-bold font-playfair text-foreground">
-                    {module.title}
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="text-center">
-                  <CardDescription className="text-muted-foreground text-sm">
-                    {module.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  <CardContent className="text-center">
+                    <CardDescription className="text-muted-foreground text-sm">
+                      {module.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

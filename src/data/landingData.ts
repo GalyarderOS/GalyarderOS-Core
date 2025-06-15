@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   User,
@@ -15,49 +14,49 @@ export const coreModules = [
   {
     title: "Identity Core",
     description: "Define your principles and life philosophy.",
-    icon: <User className="h-8 w-8" />,
+    icon: User,
     gradient: "from-blue-500/20 to-indigo-500/20"
   },
   {
     title: "Vision Architecture",
     description: "Map your goals and create a strategic roadmap.",
-    icon: <Target className="h-8 w-8" />,
+    icon: Target,
     gradient: "from-purple-500/20 to-pink-500/20"
   },
   {
     title: "Ritual Engine",
     description: "Build and track powerful, life-changing habits.",
-    icon: <CheckCircle className="h-8 w-8" />,
+    icon: CheckCircle,
     gradient: "from-green-500/20 to-emerald-500/20"
   },
   {
     title: "Focus Timer",
     description: "Master deep work and boost your productivity.",
-    icon: <Timer className="h-8 w-8" />,
+    icon: Timer,
     gradient: "from-cyan-500/20 to-blue-500/20"
   },
   {
     title: "Knowledge Hub",
     description: "Organize your learning, insights, and ideas.",
-    icon: <BookOpen className="h-8 w-8" />,
+    icon: BookOpen,
     gradient: "from-violet-500/20 to-purple-500/20"
   },
   {
     title: "AI Assistant",
     description: "Your personal AI for guidance and automation.",
-    icon: <Sparkles className="h-8 w-8" />,
+    icon: Sparkles,
     gradient: "from-pink-500/20 to-rose-500/20"
   },
   {
     title: "Investment Tracker",
     description: "Monitor your portfolio and financial growth.",
-    icon: <DollarSign className="h-8 w-8" />,
+    icon: DollarSign,
     gradient: "from-emerald-500/20 to-teal-500/20"
   },
   {
     title: "Expense Manager",
     description: "Track and categorize your spending with ease.",
-    icon: <Receipt className="h-8 w-8" />,
+    icon: Receipt,
     gradient: "from-red-500/20 to-orange-500/20"
   }
 ];
