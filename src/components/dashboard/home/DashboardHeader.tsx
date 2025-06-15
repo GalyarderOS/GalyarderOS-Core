@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Crown, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -41,8 +41,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
         >
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-20 h-20 bg-card/80 backdrop-blur-md rounded-3xl flex items-center justify-center border shadow-2xl">
-                <Crown className="h-10 w-10 text-primary" />
+              <div className="w-20 h-20 bg-card/80 backdrop-blur-md rounded-3xl flex items-center justify-center border shadow-2xl p-2">
+                <img src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" alt="GalyarderOS Logo" className="w-full h-full object-contain" />
               </div>
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
                 <Sparkles className="h-4 w-4 text-white" />
