@@ -12,6 +12,7 @@ import PersonalSystemsGrid from './home/PersonalSystemsGrid';
 import FinancialHealthSection from './home/FinancialHealthSection';
 import ProductivityMetrics from './home/ProductivityMetrics';
 import LifeAnalyticsCharts from './home/LifeAnalyticsCharts';
+import InteractiveAIChatbot from './home/InteractiveAIChatbot';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -203,39 +204,17 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     );
   }
 
-  // ---- ChatBot AI Greeting Section (after Hero) ----
-  // You may want to move this to a separate component for maintainability if file gets too long
-  function AIGreetingChat() {
-    return (
-      <div className="w-full max-w-2xl mx-auto mb-8">
-        <div className="rounded-2xl border border-primary/60 bg-card/60 px-6 py-6 shadow-lg flex flex-col items-start gap-4 animate-fade-in">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center shadow">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.5" stroke="#fff" strokeWidth="2.5"/><circle cx="12" cy="12" r="4.5" fill="#fff" /></svg>
-            </div>
-            <div className="font-semibold text-base">AI Assistant</div>
-          </div>
-          <div className="text-lg text-muted-foreground font-playfair flex flex-col gap-2">
-            <span>👋 Welcome back!</span>
-            <span>
-              I'm your personal assistant—ready to help you master life by design.<br/>Ask me anything, get personalized productivity tips, and control your dashboard with natural language.
-            </span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900/50 dark:to-indigo-950/30">
       <DashboardHeader stats={stats} />
-      
+
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <LifeOverviewSection stats={stats} />
 
-        {/* AI Chatbot Greeting (large, visible at the top, instead of modal AI section) */}
-        <AIGreetingChat />
-
+        {/* Interactive AI Chatbot positioned right after Welcome section */}
+        <div className="mb-8">
+          <InteractiveAIChatbot />
+        </div>
         {/* Ensure notionPagesCount gets passed */}
         <PersonalSystemsGrid stats={{
           activeRituals: stats.activeRituals,
