@@ -22,13 +22,16 @@ const Dashboard = () => {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isNotionAIOpen, setIsNotionAIOpen] = useState(false);
 
+  const handleOpenAIAssistant = () => setIsAIAssistantOpen(true);
+  const handleOpenNotionAI = () => setIsNotionAIOpen(true);
+
   return (
     <DashboardLayout 
-      onOpenAIAssistant={() => setIsAIAssistantOpen(true)}
-      onOpenNotionAI={() => setIsNotionAIOpen(true)}
+      onOpenAIAssistant={handleOpenAIAssistant}
+      onOpenNotionAI={handleOpenNotionAI}
     >
       <Routes>
-        <Route path="/" element={<DashboardHome />} />
+        <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
         <Route path="/profile" element={<ProfileModule />} />
         <Route path="/vision" element={<VisionModule />} />
         <Route path="/habits" element={<HabitsModule />} />
