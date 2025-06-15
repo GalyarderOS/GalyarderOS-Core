@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 
@@ -52,32 +51,6 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
           <motion.div
             className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
           />
-          
-          {/* Floating particles - only show on hover */}
-          {isHovered && (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-1 h-1 bg-primary/40 rounded-full"
-                  animate={{
-                    x: [0, Math.random() * 200 - 100],
-                    y: [0, Math.random() * 200 - 100],
-                    opacity: [0, 1, 0]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: Math.random()
-                  }}
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`
-                  }}
-                />
-              ))}
-            </div>
-          )}
 
           <CardContent className="p-6 h-full flex flex-col justify-between relative z-10">
             <div>

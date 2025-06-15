@@ -112,32 +112,6 @@ const InteractiveCard = ({
         {/* Static background gradient - only animate on hover */}
         <div className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-gradient-to-br ${item.gradient}`} />
 
-        {/* Floating particles effect - only show on hover */}
-        {isHovered && (
-          <div className="absolute inset-0 overflow-hidden opacity-100 transition-opacity duration-700">
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-primary/30 rounded-full"
-                animate={{
-                  x: [0, Math.random() * 200 - 100],
-                  y: [0, Math.random() * 200 - 100],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2
-                }}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`
-                }}
-              />
-            ))}
-          </div>
-        )}
-
         {/* Context menu indicator */}
         <motion.div
           className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity z-10"
@@ -179,12 +153,10 @@ const InteractiveCard = ({
                 {item.change.includes('-') && <Badge variant="secondary" className="text-xs bg-red-500/10 text-red-600">↘</Badge>}
               </div>
             </div>
-            <motion.div
-              animate={isHovered ? { x: 6, scale: 1.1 } : { x: 0, scale: 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
+            {/* Static arrow - no continuous animation */}
+            <div className="group-hover:translate-x-1 group-hover:scale-105 transition-transform duration-300">
               <ArrowRight className="h-4 w-4 text-muted-foreground" />
-            </motion.div>
+            </div>
           </div>
         </CardContent>
 
