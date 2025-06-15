@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from 'react';
 import { useDashboardStats } from '@/hooks/useDashboardStats';
 import { DashboardHeader } from './home/DashboardHeader';
 import DashboardContent from './home/DashboardContent';
@@ -9,21 +8,13 @@ import { useFirstTimeUser } from '@/hooks/useFirstTimeUser';
 
 const DashboardHome = () => {
   const { stats, loading } = useDashboardStats();
-  const { isFirstTime, hasCompletedWelcome, markWelcomeCompleted } = useFirstTimeUser();
-  const [showWelcome, setShowWelcome] = useState(false);
-
-  useEffect(() => {
-    if (isFirstTime && !hasCompletedWelcome) {
-      setShowWelcome(true);
-    }
-  }, [isFirstTime, hasCompletedWelcome]);
+  const { isFirstTimeUser, markOnboardingCompleted, isLoading: isFirstTimeUserLoading } = useFirstTimeUser();
 
   const handleWelcomeClose = () => {
-    setShowWelcome(false);
-    markWelcomeCompleted();
+    markOnboardingCompleted();
   };
 
-  if (loading) {
+  if (loading || isFirstTimeUserLoading) {
     return (
       <div className="flex flex-col min-h-screen">
         <div className="flex-grow flex items-center justify-center">
@@ -39,7 +30,7 @@ const DashboardHome = () => {
       <DashboardContent stats={stats} />
       
       <WelcomeCenter 
-        isOpen={showWelcome} 
+        isOpen={isFirstTimeUser} 
         onClose={handleWelcomeClose} 
       />
     </div>

@@ -1,33 +1,30 @@
 
-import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useFirstTimeUser = () => {
-  const [isFirstTime, setIsFirstTime] = useState(false);
-  const [hasCompletedWelcome, setHasCompletedWelcome] = useState(false);
-  const { user, profile } = useAuth();
+  const { user, profile, reloadProfile, loadingProfile } = useAuth();
 
-  useEffect(() => {
+  const isFirstTimeUser = profile ? !profile.has_completed_onboarding : false;
+
+  const markOnboardingCompleted = async () => {
     if (user && profile) {
-      // Check if user has completed initial setup
-      const hasSetupIdentity = profile.full_name && profile.full_name !== user.email;
-      const welcomeCompleted = localStorage.getItem(`welcome_completed_${user.id}`);
-      
-      setIsFirstTime(!hasSetupIdentity);
-      setHasCompletedWelcome(!!welcomeCompleted);
-    }
-  }, [user, profile]);
+      const { error } = await supabase
+        .from('profiles')
+        .update({ has_completed_onboarding: true })
+        .eq('user_id', user.id);
 
-  const markWelcomeCompleted = () => {
-    if (user) {
-      localStorage.setItem(`welcome_completed_${user.id}`, 'true');
-      setHasCompletedWelcome(true);
+      if (error) {
+        console.error('Error marking onboarding as completed:', error.message);
+      } else {
+        await reloadProfile();
+      }
     }
   };
 
   return {
-    isFirstTime,
-    hasCompletedWelcome,
-    markWelcomeCompleted
+    isFirstTimeUser,
+    markOnboardingCompleted,
+    isLoading: loadingProfile,
   };
 };

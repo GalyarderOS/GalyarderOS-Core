@@ -469,25 +469,40 @@ export type Database = {
           avatar_url: string | null
           created_at: string | null
           full_name: string | null
+          has_completed_onboarding: boolean | null
           id: string
+          life_purpose: string | null
+          mission_statement: string | null
+          professional_title: string | null
           updated_at: string | null
           user_id: string
+          vision_statement: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
+          has_completed_onboarding?: boolean | null
           id?: string
+          life_purpose?: string | null
+          mission_statement?: string | null
+          professional_title?: string | null
           updated_at?: string | null
           user_id: string
+          vision_statement?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           full_name?: string | null
+          has_completed_onboarding?: boolean | null
           id?: string
+          life_purpose?: string | null
+          mission_statement?: string | null
+          professional_title?: string | null
           updated_at?: string | null
           user_id?: string
+          vision_statement?: string | null
         }
         Relationships: []
       }

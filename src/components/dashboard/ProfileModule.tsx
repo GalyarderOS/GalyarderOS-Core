@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,26 +8,73 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { User, Edit, Save, Plus, X } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { TablesUpdate } from '@/integrations/supabase/types';
 
 const ProfileModule = () => {
+  const { user, profile, reloadProfile, loadingProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState({
-    fullName: 'John Doe',
-    bio: 'Aspiring entrepreneur focused on building meaningful products and personal growth.',
+  
+  const [formData, setFormData] = useState({
+    fullName: '',
+    professionalTitle: '',
+    bio: '',
     coreValues: ['Innovation', 'Integrity', 'Growth', 'Impact'],
-    mission: 'To create technology that empowers people to achieve their full potential.',
-    vision: 'A world where everyone has the tools and mindset to pursue their dreams.'
+    mission: '',
+    vision: ''
   });
+
   const [newValue, setNewValue] = useState('');
 
-  const handleSave = () => {
-    setIsEditing(false);
-    // Here you would save to Supabase
+  useEffect(() => {
+    if (profile) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: profile.full_name || '',
+        professionalTitle: profile.professional_title || '',
+        bio: profile.life_purpose || '',
+        mission: profile.mission_statement || '',
+        vision: profile.vision_statement || '',
+        coreValues: prev.coreValues, // Core values are local-only for now
+      }));
+    }
+  }, [profile]);
+
+
+  const handleSave = async () => {
+    if (!user) return;
+    
+    const profileUpdate: TablesUpdate<'profiles'> = {
+      full_name: formData.fullName,
+      professional_title: formData.professionalTitle,
+      life_purpose: formData.bio,
+      mission_statement: formData.mission,
+      vision_statement: formData.vision,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { error } = await supabase
+      .from('profiles')
+      .update(profileUpdate)
+      .eq('user_id', user.id);
+
+    if (error) {
+      console.error("Error updating profile", error);
+    } else {
+      setIsEditing(false);
+      await reloadProfile();
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({...prev, [id]: value}));
   };
 
   const addCoreValue = () => {
     if (newValue.trim()) {
-      setProfile(prev => ({
+      setFormData(prev => ({
         ...prev,
         coreValues: [...prev.coreValues, newValue.trim()]
       }));
@@ -36,11 +83,15 @@ const ProfileModule = () => {
   };
 
   const removeCoreValue = (index: number) => {
-    setProfile(prev => ({
+    setFormData(prev => ({
       ...prev,
       coreValues: prev.coreValues.filter((_, i) => i !== index)
     }));
   };
+
+  if (loadingProfile) {
+    return <div>Loading profile...</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -84,27 +135,41 @@ const ProfileModule = () => {
                 {isEditing ? (
                   <Input
                     id="fullName"
-                    value={profile.fullName}
-                    onChange={(e) => setProfile(prev => ({ ...prev, fullName: e.target.value }))}
+                    value={formData.fullName}
+                    onChange={handleInputChange}
                     className="mt-1"
                   />
                 ) : (
-                  <p className="mt-1 text-lg font-medium">{profile.fullName}</p>
+                  <p className="mt-1 text-lg font-medium">{formData.fullName}</p>
                 )}
               </div>
               
               <div>
-                <Label htmlFor="bio">Bio</Label>
+                <Label htmlFor="professionalTitle">Professional Title</Label>
+                {isEditing ? (
+                  <Input
+                    id="professionalTitle"
+                    value={formData.professionalTitle}
+                    onChange={handleInputChange}
+                    className="mt-1"
+                  />
+                ) : (
+                  <p className="mt-1 text-gray-700">{formData.professionalTitle}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="bio">Life Purpose / Bio</Label>
                 {isEditing ? (
                   <Textarea
                     id="bio"
-                    value={profile.bio}
-                    onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
+                    value={formData.bio}
+                    onChange={handleInputChange}
                     className="mt-1"
                     rows={3}
                   />
                 ) : (
-                  <p className="mt-1 text-gray-700">{profile.bio}</p>
+                  <p className="mt-1 text-gray-700">{formData.bio}</p>
                 )}
               </div>
             </CardContent>
@@ -121,13 +186,13 @@ const ProfileModule = () => {
             <CardHeader>
               <CardTitle>Core Values</CardTitle>
               <CardDescription>
-                The principles that guide your decisions
+                The principles that guide your decisions (not saved to database)
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
-                  {profile.coreValues.map((value, index) => (
+                  {formData.coreValues.map((value, index) => (
                     <Badge key={index} variant="secondary" className="text-sm">
                       {value}
                       {isEditing && (
@@ -174,12 +239,13 @@ const ProfileModule = () => {
             <CardContent>
               {isEditing ? (
                 <Textarea
-                  value={profile.mission}
-                  onChange={(e) => setProfile(prev => ({ ...prev, mission: e.target.value }))}
+                  id="mission"
+                  value={formData.mission}
+                  onChange={handleInputChange}
                   rows={4}
                 />
               ) : (
-                <p className="text-gray-700 leading-relaxed">{profile.mission}</p>
+                <p className="text-gray-700 leading-relaxed">{formData.mission}</p>
               )}
             </CardContent>
           </Card>
@@ -201,12 +267,13 @@ const ProfileModule = () => {
             <CardContent>
               {isEditing ? (
                 <Textarea
-                  value={profile.vision}
-                  onChange={(e) => setProfile(prev => ({ ...prev, vision: e.target.value }))}
+                  id="vision"
+                  value={formData.vision}
+                  onChange={handleInputChange}
                   rows={4}
                 />
               ) : (
-                <p className="text-gray-700 leading-relaxed">{profile.vision}</p>
+                <p className="text-gray-700 leading-relaxed">{formData.vision}</p>
               )}
             </CardContent>
           </Card>

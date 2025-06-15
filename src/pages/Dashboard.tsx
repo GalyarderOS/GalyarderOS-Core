@@ -39,7 +39,7 @@ const Dashboard = () => {
       <Routes>
         <Route path="/" element={<DashboardHome />} />
         <Route path="/identity" element={<IdentityCore />} />
-        <Route path="/vision" element={<VisionArchitecture />} />
+        <Route path="/vision" element={<VisionModule />} />
         <Route path="/balance" element={<LifeBalance />} />
         <Route path="/ritual" element={<RitualEngine />} />
         <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
