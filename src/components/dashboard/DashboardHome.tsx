@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
@@ -12,7 +13,8 @@ import PersonalSystemsGrid from './home/PersonalSystemsGrid';
 import FinancialHealthSection from './home/FinancialHealthSection';
 import ProductivityMetrics from './home/ProductivityMetrics';
 import LifeAnalyticsCharts from './home/LifeAnalyticsCharts';
-import InteractiveAIChatbot from './home/InteractiveAIChatbot';
+// REMOVE InteractiveAIChatbot import since moved to header
+// import InteractiveAIChatbot from './home/InteractiveAIChatbot';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -206,15 +208,16 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900/50 dark:to-indigo-950/30">
+      {/* Move AI Chatbot INTO DashboardHeader, pass as child */}
       <DashboardHeader stats={stats} />
-
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <LifeOverviewSection stats={stats} />
 
-        {/* Interactive AI Chatbot positioned right after Welcome section */}
-        <div className="mb-8">
+        {/* Removed AI Chatbot here! */}
+        {/* <div className="mb-8">
           <InteractiveAIChatbot />
-        </div>
+        </div> */}
+
         {/* Ensure notionPagesCount gets passed */}
         <PersonalSystemsGrid stats={{
           activeRituals: stats.activeRituals,
@@ -263,3 +266,4 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 };
 
 export default DashboardHome;
+

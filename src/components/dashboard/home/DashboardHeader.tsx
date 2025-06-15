@@ -4,6 +4,8 @@ import { Crown, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
+// Import InteractiveAIChatbot here!
+import InteractiveAIChatbot from './InteractiveAIChatbot';
 
 interface DashboardHeaderProps {
   stats: {
@@ -111,9 +113,15 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
             <Progress value={Math.min(((stats.activeHabits + stats.activeGoals) / 10) * 100, 100)} className="h-2 bg-white/20" />
           </div>
         </motion.div>
+
+        {/* AI Chatbot: Right after stats, still in header area */}
+        <div className="max-w-2xl mx-auto flex flex-col justify-center mt-12">
+          <InteractiveAIChatbot />
+        </div>
       </div>
     </div>
   );
 };
 
 export default DashboardHeader;
+
