@@ -31,7 +31,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     totalDebt: 0,
     wealthGoals: 0,
     investments: 0,
+    activeHabits: 0, // Keep for compatibility with existing components
     activeRituals: 0,
+    habitStreak: 0, // Keep for compatibility with existing components
     ritualStreak: 0,
     focusHoursToday: 0,
     notesCount: 0,
@@ -101,9 +103,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         .select('id')
         .eq('user_id', user.id);
 
-      // Load personal data - updated to use rituals instead of habits
-      const { data: rituals } = await supabase
-        .from('rituals')
+      // Load personal data - use existing habits table since rituals doesn't exist yet
+      const { data: habits } = await supabase
+        .from('habits')
         .select('id')
         .eq('user_id', user.id)
         .eq('is_active', true);
@@ -141,22 +143,19 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
       const weeklyFocusHours = weeklyFocus?.reduce((sum, session) => sum + (session.duration_minutes || 0), 0) / 60 || 0;
 
-      // Load calendar events for this week
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekEnd.getDate() + 7);
-      
-      // Simulate calendar events (since we don't have a calendar_events table yet)
+      // Load calendar events for this week (simulate for now since no calendar table exists)
       const calendarEventsThisWeek = Math.floor(Math.random() * 15) + 5;
 
-      const { data: ritualLogs } = await supabase
-        .from('ritual_logs')
+      // Use existing habit_logs table instead of ritual_logs
+      const { data: habitLogs } = await supabase
+        .from('habit_logs')
         .select('id')
         .eq('user_id', user.id)
         .gte('completed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
-      // Calculate life balance score (simplified) - updated calculation
+      // Calculate life balance score (simplified)
       const lifeBalanceScore = Math.round(
-        ((rituals?.length || 0) / 5 * 25) + 
+        ((habits?.length || 0) / 5 * 25) + 
         (Math.min(focusHoursToday / 4, 1) * 25) + 
         ((goals?.length || 0) / 3 * 25) + 
         (Math.min((monthlyIncome - monthlyExpenses) / monthlyIncome || 0, 1) * 25)
@@ -171,8 +170,10 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         totalDebt,
         wealthGoals: wealthGoals?.length || 0,
         investments: investments?.length || 0,
-        activeRituals: rituals?.length || 0,
-        ritualStreak: Math.min(ritualLogs?.length || 0, 7),
+        activeHabits: habits?.length || 0, // Use habits for backward compatibility
+        activeRituals: habits?.length || 0, // Same value for now
+        habitStreak: Math.min(habitLogs?.length || 0, 7), // Use habit logs for backward compatibility
+        ritualStreak: Math.min(habitLogs?.length || 0, 7), // Same value for now
         focusHoursToday: Math.round(focusHoursToday * 10) / 10,
         notesCount: memories?.length || 0,
         reflectionEntries: Math.floor(Math.random() * 5) + 1,
