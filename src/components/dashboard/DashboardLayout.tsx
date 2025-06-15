@@ -241,7 +241,7 @@ const DashboardLayout = () => {
               className="max-w-7xl mx-auto"
             >
               <Routes>
-                <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
+                <Route path="/" element={<DashboardHome />} />
                 <Route path="/identity" element={<IdentityCore />} />
                 <Route path="/vision" element={<VisionArchitecture />} />
                 <Route path="/balance" element={<LifeBalance />} />
