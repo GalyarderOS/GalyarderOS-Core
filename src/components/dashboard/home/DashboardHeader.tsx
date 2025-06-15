@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -5,6 +6,7 @@ import InteractiveAIChatbot from './InteractiveAIChatbot';
 import { DashboardStats } from '@/types/dashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 
 export interface DashboardHeaderProps {
   stats: DashboardStats;
@@ -12,18 +14,16 @@ export interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
   const { language } = useTheme();
-  const { loadingProfile } = useAuth();
+  const { user, profile, loadingProfile } = useAuth();
 
   const t = {
     en: {
-      welcome: "Welcome to Your Personal OS",
       subtitle: "Master life by design, powered by data",
       lifeBalance: "Life Balance Score",
       todaysFocus: "Today's Focus",
       activeElements: "Active Systems"
     },
     id: {
-      welcome: "Selamat Datang di OS Pribadi Anda",
       subtitle: "Kuasai hidup dengan desain, didukung data",
       lifeBalance: "Skor Keseimbangan Hidup",
       todaysFocus: "Fokus Hari Ini",
@@ -45,7 +45,12 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
               {loadingProfile ? (
                 <Skeleton className="w-20 h-20 rounded-full" />
               ) : (
-                <img src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" alt="Galyarder Logo" className="w-20 h-20 object-contain" />
+                <Avatar className="w-24 h-24 text-3xl">
+                  <AvatarImage src={profile?.avatar_url || user?.user_metadata?.avatar_url} alt={profile?.full_name || "User avatar"} />
+                  <AvatarFallback>
+                    {profile?.full_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
               )}
             </div>
           </div>
@@ -62,7 +67,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
               </div>
             ) : (
               <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
-                Galyarder Architect Intellegent
+                {profile?.full_name || user?.email}
               </h1>
             )}
           </motion.div>
