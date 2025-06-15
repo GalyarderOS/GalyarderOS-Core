@@ -14,6 +14,22 @@ interface DashboardHeaderProps {
     activeGoals: number;
     focusHoursToday: number;
     totalPortfolioValue: number;
+    // Add all the other stats properties that are being passed
+    monthlyIncome: number;
+    monthlyExpenses: number;
+    totalDebt: number;
+    wealthGoals: number;
+    investments: number;
+    activeRituals: number;
+    habitStreak: number;
+    ritualStreak: number;
+    notesCount: number;
+    reflectionEntries: number;
+    weeklyFocusHours: number;
+    completedGoalsThisMonth: number;
+    savingsRate: number;
+    calendarEventsThisWeek: number;
+    notionPagesCount: number;
   };
 }
 
@@ -127,4 +143,3 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
 };
 
 export default DashboardHeader;
-
