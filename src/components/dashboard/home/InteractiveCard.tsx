@@ -102,51 +102,41 @@ const InteractiveCard = ({
       onContextMenu={onContextMenu}
     >
       <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/70 transition-all duration-700 bg-card/85 group-hover:bg-card/95 soft-shadow group-hover:soft-shadow-2xl h-full backdrop-blur-md">
-        {/* Ripple effect */}
+        {/* Ripple effect - only on click */}
         <span
           ref={rippleRef}
           className="pointer-events-none absolute rounded-full bg-primary/25 opacity-70 scale-100 z-20"
           style={{ transform: "scale(0)", transition: "transform 0.6s cubic-bezier(0.4,0,0.2,1)" }}
         />
 
-        {/* Enhanced animated background gradient */}
-        <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-          animate={{
-            background: [
-              `linear-gradient(45deg, ${item.gradient.split(' ').join(', ')})`,
-              `linear-gradient(135deg, ${item.gradient.split(' ').join(', ')})`,
-              `linear-gradient(225deg, ${item.gradient.split(' ').join(', ')})`,
-              `linear-gradient(315deg, ${item.gradient.split(' ').join(', ')})`,
-              `linear-gradient(45deg, ${item.gradient.split(' ').join(', ')})`
-            ]
-          }}
-          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-        />
+        {/* Static background gradient - only animate on hover */}
+        <div className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-700 bg-gradient-to-br ${item.gradient}`} />
 
-        {/* Floating particles effect */}
-        <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-          {[...Array(6)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-primary/30 rounded-full"
-              animate={{
-                x: [0, Math.random() * 200 - 100],
-                y: [0, Math.random() * 200 - 100],
-                opacity: [0, 1, 0]
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2
-              }}
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`
-              }}
-            />
-          ))}
-        </div>
+        {/* Floating particles effect - only show on hover */}
+        {isHovered && (
+          <div className="absolute inset-0 overflow-hidden opacity-100 transition-opacity duration-700">
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-primary/30 rounded-full"
+                animate={{
+                  x: [0, Math.random() * 200 - 100],
+                  y: [0, Math.random() * 200 - 100],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2
+                }}
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`
+                }}
+              />
+            ))}
+          </div>
+        )}
 
         {/* Context menu indicator */}
         <motion.div
@@ -162,19 +152,10 @@ const InteractiveCard = ({
           <div
             className={`w-full h-24 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-all duration-700 border border-border relative overflow-hidden`}
           >
-            {/* Icon glow effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-              animate={isHovered ? {
-                background: [
-                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)',
-                  'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2) 0%, transparent 50%)',
-                  'radial-gradient(circle at 70% 70%, rgba(255,255,255,0.2) 0%, transparent 50%)',
-                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)'
-                ]
-              } : {}}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
+            {/* Icon glow effect - only on hover */}
+            {isHovered && (
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-100 transition-opacity duration-500" />
+            )}
             <div className="text-foreground drop-shadow-lg relative z-10">
               {item.icon}
             </div>
@@ -207,9 +188,9 @@ const InteractiveCard = ({
           </div>
         </CardContent>
 
-        {/* Enhanced border glow */}
+        {/* Enhanced border glow - only on hover */}
         <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-          <div className="absolute inset-0 rounded-xl border-2 border-primary/50 animate-pulse" />
+          <div className="absolute inset-0 rounded-xl border-2 border-primary/50" />
         </div>
       </Card>
 
