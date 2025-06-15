@@ -1,58 +1,136 @@
 
-import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 
-interface DesktopGridProps {
-  modules: any[];
-  onModuleClick: (module: any) => void;
-  onModuleOpen: (moduleId: string) => void;
+// GalyarderOS "Digital Soul Layer" groups
+const CATEGORY_CONFIG = [
+  {
+    key: 'core',
+    label: 'Digital Soul Layer',
+    description: 'Your core OS modules for life design and personal mastery.',
+    color: 'from-primary to-muted/50',
+    modules: ['dashboard', 'command', 'identity', 'vision', 'balance'],
+  },
+  {
+    key: 'ritual',
+    label: 'Ritual Engine',
+    description: 'Habits and routines to power your day.',
+    color: 'from-green-500 to-emerald-300',
+    modules: ['habits', 'flow', 'reflection'],
+  },
+  {
+    key: 'knowledge',
+    label: 'Knowledge System',
+    description: 'Harness your mind: memory, learning, analytics.',
+    color: 'from-blue-500 to-blue-300',
+    modules: ['memory', 'analytics'],
+  },
+  {
+    key: 'finance',
+    label: 'Financial Core',
+    description: 'Build, track, and optimize wealth.',
+    color: 'from-yellow-500 to-amber-300',
+    modules: [
+      'investments',
+      'cashflow',
+      'expenses',
+      'wealth',
+      'tax',
+      'debt',
+    ],
+  },
+  {
+    key: 'ai',
+    label: 'AI/Integration',
+    description: 'Seamless connection with AI and Notion.',
+    color: 'from-pink-500 to-rose-300',
+    modules: ['ai-assistant', 'notion-ai'],
+  },
+  {
+    key: 'system',
+    label: 'System & Settings',
+    description: 'Manage your OS and settings.',
+    color: 'from-gray-400 to-slate-300',
+    modules: ['settings'],
+  },
+];
+
+function normalizeId(id: string) {
+  // Map legacy module ids to digital soul vocab
+  switch (id) {
+    case 'profile':
+      return 'identity';
+    case 'focus':
+      return 'flow';
+    case 'dashboard':
+      return 'dashboard';
+    case 'vision':
+      return 'vision';
+    case 'habits':
+      return 'habits';
+    case 'memory':
+      return 'memory';
+    case 'investments':
+      return 'investments';
+    case 'cashflow':
+      return 'cashflow';
+    case 'expenses':
+      return 'expenses';
+    case 'wealth':
+      return 'wealth';
+    case 'tax':
+      return 'tax';
+    case 'debt':
+      return 'debt';
+    case 'settings':
+      return 'settings';
+    case 'ai-assistant':
+      return 'ai-assistant';
+    case 'notion-ai':
+      return 'notion-ai';
+    // Add more legacy-to-digital mapping as needed
+    default:
+      return id;
+  }
 }
 
-const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps) => {
+// You must preserve the dock's ability to open modules by id
+
+const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }) => {
   const { data: realTimeData, isConnected } = useRealTimeData();
 
-  const groupedModules = {
-    personal: modules.filter(m => m.category === 'personal'),
-    finance: modules.filter(m => m.category === 'finance'),
-    ai: modules.filter(m => m.category === 'ai'),
-    system: modules.filter(m => m.category === 'system')
-  };
-
-  const categoryLabels = {
-    personal: 'Personal Development',
-    finance: 'Financial Management', 
-    ai: 'AI Tools',
-    system: 'System'
-  };
+  // Build category lists with normalized ids (to future-proof new module names)
+  const categorized = CATEGORY_CONFIG.map((cat) => ({
+    ...cat,
+    items: modules
+      .filter((mod) => cat.modules.includes(normalizeId(mod.id)))
+      .map((mod) => ({
+        ...mod,
+        _groupLabel: cat.label,
+      })),
+  }));
 
   const ModuleCard = ({ module }: { module: any }) => {
     const Icon = module.icon;
-    
     return (
       <div
-        className="group cursor-pointer transition-all"
+        className="group cursor-pointer rounded-xl border border-border bg-card hover:border-primary/60 hover:shadow-lg transition duration-150 select-none overflow-hidden"
         onClick={() => onModuleClick(module)}
         onDoubleClick={() => onModuleOpen(module.id)}
       >
-        <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/60 transition-all duration-200 bg-card h-40 shadow-sm group-hover:shadow-md">
-          {/* Static very subtle gradient on hover only */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-10 transition-opacity duration-200 pointer-events-none`} />
-          <CardContent className="p-6 h-full flex flex-col justify-between relative z-10">
-            <div>
-              <div className={`w-12 h-12 bg-gradient-to-br ${module.color} rounded-2xl flex items-center justify-center mb-4`}>
+        <Card className="border-none shadow-none h-full">
+          <CardContent className="p-5 flex flex-col justify-between h-full">
+            <div className="flex items-center mb-4">
+              <div className={`w-12 h-12 bg-gradient-to-tr ${module.color} rounded-2xl flex items-center justify-center`}>
                 <Icon className="h-6 w-6 text-white" />
               </div>
-              <h3 className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors duration-200">
-                {module.label}
-              </h3>
+              <span className="ml-4 text-lg font-semibold font-playfair text-foreground group-hover:text-primary transition-colors truncate">{module.label}</span>
             </div>
-            {/* Live indicator for real-time modules (static only) */}
-            {isConnected && ['habits', 'focus', 'investments'].includes(module.id) && (
-              <div className="flex items-center space-x-2">
+            {isConnected && ['habits', 'flow', 'investments'].includes(module.id) && (
+              <div className="flex items-center space-x-2 mt-auto">
                 <div className="w-2 h-2 bg-green-500 rounded-full" />
-                <span className="text-xs text-green-600 font-medium">Live</span>
+                <span className="text-xs text-green-600 font-medium font-playfair">Live</span>
               </div>
             )}
           </CardContent>
@@ -63,49 +141,32 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
 
   return (
     <div className="space-y-12">
-      {/* Hero Section */}
-      <div className="text-center space-y-4 mb-12">
-        <h1 className="text-5xl font-bold font-playfair bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-          Welcome to GalyarderOS
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Your personal operating system for life management and productivity
-        </p>
-        <div className="flex items-center justify-center space-x-4">
-          <div className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
-            isConnected 
-              ? 'bg-green-500/10 border-green-500/20 text-green-600' 
-              : 'bg-red-500/10 border-red-500/20 text-red-600'
-          }`}>
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
-            <span className="text-sm font-medium">
-              {isConnected ? 'System Online' : 'System Offline'}
-            </span>
-          </div>
-        </div>
-      </div>
-      {/* Module Categories */}
-      {Object.entries(groupedModules).map(([category, categoryModules]) => (
-        <div key={category} className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <h2 className="text-3xl font-bold font-playfair text-foreground">
-                {categoryLabels[category as keyof typeof categoryLabels]}
-              </h2>
-              <Badge variant="secondary" className="font-playfair">
-                {categoryModules.length} modules
-              </Badge>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {categoryModules.map((module) => (
-              <ModuleCard key={module.id} module={module} />
-            ))}
-          </div>
-        </div>
-      ))}
-      {/* Quick Actions */}
-      <div className="text-center space-y-4 pt-8">
+      {categorized.map(
+        (cat) =>
+          cat.items.length > 0 && (
+            <section key={cat.key} className="space-y-5">
+              <div className="flex items-baseline space-x-5">
+                <h2 className="text-2xl font-bold leading-none font-playfair text-foreground">
+                  {cat.label}
+                </h2>
+                <Badge variant="secondary" className="font-playfair">
+                  {cat.items.length} modules
+                </Badge>
+                {cat.description && (
+                  <span className="text-base text-muted-foreground hidden md:inline font-playfair">
+                    {cat.description}
+                  </span>
+                )}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {cat.items.map((mod) => (
+                  <ModuleCard key={mod.id} module={mod} />
+                ))}
+              </div>
+            </section>
+          )
+      )}
+      <div className="text-center mt-12">
         <p className="text-muted-foreground">
           Double-click modules to open in windows • Press ⌘K for quick search • Drag to customize layout
         </p>

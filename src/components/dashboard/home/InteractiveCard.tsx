@@ -1,30 +1,8 @@
 
-import { useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowRight, MoreHorizontal } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-
-interface InteractiveCardProps {
-  item: {
-    id: string;
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-    value: string;
-    change: string;
-    gradient: string;
-    size?: 'small' | 'medium' | 'large';
-  };
-  index: number;
-  onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerLeave: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onClick: (e: React.MouseEvent) => void;
-  onDragStart: () => void;
-  onDragEnd: () => void;
-  onContextMenu?: (e: React.MouseEvent) => void;
-  isDragging?: boolean;
-}
 
 const InteractiveCard = ({
   item,
@@ -36,7 +14,7 @@ const InteractiveCard = ({
   onDragEnd,
   onContextMenu,
   isDragging = false
-}: InteractiveCardProps) => {
+}) => {
   const getSizeClasses = () => {
     switch (item.size) {
       case 'small':
@@ -50,40 +28,31 @@ const InteractiveCard = ({
 
   return (
     <div
-      className={`group cursor-pointer select-none relative transition-all duration-200 ${getSizeClasses()} ${isDragging ? 'brightness-90 pointer-events-none' : ''}`}
+      className={`group cursor-pointer select-none relative transition-all duration-150 ${getSizeClasses()} ${isDragging ? 'opacity-70 pointer-events-none' : ''}`}
       onClick={onClick}
       onContextMenu={onContextMenu}
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
       draggable={true}
-      style={{
-        zIndex: isDragging ? 50 : 1
-      }}
+      style={{ zIndex: isDragging ? 50 : 1 }}
     >
-      <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/70 transition-all duration-200 bg-card h-full shadow group-hover:shadow-md">
-        {/* Subtle static gradient bg on hover */}
-        <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-200 bg-gradient-to-br ${item.gradient}`} />
-        {/* Context menu indicator */}
-        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+      <Card className="relative overflow-hidden border bg-card h-full shadow group-hover:shadow-lg group-hover:border-primary/50 transition-all duration-150">
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-100 z-10">
           <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </div>
         <CardHeader className="pb-4 relative z-10">
           <div className={`w-full h-24 bg-gradient-to-br ${item.gradient} rounded-2xl flex items-center justify-center mb-4`}>
-            {/* Essential icon only, no extra glow */}
-            <div className="text-foreground relative z-10">
-              {item.icon}
-            </div>
+            <div className="text-foreground relative z-10">{item.icon}</div>
           </div>
-          <CardTitle className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors duration-200">
+          <CardTitle className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors">
             {item.title}
           </CardTitle>
           <CardDescription className="font-playfair text-sm text-muted-foreground">
             {item.description}
           </CardDescription>
         </CardHeader>
-
         <CardContent className="space-y-4 relative z-10">
           <div className="flex items-center justify-between">
             <div>
@@ -94,8 +63,7 @@ const InteractiveCard = ({
                 {item.change.includes('-') && <Badge variant="secondary" className="text-xs bg-red-500/10 text-red-600">↘</Badge>}
               </div>
             </div>
-            {/* Subtle right arrow with opacity/fill on hover */}
-            <div className="transition-all duration-200 group-hover:text-primary group-hover:opacity-80">
+            <div className="transition-colors group-hover:text-primary">
               <ArrowRight className="h-4 w-4 text-muted-foreground" />
             </div>
           </div>
