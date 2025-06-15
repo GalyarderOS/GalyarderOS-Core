@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -209,29 +208,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
-      {/* Animated background particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-primary/20 rounded-full"
-            animate={{
-              x: [0, Math.random() * window.innerWidth],
-              y: [0, Math.random() * window.innerHeight],
-              opacity: [0, 1, 0]
-            }}
-            transition={{
-              duration: Math.random() * 10 + 10,
-              repeat: Infinity,
-              delay: Math.random() * 5
-            }}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-          />
-        ))}
-      </div>
+      {/* Remove animated background particles completely */}
 
       {/* Top Bar */}
       <TopBar 
