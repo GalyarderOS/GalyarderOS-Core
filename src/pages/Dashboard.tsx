@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
@@ -46,6 +47,8 @@ const Dashboard = () => {
         <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/balance" element={<LifeBalance />} />
         <Route path="/ritual" element={<RitualEngine />} />
+        <Route path="/habits" element={<HabitsModule />} />
+        <Route path="/focus" element={<FocusTimer />} />
         <Route path="/flow" element={<FlowState />} />
         <Route path="/knowledge" element={<KnowledgeHub />} />
         <Route path="/reflection" element={<Reflection />} />
