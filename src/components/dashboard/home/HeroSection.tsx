@@ -2,8 +2,7 @@
 import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Crown, Sparkles } from 'lucide-react';
-import SystemStats from './SystemStats';
+import { Crown, Sparkles, Award, TrendingUp, Wifi } from 'lucide-react';
 
 const HeroSection = () => {
     const { language } = useTheme();
@@ -12,13 +11,38 @@ const HeroSection = () => {
           welcomeTitle: "Your Personal Operating System",
           welcomeSubtitle: "Master Your Life with AI-Powered Intelligence",
           welcomeDescription: "Access all your personal development and wealth management tools in one unified dashboard. From habits to investments, vision to focus - everything you need to live by design.",
+          totalModules: "Active Modules",
+          portfolioValue: "Portfolio Value",
+          connection: "Connection Status"
         },
         id: {
           welcomeTitle: "Sistem Operasi Personal Anda",
           welcomeSubtitle: "Kuasai Hidup Anda dengan Kecerdasan AI",
           welcomeDescription: "Akses semua alat pengembangan diri dan manajemen kekayaan dalam satu dashboard terpadu. Dari kebiasaan hingga investasi, visi hingga fokus - semua yang Anda butuhkan untuk hidup sesuai desain.",
+          totalModules: "Modul Aktif",
+          portfolioValue: "Nilai Portofolio",
+          connection: "Status Koneksi"
         }
       }[language];
+
+    // Simple stats for hero section without external dependencies
+    const heroStats = [
+        { 
+            label: t.totalModules, 
+            value: "13", 
+            icon: <Award className="h-6 w-6" /> 
+        },
+        { 
+            label: t.portfolioValue, 
+            value: "$0", 
+            icon: <TrendingUp className="h-6 w-6" /> 
+        },
+        { 
+            label: t.connection, 
+            value: "Online", 
+            icon: <Wifi className="h-6 w-6" /> 
+        }
+    ];
 
     return (
         <motion.div
@@ -58,7 +82,24 @@ const HeroSection = () => {
                     </p>
                     </div>
 
-                    <SystemStats />
+                    {/* Inline stats instead of SystemStats component */}
+                    <div className="grid grid-cols-3 gap-6">
+                        {heroStats.map((stat, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 + 0.5 }}
+                            className="text-center"
+                        >
+                            <div className="p-3 bg-muted/20 rounded-xl mx-auto w-fit mb-3 soft-shadow border border-border">
+                            {stat.icon}
+                            </div>
+                            <div className="text-2xl font-bold text-foreground font-playfair">{stat.value}</div>
+                            <div className="text-sm text-muted-foreground font-playfair">{stat.label}</div>
+                        </motion.div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="hidden xl:block">
