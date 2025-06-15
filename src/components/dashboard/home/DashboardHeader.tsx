@@ -1,6 +1,6 @@
 
 import { motion } from 'framer-motion';
-import { Sparkles, User } from 'lucide-react';
+import { Crown, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -60,7 +60,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                    <Sparkles className="h-4 w-4 text-white" />
+                    <Crown className="h-4 w-4 text-white" />
                   </div>
                 </>
               )}
