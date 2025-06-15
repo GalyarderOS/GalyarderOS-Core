@@ -3,7 +3,7 @@ import LifeOverviewSection from './LifeOverviewSection';
 import PersonalSystemsGrid from './PersonalSystemsGrid';
 import FinancialHealthSection from './FinancialHealthSection';
 import ProductivityMetrics from './ProductivityMetrics';
-import { LifeAnalyticsCharts } from './LifeAnalyticsCharts';
+import LifeAnalyticsCharts from './LifeAnalyticsCharts';
 import { DashboardStats } from '@/types/dashboard';
 
 interface DashboardContentProps {
@@ -30,7 +30,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ stats }) => {
         <FinancialHealthSection stats={stats} />
         <ProductivityMetrics stats={stats} />
       </div>
-      <LifeAnalyticsCharts stats={stats} />
+      <LifeAnalyticsCharts />
     </div>
   );
 };
