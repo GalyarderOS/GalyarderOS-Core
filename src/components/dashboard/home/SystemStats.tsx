@@ -1,27 +1,62 @@
 
 import { motion } from 'framer-motion';
-import { Award, Users, Zap } from 'lucide-react';
+import { Award, Users, Zap, TrendingUp, Wifi, WifiOff } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
-const SystemStats = () => {
+interface Stats {
+  totalPortfolioValue: number;
+  monthlyIncome: number;
+  monthlyExpenses: number;
+  totalDebt: number;
+  wealthGoals: number;
+  investments: number;
+}
+
+interface RealTimeData {
+  [key: string]: any;
+}
+
+interface SystemStatsProps {
+  stats: Stats;
+  realTimeData: RealTimeData;
+  isConnected: boolean;
+}
+
+const SystemStats = ({ stats, realTimeData, isConnected }: SystemStatsProps) => {
     const { language } = useTheme();
     const t = {
         en: {
             totalModules: "Active Modules",
             globalUsers: "Global Users",
             aiPowered: "AI-Powered",
+            portfolioValue: "Portfolio Value",
+            connection: "Connection Status"
         },
         id: {
             totalModules: "Modul Aktif",
             globalUsers: "Pengguna Global",
             aiPowered: "Bertenaga AI",
+            portfolioValue: "Nilai Portofolio",
+            connection: "Status Koneksi"
         }
     }[language];
 
     const systemStats = [
-        { label: t.totalModules, value: "13", icon: <Award className="h-6 w-6" /> },
-        { label: t.globalUsers, value: "50K+", icon: <Users className="h-6 w-6" /> },
-        { label: t.aiPowered, value: "24/7", icon: <Zap className="h-6 w-6" /> }
+        { 
+            label: t.totalModules, 
+            value: "13", 
+            icon: <Award className="h-6 w-6" /> 
+        },
+        { 
+            label: t.portfolioValue, 
+            value: `$${stats.totalPortfolioValue.toLocaleString()}`, 
+            icon: <TrendingUp className="h-6 w-6" /> 
+        },
+        { 
+            label: t.connection, 
+            value: isConnected ? "Online" : "Offline", 
+            icon: isConnected ? <Wifi className="h-6 w-6" /> : <WifiOff className="h-6 w-6" /> 
+        }
     ];
 
     return (
