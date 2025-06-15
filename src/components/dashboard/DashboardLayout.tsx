@@ -45,8 +45,9 @@ import TopBar from "@/components/dashboard/os/TopBar";
 import DesktopGrid from "@/components/dashboard/os/DesktopGrid";
 import Dock from "@/components/dashboard/os/Dock";
 import WindowManager from "@/components/dashboard/os/WindowManager";
+import NotionSync from "@/components/dashboard/NotionSync";
 
-const Dashboard = () => {
+const DashboardLayout = () => {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
   const [isNotionAIOpen, setIsNotionAIOpen] = useState(false);
   const [openWindows, setOpenWindows] = useState<string[]>([]);
@@ -146,7 +147,7 @@ const Dashboard = () => {
       id: 'notion',
       label: 'Notion Sync',
       icon: FileText,
-      action: handleOpenNotionAI,
+      path: '/dashboard/notion-sync',
       category: 'ai',
       color: 'from-gray-500 to-slate-600'
     },
@@ -259,6 +260,7 @@ const Dashboard = () => {
                 <Route path="/tax" element={<TaxOptimizer />} />
                 <Route path="/debt" element={<DebtManager />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/notion-sync" element={<NotionSync />} />
               </Routes>
             </motion.div>
           )}
@@ -329,4 +331,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardLayout;
