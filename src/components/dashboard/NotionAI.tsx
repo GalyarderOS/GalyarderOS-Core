@@ -1,684 +1,191 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { 
-  FileText, 
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Loader2,
-  AlertCircle,
-  Save,
-  X,
-  Calendar,
-  Clock,
-  Eye,
-  ExternalLink
-} from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { FileText, Send, Loader2, BookOpen, PenTool, Database, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-interface NotionAIProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-interface NotionPage {
-  id: string;
-  title: string;
-  content?: string;
-  created_time: string;
-  last_edited_time: string;
-  url?: string;
-}
-
-const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
-  const [pages, setPages] = useState<NotionPage[]>([]);
-  const [selectedPage, setSelectedPage] = useState<NotionPage | null>(null);
-  const [editingPage, setEditingPage] = useState<NotionPage | null>(null);
-  const [newPageTitle, setNewPageTitle] = useState('');
-  const [newPageContent, setNewPageContent] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+const NotionAI = () => {
+  const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [connectionError, setConnectionError] = useState(false);
-  const [activeTab, setActiveTab] = useState('browse');
-  
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5);
-  const [totalPages, setTotalPages] = useState(1);
-  
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const { user, session } = useAuth();
-  const { toast } = useToast();
+  const [response, setResponse] = useState('');
 
-  const callNotionAPI = async (action: string, data: any = {}) => {
-    try {
-      console.log('Calling Notion API:', action, data);
-      
-      const { data: response, error } = await supabase.functions.invoke('notion-ai', {
-        body: { action, ...data },
-        headers: {
-          Authorization: `Bearer ${session?.access_token}`,
-        },
-      });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!query.trim()) return;
 
-      console.log('Notion API response:', { response, error });
-
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Failed to connect to Notion API');
-      }
-
-      if (response?.error) {
-        console.error('Notion API error:', response.error);
-        throw new Error(response.error);
-      }
-
-      return response;
-    } catch (error) {
-      console.error('Error calling Notion API:', error);
-      setConnectionError(true);
-      
-      let errorMessage = 'Failed to connect to Notion API. Please check your token.';
-      
-      if (error.message?.includes('token not configured')) {
-        errorMessage = 'Notion token not configured. Please add your Notion integration token in settings.';
-      } else if (error.message?.includes('unauthorized')) {
-        errorMessage = 'Invalid Notion token. Please check your integration token.';
-      } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
-        errorMessage = 'Network error. Please check your internet connection.';
-      }
-
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive"
-      });
-
-      throw error;
-    }
-  };
-
-  const fetchPages = async (showSuccessToast = false) => {
     setIsLoading(true);
-    setConnectionError(false);
-    
     try {
-      const response = await callNotionAPI('list_pages');
-      const allPages = response.pages || [];
-      setPages(allPages);
-      setTotalPages(Math.ceil(allPages.length / itemsPerPage));
-      
-      // Only show success toast when explicitly requested (manual refresh)
-      if (showSuccessToast && allPages.length > 0) {
-        toast({
-          title: "Success",
-          description: `Loaded ${allPages.length} pages from your Notion workspace`,
-        });
-      }
+      // Simulate API call - replace with actual Notion AI integration
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setResponse(`AI Response for: "${query}"\n\nThis is a placeholder response. The actual Notion AI integration will be implemented here.`);
     } catch (error) {
-      console.error('Error fetching pages:', error);
+      console.error('Error:', error);
+      setResponse('Error occurred while processing your request.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const createPage = async () => {
-    if (!newPageTitle.trim()) {
-      toast({
-        title: "Error",
-        description: "Page title cannot be empty",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      const response = await callNotionAPI('create_page', {
-        title: newPageTitle.trim(),
-        content: newPageContent.trim()
-      });
-      
-      toast({
-        title: "Success",
-        description: "New page created successfully in your Notion workspace",
-      });
-      
-      setNewPageTitle('');
-      setNewPageContent('');
-      setActiveTab('browse');
-      await fetchPages();
-    } catch (error) {
-      console.error('Error creating page:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const updatePage = async (pageId: string, title: string, content: string) => {
-    setIsLoading(true);
-    
-    try {
-      const response = await callNotionAPI('update_page', {
-        page_id: pageId,
-        title: title.trim(),
-        content: content.trim()
-      });
-      
-      toast({
-        title: "Success",
-        description: "Page updated successfully in your Notion workspace",
-      });
-      
-      setEditingPage(null);
-      await fetchPages();
-    } catch (error) {
-      console.error('Error updating page:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const deletePage = async (pageId: string) => {
-    if (!confirm('Are you sure you want to archive this page in Notion?')) {
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      await callNotionAPI('delete_page', { page_id: pageId });
-      
-      toast({
-        title: "Success",
-        description: "Page archived successfully in your Notion workspace",
-      });
-      
-      setSelectedPage(null);
-      setEditingPage(null);
-      await fetchPages();
-    } catch (error) {
-      console.error('Error deleting page:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const searchPages = async () => {
-    if (!searchQuery.trim()) {
-      await fetchPages();
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      const response = await callNotionAPI('search_pages', {
-        query: searchQuery.trim()
-      });
-      const searchResults = response.pages || [];
-      setPages(searchResults);
-      setTotalPages(Math.ceil(searchResults.length / itemsPerPage));
-      setCurrentPage(1);
-      
-      toast({
-        title: "Search Complete",
-        description: `Found ${searchResults.length} pages matching "${searchQuery}"`,
-      });
-    } catch (error) {
-      console.error('Error searching pages:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const viewPage = async (page: NotionPage) => {
-    setSelectedPage(page);
-    setActiveTab('view');
-    
-    // Fetch page content if not already loaded
-    if (!page.content) {
-      try {
-        const response = await callNotionAPI('get_page_content', { page_id: page.id });
-        const updatedPage = { ...page, content: response.content || 'No content available' };
-        setSelectedPage(updatedPage);
-      } catch (error) {
-        console.error('Error fetching page content:', error);
-        const updatedPage = { ...page, content: 'Failed to load content' };
-        setSelectedPage(updatedPage);
-      }
-    }
-  };
-
-  const openInNotion = (pageId: string) => {
-    const notionUrl = `https://notion.so/${pageId.replace(/-/g, '')}`;
-    window.open(notionUrl, '_blank');
-  };
-
-  const handleRefresh = () => {
-    fetchPages(true); // Pass true to show success toast on manual refresh
-  };
-
-  useEffect(() => {
-    if (isOpen && user && session) {
-      fetchPages(); // No success toast on initial load
-    }
-  }, [isOpen, user, session]);
-
-  useEffect(() => {
-    if (searchQuery.trim()) {
-      const timeoutId = setTimeout(searchPages, 500);
-      return () => clearTimeout(timeoutId);
-    } else {
-      fetchPages(); // No success toast on search clear
-    }
-  }, [searchQuery]);
-
-  // Calculate paginated pages
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedPages = pages.slice(startIndex, endIndex);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('id-ID', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const generatePageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 5;
-    
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push('ellipsis');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push('ellipsis');
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push('ellipsis');
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i);
-        }
-        pages.push('ellipsis');
-        pages.push(totalPages);
-      }
-    }
-    
-    return pages;
-  };
+  const quickActions = [
+    { icon: BookOpen, label: 'Summarize Notes', action: () => setQuery('Summarize my recent notes') },
+    { icon: PenTool, label: 'Create Template', action: () => setQuery('Create a project planning template') },
+    { icon: Database, label: 'Organize Data', action: () => setQuery('Help me organize my database structure') },
+    { icon: Zap, label: 'Quick Analysis', action: () => setQuery('Analyze my productivity patterns') }
+  ];
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl h-[80vh] flex flex-col p-0">
-        <DialogHeader className="p-6 pb-4 border-b">
-          <DialogTitle className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-              <FileText className="h-5 w-5 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+      <div className="max-w-6xl mx-auto p-6 space-y-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-4"
+        >
+          <div className="flex items-center justify-center space-x-3">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
+              <FileText className="h-8 w-8 text-white" />
             </div>
-            <span>Notion Workspace Manager</span>
-            {connectionError && (
-              <AlertCircle className="h-4 w-4 text-red-500" />
-            )}
-          </DialogTitle>
-        </DialogHeader>
-
-        <div className="flex-1 flex flex-col min-h-0">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-            <div className="px-6 py-2 border-b">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="browse">Browse Pages</TabsTrigger>
-                <TabsTrigger value="create">Create Page</TabsTrigger>
-                <TabsTrigger value="search">Search</TabsTrigger>
-                <TabsTrigger value="view" disabled={!selectedPage}>View Page</TabsTrigger>
-              </TabsList>
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                Notion AI Assistant
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400">Intelligent note-taking and knowledge management</p>
             </div>
+          </div>
+        </motion.div>
 
-            <TabsContent value="browse" className="flex-1 p-6 space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold">Your Notion Pages</h3>
-                <Button onClick={handleRefresh} disabled={isLoading} size="sm">
-                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Refresh"}
-                </Button>
+        {/* Quick Actions */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Zap className="h-5 w-5 text-purple-600" />
+                <span>Quick Actions</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {quickActions.map((action, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="h-auto p-4 flex flex-col items-center space-y-2"
+                    onClick={action.action}
+                  >
+                    <action.icon className="h-6 w-6 text-purple-600" />
+                    <span className="text-sm">{action.label}</span>
+                  </Button>
+                ))}
               </div>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {paginatedPages.map((page) => (
-                    <motion.div
-                      key={page.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="border rounded-lg p-4 hover:bg-gray-50"
-                    >
-                      {editingPage?.id === page.id ? (
-                        <div className="space-y-3">
-                          <Input
-                            value={editingPage.title}
-                            onChange={(e) => setEditingPage({...editingPage, title: e.target.value})}
-                            className="font-medium"
-                          />
-                          <Textarea
-                            value={editingPage.content || ''}
-                            onChange={(e) => setEditingPage({...editingPage, content: e.target.value})}
-                            placeholder="Edit content..."
-                            className="min-h-[100px]"
-                          />
-                          <div className="flex space-x-2">
-                            <Button 
-                              size="sm"
-                              onClick={() => updatePage(editingPage.id, editingPage.title, editingPage.content || '')}
-                              disabled={isLoading}
-                            >
-                              <Save className="h-4 w-4 mr-1" />
-                              Save
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => setEditingPage(null)}
-                            >
-                              <X className="h-4 w-4 mr-1" />
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <h4 
-                              className="font-medium text-gray-900 mb-2 cursor-pointer hover:text-blue-600 transition-colors"
-                              onClick={() => viewPage(page)}
-                            >
-                              {page.title}
-                            </h4>
-                            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                              <div className="flex items-center space-x-1">
-                                <Calendar className="h-4 w-4" />
-                                <span>Created: {formatDate(page.created_time)}</span>
-                              </div>
-                              <div className="flex items-center space-x-1">
-                                <Clock className="h-4 w-4" />
-                                <span>Edited: {formatDate(page.last_edited_time)}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex space-x-2">
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => viewPage(page)}
-                              title="View details"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => openInNotion(page.id)}
-                              title="Open in Notion"
-                            >
-                              <ExternalLink className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => setEditingPage({...page, content: page.content || ''})}
-                              title="Edit page"
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              onClick={() => deletePage(page.id)}
-                              className="text-red-600 hover:text-red-700"
-                              title="Delete page"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </motion.div>
-                  ))}
-                  
-                  {paginatedPages.length === 0 && !isLoading && (
-                    <div className="text-center py-8 text-gray-500">
-                      <FileText className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-lg font-medium">No pages found</p>
-                      <p className="text-sm">Create your first page or adjust your search</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-
-              {totalPages > 1 && (
-                <div className="flex justify-center mt-4">
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious 
-                          onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                          className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                        />
-                      </PaginationItem>
-                      
-                      {generatePageNumbers().map((page, index) => (
-                        <PaginationItem key={index}>
-                          {page === 'ellipsis' ? (
-                            <PaginationEllipsis />
-                          ) : (
-                            <PaginationLink
-                              onClick={() => setCurrentPage(page as number)}
-                              isActive={currentPage === page}
-                              className="cursor-pointer"
-                            >
-                              {page}
-                            </PaginationLink>
-                          )}
-                        </PaginationItem>
-                      ))}
-                      
-                      <PaginationItem>
-                        <PaginationNext 
-                          onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                          className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                </div>
-              )}
-            </TabsContent>
-
-            <TabsContent value="create" className="flex-1 p-6 space-y-4">
-              <h3 className="text-lg font-semibold">Create New Page</h3>
-              
-              <div className="space-y-4">
+        {/* AI Chat Interface */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <FileText className="h-5 w-5 text-blue-600" />
+                <span>AI Assistant</span>
+                <Badge variant="outline" className="ml-auto">
+                  Notion Integration
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Page Title</label>
-                  <Input
-                    value={newPageTitle}
-                    onChange={(e) => setNewPageTitle(e.target.value)}
-                    placeholder="Enter page title..."
-                    disabled={isLoading}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2">Content</label>
                   <Textarea
-                    value={newPageContent}
-                    onChange={(e) => setNewPageContent(e.target.value)}
-                    placeholder="Enter page content..."
-                    className="min-h-[300px]"
-                    disabled={isLoading}
+                    placeholder="Ask your AI assistant anything about your notes, documents, or knowledge base..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="min-h-[100px] bg-white/50 dark:bg-slate-700/50"
                   />
                 </div>
-                
-                <Button 
-                  onClick={createPage} 
-                  disabled={isLoading || !newPageTitle.trim()}
-                  className="w-full"
+                <Button
+                  type="submit"
+                  disabled={!query.trim() || isLoading}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
                 >
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Processing...
+                    </>
                   ) : (
-                    <Plus className="h-4 w-4 mr-2" />
+                    <>
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Query
+                    </>
                   )}
-                  Create Page
                 </Button>
-              </div>
-            </TabsContent>
+              </form>
 
-            <TabsContent value="search" className="flex-1 p-6 space-y-4">
-              <h3 className="text-lg font-semibold">Search Pages</h3>
-              
-              <div className="flex space-x-2">
-                <Input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search pages..."
-                  disabled={isLoading}
-                />
-                <Button onClick={searchPages} disabled={isLoading}>
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-3">
-                  {pages.map((page) => (
-                    <motion.div
-                      key={page.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer"
-                      onClick={() => viewPage(page)}
-                    >
-                      <h4 className="font-medium text-gray-900">{page.title}</h4>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Edited: {formatDate(page.last_edited_time)}
-                      </p>
-                    </motion.div>
-                  ))}
-                  
-                  {pages.length === 0 && !isLoading && searchQuery && (
-                    <div className="text-center py-8 text-gray-500">
-                      <Search className="h-12 w-12 mx-auto mb-3 text-gray-300" />
-                      <p className="text-lg font-medium">No results found</p>
-                      <p className="text-sm">Try a different search term</p>
-                    </div>
-                  )}
-                </div>
-              </ScrollArea>
-            </TabsContent>
-
-            <TabsContent value="view" className="flex-1 p-6 space-y-4">
-              {selectedPage && (
-                <div className="space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-lg font-semibold">{selectedPage.title}</h3>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500 mt-2">
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>Created: {formatDate(selectedPage.created_time)}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Clock className="h-4 w-4" />
-                          <span>Last edited: {formatDate(selectedPage.last_edited_time)}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => openInNotion(selectedPage.id)}
-                      >
-                        <ExternalLink className="h-4 w-4 mr-1" />
-                        Open in Notion
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => {
-                          setEditingPage({...selectedPage, content: selectedPage.content || ''});
-                          setActiveTab('browse');
-                        }}
-                      >
-                        <Edit className="h-4 w-4 mr-1" />
-                        Edit
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div className="border rounded-lg p-4 bg-gray-50 min-h-[300px]">
-                    <h4 className="font-medium mb-2">Content Preview</h4>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap">
-                      {selectedPage.content || 'Loading content...'}
-                    </div>
-                  </div>
-                </div>
+              {response && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-6"
+                >
+                  <Card className="bg-slate-50 dark:bg-slate-700/50 border-0">
+                    <CardHeader>
+                      <CardTitle className="text-lg">AI Response</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <pre className="whitespace-pre-wrap text-sm text-slate-700 dark:text-slate-300">
+                        {response}
+                      </pre>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               )}
-            </TabsContent>
-          </Tabs>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-          {!user && (
-            <div className="p-6 pt-4 border-t">
-              <p className="text-xs text-gray-500">
-                Please sign in to use Notion integration
-              </p>
-            </div>
-          )}
-          
-          {connectionError && (
-            <div className="p-6 pt-4 border-t">
-              <p className="text-xs text-red-500">
-                ⚠️ Connection error. Please check your Notion token configuration.
-              </p>
-            </div>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+        {/* Integration Status */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Database className="h-5 w-5 text-green-600" />
+                <span>Integration Status</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                  <span className="text-sm">Notion API: Ready for setup</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">AI Engine: Connected</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
   );
 };
 

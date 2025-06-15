@@ -1,226 +1,224 @@
 
-import { motion } from 'framer-motion';
+import React from 'react';
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { 
-  AreaChart, Area, XAxis, YAxis, ResponsiveContainer, 
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar,
-  BarChart, Bar
-} from 'recharts';
-import { TrendingUp, BarChart3, Activity, Target } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { TrendingUp, Target, Clock, Zap } from 'lucide-react';
 
-interface LifeAnalyticsChartsProps {
-  stats: {
-    lifeBalanceScore: number;
-    focusHoursToday: number;
-    activeHabits: number;
-    activeGoals: number;
-    totalPortfolioValue: number;
-    savingsRate: number;
-    habitStreak: number;
-  };
-}
-
-const LifeAnalyticsCharts = ({ stats }: LifeAnalyticsChartsProps) => {
-  const { language } = useTheme();
-
-  const t = {
-    en: {
-      lifeAnalytics: "Life Analytics Dashboard",
-      description: "Comprehensive insights into your life optimization journey",
-      lifeBalance: "Life Balance Radar",
-      monthlyProgress: "Monthly Progress Trends",
-      weeklyStats: "Weekly Performance",
-      personal: "Personal",
-      financial: "Financial",
-      productivity: "Productivity",
-      health: "Health",
-      relationships: "Relationships",
-      spirituality: "Spirituality"
-    },
-    id: {
-      lifeAnalytics: "Dashboard Analitik Hidup",
-      description: "Wawasan komprehensif perjalanan optimisasi hidup Anda",
-      lifeBalance: "Radar Keseimbangan Hidup",
-      monthlyProgress: "Tren Kemajuan Bulanan",
-      weeklyStats: "Performa Mingguan",
-      personal: "Pribadi",
-      financial: "Finansial",
-      productivity: "Produktivitas",
-      health: "Kesehatan",
-      relationships: "Hubungan",
-      spirituality: "Spiritualitas"
-    }
-  }[language];
-
-  // Radar chart data for life balance
-  const radarData = [
-    { subject: t.personal, A: 85, fullMark: 100 },
-    { subject: t.financial, A: Math.min(stats.savingsRate * 2, 100), fullMark: 100 },
-    { subject: t.productivity, A: Math.min((stats.focusHoursToday / 8) * 100, 100), fullMark: 100 },
-    { subject: t.health, A: 78, fullMark: 100 },
-    { subject: t.relationships, A: 72, fullMark: 100 },
-    { subject: t.spirituality, A: 65, fullMark: 100 },
+const LifeAnalyticsCharts = () => {
+  // Sample data for different metrics
+  const productivityData = [
+    { name: 'Mon', focus: 85, energy: 70, mood: 80 },
+    { name: 'Tue', focus: 75, energy: 80, mood: 85 },
+    { name: 'Wed', focus: 90, energy: 75, mood: 78 },
+    { name: 'Thu', focus: 80, energy: 85, mood: 82 },
+    { name: 'Fri', focus: 70, energy: 60, mood: 75 },
+    { name: 'Sat', focus: 60, energy: 90, mood: 95 },
+    { name: 'Sun', focus: 65, energy: 85, mood: 90 }
   ];
 
-  // Monthly progress data
-  const monthlyData = [
-    { month: 'Jan', personal: 65, financial: 45, productivity: 70 },
-    { month: 'Feb', personal: 72, financial: 52, productivity: 75 },
-    { month: 'Mar', personal: 78, financial: 68, productivity: 82 },
-    { month: 'Apr', personal: 85, financial: Math.min(stats.savingsRate * 2, 100), productivity: Math.min((stats.focusHoursToday / 8) * 100, 100) },
+  const goalProgressData = [
+    { name: 'Career', value: 75, color: '#3B82F6' },
+    { name: 'Health', value: 60, color: '#10B981' },
+    { name: 'Finance', value: 85, color: '#F59E0B' },
+    { name: 'Personal', value: 45, color: '#8B5CF6' }
   ];
 
-  // Weekly performance data
-  const weeklyData = [
-    { day: 'Mon', habits: 4, focus: 6.5, goals: 2 },
-    { day: 'Tue', habits: 5, focus: 7.2, goals: 3 },
-    { day: 'Wed', habits: 3, focus: 5.8, goals: 2 },
-    { day: 'Thu', habits: 5, focus: 8.1, goals: 4 },
-    { day: 'Fri', habits: 4, focus: 7.5, goals: 3 },
-    { day: 'Sat', habits: 3, focus: 4.2, goals: 1 },
-    { day: 'Sun', habits: stats.activeHabits, focus: stats.focusHoursToday, goals: stats.activeGoals },
+  const timeTrackingData = [
+    { activity: 'Deep Work', hours: 6, color: '#3B82F6' },
+    { activity: 'Meetings', hours: 2, color: '#EF4444' },
+    { activity: 'Learning', hours: 2, color: '#10B981' },
+    { activity: 'Admin', hours: 1, color: '#F59E0B' },
+    { activity: 'Break', hours: 1, color: '#8B5CF6' }
   ];
+
+  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444'];
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.8 }}
-      className="space-y-6"
-    >
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">{t.lifeAnalytics}</h2>
-        <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">{t.description}</p>
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Productivity Trends */}
+      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center space-x-2 text-lg">
+            <TrendingUp className="h-5 w-5 text-blue-600" />
+            <span>Weekly Productivity</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={productivityData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <XAxis 
+                dataKey="name" 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: 'none', 
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="focus" 
+                stroke="#3B82F6" 
+                strokeWidth={2}
+                dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#3B82F6', strokeWidth: 2 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="energy" 
+                stroke="#10B981" 
+                strokeWidth={2}
+                dot={{ fill: '#10B981', strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: '#10B981', strokeWidth: 2 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {/* Life Balance Radar */}
-        <Card className="border-0 bg-gradient-to-br from-white/60 to-white/30 dark:from-slate-800/60 dark:to-slate-800/30 backdrop-blur-md">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Activity className="h-5 w-5 text-white" />
-              </div>
-              <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">{t.lifeBalance}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                A: { label: 'Score', color: '#8b5cf6' },
-              }}
-              className="h-64"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="subject" fontSize={10} />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} fontSize={8} />
-                  <Radar
-                    name="Life Balance"
-                    dataKey="A"
-                    stroke="#8b5cf6"
-                    fill="#8b5cf6"
-                    fillOpacity={0.3}
-                    strokeWidth={2}
-                  />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                </RadarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+      {/* Goal Progress */}
+      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center space-x-2 text-lg">
+            <Target className="h-5 w-5 text-green-600" />
+            <span>Goal Progress</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={goalProgressData}
+                cx="50%"
+                cy="50%"
+                outerRadius={70}
+                fill="#8884d8"
+                dataKey="value"
+                label={({ name, value }) => `${name}: ${value}%`}
+                labelLine={false}
+              >
+                {goalProgressData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: 'none', 
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
-        {/* Monthly Progress */}
-        <Card className="border-0 bg-gradient-to-br from-white/60 to-white/30 dark:from-slate-800/60 dark:to-slate-800/30 backdrop-blur-md">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-white" />
-              </div>
-              <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">{t.monthlyProgress}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                personal: { label: t.personal, color: '#8b5cf6' },
-                financial: { label: t.financial, color: '#10b981' },
-                productivity: { label: t.productivity, color: '#f59e0b' },
-              }}
-              className="h-64"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={monthlyData}>
-                  <XAxis dataKey="month" fontSize={10} />
-                  <YAxis fontSize={10} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Area 
-                    type="monotone" 
-                    dataKey="productivity" 
-                    stackId="1" 
-                    stroke="#f59e0b" 
-                    fill="#f59e0b" 
-                    fillOpacity={0.6}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="financial" 
-                    stackId="1" 
-                    stroke="#10b981" 
-                    fill="#10b981" 
-                    fillOpacity={0.6}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="personal" 
-                    stackId="1" 
-                    stroke="#8b5cf6" 
-                    fill="#8b5cf6" 
-                    fillOpacity={0.6}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
+      {/* Time Tracking */}
+      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center space-x-2 text-lg">
+            <Clock className="h-5 w-5 text-purple-600" />
+            <span>Time Allocation</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={timeTrackingData} layout="horizontal">
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <XAxis 
+                type="number"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+              />
+              <YAxis 
+                type="category"
+                dataKey="activity"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+                width={80}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: 'none', 
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+              <Bar 
+                dataKey="hours" 
+                fill="#8B5CF6"
+                radius={[0, 4, 4, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
 
-        {/* Weekly Performance */}
-        <Card className="border-0 bg-gradient-to-br from-white/60 to-white/30 dark:from-slate-800/60 dark:to-slate-800/30 backdrop-blur-md">
-          <CardHeader>
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-lg flex items-center justify-center">
-                <BarChart3 className="h-5 w-5 text-white" />
-              </div>
-              <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-100">{t.weeklyStats}</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer
-              config={{
-                habits: { label: 'Habits', color: '#10b981' },
-                focus: { label: 'Focus (h)', color: '#8b5cf6' },
-                goals: { label: 'Goals', color: '#f59e0b' },
-              }}
-              className="h-64"
-            >
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={weeklyData}>
-                  <XAxis dataKey="day" fontSize={10} />
-                  <YAxis fontSize={10} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="habits" fill="#10b981" radius={2} />
-                  <Bar dataKey="focus" fill="#8b5cf6" radius={2} />
-                  <Bar dataKey="goals" fill="#f59e0b" radius={2} />
-                </BarChart>
-              </ResponsiveContainer>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      </div>
-    </motion.section>
+      {/* Energy Levels */}
+      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center space-x-2 text-lg">
+            <Zap className="h-5 w-5 text-yellow-600" />
+            <span>Energy Levels</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={productivityData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <XAxis 
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 12, fill: '#6B7280' }}
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'white', 
+                  border: 'none', 
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="energy" 
+                stroke="#F59E0B" 
+                fill="#FEF3C7"
+                strokeWidth={2}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="mood" 
+                stroke="#10B981" 
+                fill="#D1FAE5"
+                strokeWidth={2}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
