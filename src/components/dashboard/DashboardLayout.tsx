@@ -95,8 +95,12 @@ const DashboardLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: Dashbo
             {/* Header with Logo */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center border-2 border-border">
-                  <Crown className="h-7 w-7 text-background" />
+                <div className="w-12 h-12 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center border-2 border-border overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+                    alt="GalyarderOS Logo" 
+                    className="w-8 h-8 object-contain"
+                  />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-foreground font-playfair">GalyarderOS</h2>
@@ -242,7 +246,11 @@ const DashboardLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: Dashbo
             <div className="flex h-16 items-center px-6">
               <SidebarTrigger className="mr-4" />
               <div className="flex items-center space-x-2">
-                <Crown className="h-6 w-6 text-foreground" />
+                <img 
+                  src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+                  alt="GalyarderOS Logo" 
+                  className="h-6 w-6 object-contain"
+                />
                 <span className="font-bold text-lg font-playfair text-foreground">GalyarderOS</span>
               </div>
               <div className="flex-1" />

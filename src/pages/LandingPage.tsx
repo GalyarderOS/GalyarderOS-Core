@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -264,11 +265,15 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <motion.div 
-              className="w-10 h-10 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center"
+              className="w-10 h-10 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center overflow-hidden"
               whileHover={{ scale: 1.05, rotate: 5 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              <Crown className="h-6 w-6 text-background" />
+              <img 
+                src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+                alt="GalyarderOS Logo" 
+                className="w-6 h-6 object-contain"
+              />
             </motion.div>
             <span className="text-xl font-bold font-playfair text-foreground">GalyarderOS</span>
           </div>
@@ -799,8 +804,12 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-foreground to-muted-foreground rounded-lg flex items-center justify-center">
-                <Crown className="h-5 w-5 text-background" />
+              <div className="w-8 h-8 bg-gradient-to-br from-foreground to-muted-foreground rounded-lg flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+                  alt="GalyarderOS Logo" 
+                  className="w-5 h-5 object-contain"
+                />
               </div>
               <span className="text-lg font-bold font-playfair text-foreground">GalyarderOS</span>
             </div>
