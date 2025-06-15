@@ -30,7 +30,7 @@ export const useSystemStatus = () => {
       connectionType: 'wifi',
     },
     volume: {
-      level: 50,
+      level: 75,
       muted: false,
       supported: false,
     },
@@ -80,59 +80,23 @@ export const useSystemStatus = () => {
       }));
     };
 
-    // Volume monitoring (limited in web browsers)
-    const initVolumeMonitoring = () => {
-      try {
-        // Create a silent audio context to monitor volume
-        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-        
-        navigator.mediaDevices?.getUserMedia({ audio: true })
-          .then(stream => {
-            const analyser = audioContext.createAnalyser();
-            const source = audioContext.createMediaStreamSource(stream);
-            source.connect(analyser);
-            
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            
-            const checkVolume = () => {
-              analyser.getByteFrequencyData(dataArray);
-              const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
-              const volumeLevel = Math.round((average / 255) * 100);
-              
-              setStatus(prev => ({
-                ...prev,
-                volume: {
-                  level: volumeLevel,
-                  muted: volumeLevel === 0,
-                  supported: true,
-                },
-              }));
-              
-              requestAnimationFrame(checkVolume);
-            };
-            
-            checkVolume();
-          })
-          .catch(() => {
-            // Fallback to simulated volume
-            setStatus(prev => ({
-              ...prev,
-              volume: {
-                level: 75,
-                muted: false,
-                supported: false,
-              },
-            }));
-          });
-      } catch (error) {
-        console.log('Volume monitoring not supported');
-      }
+    // Static volume monitoring (no continuous updates to avoid bug)
+    const initVolumeStatus = () => {
+      // Set static volume indicator - no real-time monitoring to prevent bugs
+      setStatus(prev => ({
+        ...prev,
+        volume: {
+          level: 75, // Static value
+          muted: false,
+          supported: false, // Mark as not supported to show it's simulated
+        },
+      }));
     };
 
-    // Initialize all monitoring
+    // Initialize monitoring
     initBattery();
     updateNetworkStatus();
-    initVolumeMonitoring();
+    initVolumeStatus();
 
     // Add network event listeners
     window.addEventListener('online', updateNetworkStatus);

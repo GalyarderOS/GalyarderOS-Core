@@ -1,10 +1,9 @@
 
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import VisionModule from '@/components/dashboard/VisionModule';
-import HabitsModule from '@/components/dashboard/HabitsModule';
 import FocusTimer from '@/components/dashboard/FocusTimer';
 import MemoryVault from '@/components/dashboard/MemoryVault';
 import AIAssistant from '@/components/dashboard/AIAssistant';
@@ -44,7 +43,7 @@ const Dashboard = () => {
         <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/balance" element={<LifeBalance />} />
         <Route path="/ritual" element={<RitualEngine />} />
-        <Route path="/habits" element={<HabitsModule />} />
+        <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
         <Route path="/focus" element={<FocusTimer />} />
         <Route path="/knowledge" element={<KnowledgeHub />} />
         <Route path="/reflection" element={<Reflection />} />
