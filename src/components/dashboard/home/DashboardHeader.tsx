@@ -45,11 +45,11 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
       {/* Background with gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-700 dark:from-indigo-900 dark:via-purple-900 dark:to-blue-900" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-      <div 
+      <div
         className="absolute inset-0 opacity-40"
         style={{ backgroundImage: `url("${dotPattern}")` }}
       />
-      
+
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,8 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
               </div>
             </div>
           </div>
-          
+
+          {/* Badge and Welcome Title */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,10 +80,17 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
               {t.welcome}
             </h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">
-              {t.subtitle}
-            </p>
           </motion.div>
+
+          {/* === AI Chatbot Moved Here === */}
+          <div className="max-w-2xl mx-auto flex flex-col justify-center my-8">
+            <InteractiveAIChatbot />
+          </div>
+
+          {/* Subtitle */}
+          <p className="text-xl text-white/80 max-w-2xl mx-auto">
+            {t.subtitle}
+          </p>
         </motion.div>
 
         {/* Stats Overview */}
@@ -113,11 +121,6 @@ const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
             <Progress value={Math.min(((stats.activeHabits + stats.activeGoals) / 10) * 100, 100)} className="h-2 bg-white/20" />
           </div>
         </motion.div>
-
-        {/* AI Chatbot: Right after stats, still in header area */}
-        <div className="max-w-2xl mx-auto flex flex-col justify-center mt-12">
-          <InteractiveAIChatbot />
-        </div>
       </div>
     </div>
   );
