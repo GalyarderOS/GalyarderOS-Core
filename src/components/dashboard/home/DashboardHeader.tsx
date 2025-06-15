@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Crown, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -58,7 +57,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             <Badge variant="outline" className="mb-4 bg-card/80 backdrop-blur-md">
-              GalyarderOS v2.0
+              GalyarderOS
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
               {t.welcome}
