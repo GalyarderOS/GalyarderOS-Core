@@ -20,10 +20,10 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.3 }}
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-30"
+      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30"
     >
       <div className="bg-card/80 backdrop-blur-md border border-border rounded-2xl p-3 shadow-2xl">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-center space-x-2">
           <TooltipProvider>
             {dockModules.map((module) => {
               const Icon = module.icon;
