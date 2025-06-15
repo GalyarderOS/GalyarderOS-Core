@@ -76,43 +76,43 @@ const ModuleStatsOverview = ({ stats }: ModuleStatsOverviewProps) => {
     {
       id: "identity",
       title: t.identity,
-      icon: <User className="h-6 w-6" />,
+      icon: <User className="h-6 w-6 text-chart-4" />,
       value: "Complete",
       metric: "Profile Set",
-      color: "from-purple-500/20 to-pink-500/20",
-      borderColor: "border-purple-500/30"
+      color: "from-chart-4/20 to-chart-4/5",
+      borderColor: "border-chart-4/30"
     },
     {
       id: "vision", 
       title: t.vision,
-      icon: <Target className="h-6 w-6" />,
+      icon: <Target className="h-6 w-6 text-chart-2" />,
       value: stats.activeGoals,
       metric: t.goalsActive,
-      color: "from-green-500/20 to-emerald-500/20",
-      borderColor: "border-green-500/30"
+      color: "from-chart-2/20 to-chart-2/5",
+      borderColor: "border-chart-2/30"
     },
     {
       id: "habits",
       title: t.habits,
-      icon: <Calendar className="h-6 w-6" />,
+      icon: <Calendar className="h-6 w-6 text-chart-3" />,
       value: stats.activeHabits,
       metric: t.activeCount,
-      color: "from-orange-500/20 to-red-500/20",
-      borderColor: "border-orange-500/30"
+      color: "from-chart-3/20 to-chart-5/20",
+      borderColor: "border-chart-3/30"
     },
     {
       id: "focus",
       title: t.focus,
-      icon: <Timer className="h-6 w-6" />,
+      icon: <Timer className="h-6 w-6 text-chart-1" />,
       value: `${stats.focusHoursToday}h`,
       metric: t.completedToday,
-      color: "from-blue-500/20 to-cyan-500/20",
-      borderColor: "border-blue-500/30"
+      color: "from-chart-1/20 to-chart-1/5",
+      borderColor: "border-chart-1/30"
     },
     {
       id: "knowledge",
       title: t.knowledge,
-      icon: <BookOpen className="h-6 w-6" />,
+      icon: <BookOpen className="h-6 w-6 text-violet-500" />,
       value: stats.notesCount,
       metric: t.totalEntries,
       color: "from-violet-500/20 to-purple-500/20",
@@ -121,7 +121,7 @@ const ModuleStatsOverview = ({ stats }: ModuleStatsOverviewProps) => {
     {
       id: "reflection",
       title: t.reflection,
-      icon: <Brain className="h-6 w-6" />,
+      icon: <Brain className="h-6 w-6 text-indigo-500" />,
       value: stats.reflectionEntries,
       metric: t.totalEntries,
       color: "from-indigo-500/20 to-blue-500/20",
@@ -188,10 +188,10 @@ const ModuleStatsOverview = ({ stats }: ModuleStatsOverviewProps) => {
         transition={{ delay: 0.6 }}
         className="grid grid-cols-1 md:grid-cols-3 gap-4"
       >
-        <Card className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30">
+        <Card className="bg-gradient-to-br from-chart-3/20 to-chart-3/5 border border-chart-3/30">
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <CheckCircle className="h-6 w-6 text-yellow-600" />
+              <CheckCircle className="h-6 w-6 text-chart-3" />
               <div>
                 <div className="text-2xl font-bold">{stats.habitStreak}</div>
                 <div className="text-sm text-muted-foreground">{t.daysStreak}</div>
@@ -200,10 +200,10 @@ const ModuleStatsOverview = ({ stats }: ModuleStatsOverviewProps) => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
+        <Card className="bg-gradient-to-br from-chart-1/20 to-chart-1/5 border border-chart-1/30">
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Zap className="h-6 w-6 text-cyan-600" />
+              <Zap className="h-6 w-6 text-chart-1" />
               <div>
                 <div className="text-2xl font-bold">{stats.focusHoursToday}h</div>
                 <div className="text-sm text-muted-foreground">Focus {t.completedToday}</div>
@@ -212,10 +212,10 @@ const ModuleStatsOverview = ({ stats }: ModuleStatsOverviewProps) => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30">
+        <Card className="bg-gradient-to-br from-chart-2/20 to-chart-2/5 border border-chart-2/30">
           <CardContent className="p-4">
             <div className="flex items-center space-x-3">
-              <Activity className="h-6 w-6 text-green-600" />
+              <Activity className="h-6 w-6 text-chart-2" />
               <div>
                 <div className="text-2xl font-bold">{stats.activeHabits + stats.activeGoals}</div>
                 <div className="text-sm text-muted-foreground">Active Systems</div>

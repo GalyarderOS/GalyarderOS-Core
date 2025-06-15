@@ -15,24 +15,25 @@ interface ProductivityChartProps {
 const ProductivityChart = ({ data, title }: ProductivityChartProps) => {
   return (
     <div className="space-y-3">
-      <h4 className="font-semibold text-slate-800 dark:text-slate-100">{title}</h4>
+      <h4 className="font-semibold text-foreground">{title}</h4>
       <ChartContainer
         config={{
-          hours: { label: 'Hours', color: '#8b5cf6' },
+          hours: { label: 'Hours', color: 'hsl(var(--chart-4))' },
         }}
         className="h-32"
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <XAxis dataKey="name" fontSize={10} />
-            <YAxis fontSize={10} />
-            <ChartTooltip content={<ChartTooltipContent />} />
+          <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+            <XAxis dataKey="name" fontSize={10} tickLine={false} axisLine={false} />
+            <YAxis fontSize={10} tickLine={false} axisLine={false} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
             <Line
               type="monotone"
               dataKey="hours"
-              stroke="#8b5cf6"
+              stroke="var(--color-hours)"
               strokeWidth={2}
-              dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 3 }}
+              dot={{ r: 3, fill: "var(--color-hours)" }}
+              activeDot={{ r: 5, strokeWidth: 1, fill: 'hsl(var(--background))', stroke: 'var(--color-hours)' }}
             />
           </LineChart>
         </ResponsiveContainer>
