@@ -1,5 +1,5 @@
 
-import { motion } from 'framer-motion';
+// Minimal hero, clean structure, consistent with "Digital Soul Layer"
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Crown, Sparkles, Award, TrendingUp, Wifi } from 'lucide-react';
@@ -8,110 +8,78 @@ const HeroSection = () => {
     const { language } = useTheme();
     const t = {
         en: {
-          welcomeTitle: "Your Personal Operating System",
-          welcomeSubtitle: "Master Your Life with AI-Powered Intelligence",
-          welcomeDescription: "Access all your personal development and wealth management tools in one unified dashboard. From habits to investments, vision to focus - everything you need to live by design.",
+          welcomeTitle: "Your Personal OS",
+          welcomeSubtitle: "Master life by design",
+          welcomeDescription: "Access all your personal development and wealth tools from one dashboard.",
           totalModules: "Active Modules",
           portfolioValue: "Portfolio Value",
-          connection: "Connection Status"
+          connection: "Connection"
         },
         id: {
-          welcomeTitle: "Sistem Operasi Personal Anda",
-          welcomeSubtitle: "Kuasai Hidup Anda dengan Kecerdasan AI",
-          welcomeDescription: "Akses semua alat pengembangan diri dan manajemen kekayaan dalam satu dashboard terpadu. Dari kebiasaan hingga investasi, visi hingga fokus - semua yang Anda butuhkan untuk hidup sesuai desain.",
+          welcomeTitle: "OS Pribadi Anda",
+          welcomeSubtitle: "Hidup terancang, dikuasai!",
+          welcomeDescription: "Akses seluruh alat pengembangan diri & keuangan di satu dashboard.",
           totalModules: "Modul Aktif",
           portfolioValue: "Nilai Portofolio",
-          connection: "Status Koneksi"
+          connection: "Koneksi"
         }
       }[language];
 
-    // Simple stats for hero section without external dependencies
     const heroStats = [
         { 
             label: t.totalModules, 
             value: "13", 
-            icon: <Award className="h-6 w-6" /> 
+            icon: <Award className="h-5 w-5" /> 
         },
         { 
             label: t.portfolioValue, 
             value: "$0", 
-            icon: <TrendingUp className="h-6 w-6" /> 
+            icon: <TrendingUp className="h-5 w-5" /> 
         },
         { 
             label: t.connection, 
             value: "Online", 
-            icon: <Wifi className="h-6 w-6" /> 
+            icon: <Wifi className="h-5 w-5" /> 
         }
     ];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="relative overflow-hidden"
-        >
-            <div className="bg-gradient-to-br from-card/90 to-card/60 rounded-3xl p-12 border border-border/30 relative soft-shadow">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-muted/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-muted/10 rounded-full blur-3xl"></div>
-            
-            <div className="relative">
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-                <div className="space-y-8 flex-1 max-w-3xl">
-                    <div className="flex items-center space-x-4">
-                    <div className="p-4 bg-muted/30 rounded-2xl soft-shadow border border-border">
-                        <Crown className="h-10 w-10 text-muted-foreground" />
-                    </div>
-                    <div>
-                        <Badge variant="outline" className="mb-2 border-muted-foreground/20 font-playfair">
-                        Personal Operating System
-                        </Badge>
-                        <p className="text-muted-foreground font-playfair text-lg">Welcome back</p>
-                    </div>
-                    </div>
-                    
-                    <div>
-                    <h1 className="text-6xl font-bold mb-6 font-playfair text-foreground bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text">
-                        {t.welcomeTitle}
-                    </h1>
-                    <h2 className="text-2xl font-semibold mb-4 text-muted-foreground font-playfair">
-                        {t.welcomeSubtitle}
-                    </h2>
-                    <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed font-playfair">
-                        {t.welcomeDescription}
-                    </p>
-                    </div>
-
-                    {/* Inline stats instead of SystemStats component */}
-                    <div className="grid grid-cols-3 gap-6">
-                        {heroStats.map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 + 0.5 }}
-                            className="text-center"
-                        >
-                            <div className="p-3 bg-muted/20 rounded-xl mx-auto w-fit mb-3 soft-shadow border border-border">
-                            {stat.icon}
-                            </div>
-                            <div className="text-2xl font-bold text-foreground font-playfair">{stat.value}</div>
-                            <div className="text-sm text-muted-foreground font-playfair">{stat.label}</div>
-                        </motion.div>
-                        ))}
-                    </div>
+        <div className="rounded-2xl border border-border bg-card px-7 py-8 mb-8 flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+            <div className="flex-1 space-y-4">
+                <div className="flex items-center space-x-3">
+                  <span className="p-3 bg-muted/30 rounded-xl border border-border">
+                    <Crown className="h-8 w-8 text-muted-foreground" />
+                  </span>
+                  <div>
+                    <Badge variant="outline" className="font-playfair text-xs border-muted-foreground/20">
+                      Personal OS
+                    </Badge>
+                    <div className="text-muted-foreground font-playfair text-sm">Welcome back</div>
+                  </div>
                 </div>
-
-                <div className="hidden xl:block">
-                    <div className="w-40 h-40 bg-gradient-to-br from-muted/30 to-muted/10 rounded-full flex items-center justify-center soft-shadow border-4 border-card">
-                    <Sparkles className="h-20 w-20 text-muted-foreground" />
+                <h1 className="text-4xl md:text-5xl font-extrabold font-playfair leading-tight text-foreground">{t.welcomeTitle}</h1>
+                <h2 className="text-xl font-medium text-muted-foreground font-playfair">{t.welcomeSubtitle}</h2>
+                <p className="text-base md:text-lg text-muted-foreground max-w-2xl font-playfair">{t.welcomeDescription}</p>
+                <div className="flex gap-8 mt-2">
+                  {heroStats.map((stat, idx) => (
+                    <div key={idx} className="flex flex-col items-start">
+                        <div className="flex items-center gap-2 text-foreground font-playfair">
+                          <span>{stat.icon}</span>
+                          <span className="font-bold text-lg">{stat.value}</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground font-playfair">{stat.label}</div>
                     </div>
-                </div>
+                  ))}
                 </div>
             </div>
+            <div className="hidden md:flex flex-col items-center justify-center">
+              <div className="w-28 h-28 bg-muted/30 rounded-full flex items-center justify-center border-4 border-card">
+                <Sparkles className="h-14 w-14 text-muted-foreground" />
+              </div>
             </div>
-        </motion.div>
+        </div>
     );
 };
 
 export default HeroSection;
+

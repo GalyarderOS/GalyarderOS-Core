@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { motion } from 'framer-motion';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import SystemStats from './home/SystemStats';
+import HeroSection from './home/HeroSection';
+import FinanceModulesSection from './home/FinanceModulesSection';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -98,47 +99,24 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
-        />
+      <div className="flex items-center justify-center min-h-[300px]">
+        <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
       </div>
     );
   }
 
-  // This component now serves as a fallback when not on the main dashboard
-  // The main desktop interface is handled by DesktopGrid in OSStyleLayout
   return (
     <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4"
-      >
-        <h1 className="text-4xl font-bold font-playfair text-foreground">
-          Welcome back to GalyarderOS
-        </h1>
-        <p className="text-xl text-muted-foreground">
-          Your personal operating system is ready
-        </p>
-      </motion.div>
-
-      {/* System Statistics */}
-      <SystemStats 
+      <HeroSection />
+      <FinanceModulesSection stats={stats} />
+      {/* SystemStats component (if you want more stats below, else remove) */}
+      {/* <SystemStats 
         stats={stats}
         realTimeData={realTimeData}
         isConnected={isConnected}
-      />
-
-      {/* Real-time Notifications */}
+      /> */}
       {notifications.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, x: 300 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="fixed top-20 right-6 space-y-2 z-40"
-        >
+        <div className="fixed top-20 right-6 space-y-2 z-40">
           {notifications.slice(0, 3).map((notification) => (
             <div
               key={notification.id}
@@ -155,10 +133,11 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
               </p>
             </div>
           ))}
-        </motion.div>
+        </div>
       )}
     </div>
   );
 };
 
 export default DashboardHome;
+
