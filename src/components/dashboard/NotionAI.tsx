@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,12 @@ import { Badge } from '@/components/ui/badge';
 import { FileText, Send, Loader2, BookOpen, PenTool, Database, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const NotionAI = () => {
+interface NotionAIProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState('');
@@ -38,33 +44,21 @@ const NotionAI = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-      <div className="max-w-6xl mx-auto p-6 space-y-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-4"
-        >
-          <div className="flex items-center justify-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
-              <FileText className="h-8 w-8 text-white" />
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+              <FileText className="h-4 w-4 text-white" />
             </div>
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                Notion AI Assistant
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400">Intelligent note-taking and knowledge management</p>
-            </div>
-          </div>
-        </motion.div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              Notion AI Assistant
+            </span>
+          </DialogTitle>
+        </DialogHeader>
 
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
+        <div className="space-y-6">
+          {/* Quick Actions */}
           <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -88,14 +82,8 @@ const NotionAI = () => {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
 
-        {/* AI Chat Interface */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
+          {/* AI Chat Interface */}
           <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -155,14 +143,8 @@ const NotionAI = () => {
               )}
             </CardContent>
           </Card>
-        </motion.div>
 
-        {/* Integration Status */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+          {/* Integration Status */}
           <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -183,9 +165,9 @@ const NotionAI = () => {
               </div>
             </CardContent>
           </Card>
-        </motion.div>
-      </div>
-    </div>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
