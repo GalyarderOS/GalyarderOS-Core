@@ -1,3 +1,4 @@
+
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
@@ -78,28 +79,44 @@ serve(async (req) => {
 
     console.log('API key found, calling Gemini 2.0 Flash API');
 
-    // Call Gemini 2.0 Flash API with GalyarderOS persona
+    // Call Gemini 2.0 Flash API with enhanced persona
     const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${geminiApiKey}`;
     
     const galyarderPersona = userLanguage === 'id' ? `
-Kamu adalah AI Assistant untuk GalyarderOS.
-Tugasmu adalah membantu pengguna dengan pertanyaan mereka secara langsung, jelas, dan ramah.
-- Jawab pertanyaan secara langsung. Jika pertanyaannya faktual (seperti "siapa presiden indonesia?"), berikan jawaban yang singkat dan akurat.
-- Gunakan bahasa Indonesia yang natural dan mudah dimengerti.
-- Hindari respons yang terlalu panjang atau filosofis kecuali jika diminta.
-- Jaga agar jawaban tetap relevan dengan konteks GalyarderOS, yaitu seputar produktivitas, penetapan tujuan, dan pengembangan diri, jika sesuai. Jika tidak, jawab saja pertanyaannya.
-- Jangan gunakan karakter spesial atau format yang tidak perlu. Tulis dalam teks biasa.
+INSTRUKSI WAJIB - HARUS DIIKUTI:
+- MAKSIMAL 2 KALIMAT per respons
+- JAWAB LANGSUNG tanpa filosofi panjang
+- GUNAKAN bahasa sehari-hari yang natural
+- DILARANG membuat bullet points atau format rumit
+- DILARANG memberikan nasihat hidup yang panjang
 
-Pesan pengguna: ${message}` : `
-You are the AI Assistant for GalyarderOS.
-Your job is to help users with their questions in a direct, clear, and friendly manner.
-- Answer questions directly. If it's a factual question (like "who is the president of indonesia?"), provide a short and accurate answer.
-- Use natural and easy-to-understand English.
-- Avoid overly long or philosophical responses unless requested.
-- Keep the answer relevant to the GalyarderOS context (productivity, goal setting, self-development) when appropriate. Otherwise, just answer the question.
-- Do not use unnecessary special characters or formatting. Respond in plain text.
+CONTOH FORMAT YANG BENAR:
+User: "siapa presiden indonesia?"
+Response: "Presiden Indonesia saat ini adalah Prabowo Subianto. Ada yang ingin kamu tanyakan tentang Indonesia lainnya?"
 
-User message: ${message}`;
+User: "halo"
+Response: "Halo! Saya Galyarder, siap membantu kamu. Ada yang bisa saya bantu hari ini?"
+
+PESAN PENGGUNA: ${message}
+
+JAWAB SESUAI FORMAT DI ATAS - MAKSIMAL 2 KALIMAT!` : `
+MANDATORY INSTRUCTIONS - MUST FOLLOW:
+- MAXIMUM 2 SENTENCES per response
+- ANSWER DIRECTLY without long philosophy
+- USE natural everyday language
+- FORBIDDEN to make bullet points or complex formatting
+- FORBIDDEN to give long life advice
+
+CORRECT FORMAT EXAMPLES:
+User: "who is the president of indonesia?"
+Response: "The current President of Indonesia is Prabowo Subianto. Is there anything else about Indonesia you'd like to know?"
+
+User: "hello"
+Response: "Hello! I'm Galyarder, ready to help you. What can I assist you with today?"
+
+USER MESSAGE: ${message}
+
+ANSWER ACCORDING TO THE FORMAT ABOVE - MAXIMUM 2 SENTENCES!`;
 
     const response = await fetch(geminiUrl, {
       method: 'POST',
@@ -113,10 +130,10 @@ User message: ${message}`;
           }]
         }],
         generationConfig: {
-          temperature: 0.8,
-          topK: 40,
-          topP: 0.95,
-          maxOutputTokens: 2048,
+          temperature: 0.3,
+          topK: 20,
+          topP: 0.8,
+          maxOutputTokens: 150,
         },
         safetySettings: [
           {
@@ -165,11 +182,15 @@ User message: ${message}`;
     const data = await response.json();
     console.log('Gemini 2.0 Flash API response received');
     
-    const defaultResponse = userLanguage === 'id' 
-      ? 'Maaf, saya sedang mengalami gangguan teknis. Sebagai Galyarder, saya berkomitmen untuk terus mengembangkan GalyarderOS agar dapat melayani Anda dengan maksimal. Silakan coba lagi dalam beberapa saat.'
-      : 'Sorry, I\'m experiencing technical difficulties. As Galyarder, I\'m committed to continuously developing GalyarderOS to serve you at maximum capacity. Please try again in a few moments.';
+    let aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
     
-    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || defaultResponse;
+    // Response validation and fallback
+    if (!aiResponse || aiResponse.length > 300) {
+      console.log('Response too long or empty, using fallback');
+      aiResponse = userLanguage === 'id' 
+        ? 'Maaf, ada gangguan teknis. Bisa ulangi pertanyaannya?'
+        : 'Sorry, technical issue. Could you repeat your question?';
+    }
 
     return new Response(
       JSON.stringify({ response: aiResponse }),
@@ -180,8 +201,8 @@ User message: ${message}`;
     console.error('Error in GalyarderOS AI function:', error);
     
     const errorMessage = error.message.includes('Indonesian') || error.message.includes('Bahasa') 
-      ? `Terjadi kesalahan dalam sistem GalyarderOS: ${error.message}. Sebagai Galyarder, saya akan terus memperbaiki sistem untuk memberikan pengalaman terbaik.`
-      : `An error occurred in GalyarderOS: ${error.message}. As Galyarder, I will continue improving the system to provide the best experience.`;
+      ? `Terjadi kesalahan: ${error.message}`
+      : `An error occurred: ${error.message}`;
     
     return new Response(
       JSON.stringify({ error: errorMessage }),
