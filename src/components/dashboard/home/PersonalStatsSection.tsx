@@ -7,9 +7,7 @@ import {
   Timer,
   BookOpen,
   Brain,
-  FileText,
   Target,
-  Settings,
   TrendingUp,
   CheckCircle,
   Clock,
@@ -20,7 +18,6 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 
 interface PersonalStatsSectionProps {
@@ -32,8 +29,6 @@ interface PersonalStatsSectionProps {
     reflectionEntries: number;
     activeGoals: number;
   };
-  onOpenAIAssistant: () => void;
-  onOpenNotionAI: () => void;
 }
 
 const trans = {
@@ -41,25 +36,17 @@ const trans = {
     personalModules: "Personal System Overview",
     description: "Real-time insights from your life management modules",
     connected: "Live Data Connected",
-    offline: "Offline Mode",
-    aiAssistant: "AI Assistant",
-    notionAI: "Notion AI"
+    offline: "Offline Mode"
   },
   id: {
     personalModules: "Ikhtisar Sistem Pribadi",
     description: "Wawasan real-time dari modul manajemen hidup Anda",
     connected: "Data Live Terhubung",
-    offline: "Mode Offline",
-    aiAssistant: "Asisten AI",
-    notionAI: "Notion AI"
+    offline: "Mode Offline"
   }
 };
 
-const PersonalStatsSection = ({
-  stats,
-  onOpenAIAssistant,
-  onOpenNotionAI
-}: PersonalStatsSectionProps) => {
+const PersonalStatsSection = ({ stats }: PersonalStatsSectionProps) => {
   const { language } = useTheme();
   const t = trans[language];
   const { data: realTimeData, isConnected } = useRealTimeData();
@@ -188,22 +175,6 @@ const PersonalStatsSection = ({
           progress: 82
         }
       ]
-    },
-    {
-      group: "AI Integration",
-      color: "from-pink-500 to-rose-300",
-      modules: [
-        {
-          id: "notion",
-          title: "Notion Sync",
-          description: "Synchronized knowledge base",
-          icon: <FileText className="h-6 w-6" />,
-          value: "Synced",
-          subtitle: "Last sync: 2 min ago",
-          gradient: "from-teal-400/50 via-green-400/40 to-green-300/60",
-          progress: 100
-        }
-      ]
     }
   ];
 
@@ -275,45 +246,6 @@ const PersonalStatsSection = ({
             </div>
           </section>
         ))}
-
-        {/* AI Tools Section */}
-        <section className="space-y-5">
-          <div className="flex items-baseline space-x-5">
-            <h3 className="text-2xl font-extrabold font-playfair text-foreground">AI Tools</h3>
-            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-300 block" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
-              <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400/50 via-blue-400/40 to-blue-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                  <Brain className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-lg font-bold font-playfair text-foreground">{t.aiAssistant}</CardTitle>
-                <p className="text-sm text-muted-foreground font-playfair">Personal AI assistant for productivity</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Button onClick={onOpenAIAssistant} variant="outline" className="w-full">
-                  Open Assistant
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
-              <CardHeader className="pb-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-gray-400/50 via-slate-400/40 to-slate-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
-                  <FileText className="h-6 w-6" />
-                </div>
-                <CardTitle className="text-lg font-bold font-playfair text-foreground">{t.notionAI}</CardTitle>
-                <p className="text-sm text-muted-foreground font-playfair">AI-powered knowledge management</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <Button onClick={onOpenNotionAI} variant="outline" className="w-full">
-                  Open Notion AI
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
       </div>
     </div>
   );

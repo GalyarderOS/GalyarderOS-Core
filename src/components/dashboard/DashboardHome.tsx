@@ -1,8 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Brain, FileText } from 'lucide-react';
 import HeroSection from './home/HeroSection';
 import PersonalStatsSection from './home/PersonalStatsSection';
 import ModuleStatsOverview from './home/ModuleStatsOverview';
@@ -157,13 +159,48 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
   return (
     <div className="space-y-8">
       <HeroSection stats={stats} />
-      <PersonalStatsSection 
-        stats={stats}
-        onOpenAIAssistant={onOpenAIAssistant}
-        onOpenNotionAI={onOpenNotionAI}
-      />
+      <PersonalStatsSection stats={stats} />
       <ModuleStatsOverview stats={stats} />
       <FinanceModulesSection stats={stats} />
+      
+      {/* AI Tools Section */}
+      <section className="space-y-5">
+        <div className="flex items-baseline space-x-5">
+          <h3 className="text-2xl font-extrabold font-playfair text-foreground">AI Tools</h3>
+          <span className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-300 block" />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
+            <CardHeader className="pb-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-400/50 via-blue-400/40 to-blue-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <Brain className="h-6 w-6" />
+              </div>
+              <CardTitle className="text-lg font-bold font-playfair text-foreground">AI Assistant</CardTitle>
+              <p className="text-sm text-muted-foreground font-playfair">Personal AI assistant for productivity</p>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <Button onClick={onOpenAIAssistant} variant="outline" className="w-full">
+                Open Assistant
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
+            <CardHeader className="pb-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-gray-400/50 via-slate-400/40 to-slate-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                <FileText className="h-6 w-6" />
+              </div>
+              <CardTitle className="text-lg font-bold font-playfair text-foreground">Notion AI</CardTitle>
+              <p className="text-sm text-muted-foreground font-playfair">AI-powered knowledge management</p>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <Button onClick={onOpenNotionAI} variant="outline" className="w-full">
+                Open Notion AI
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
       
       {notifications.length > 0 && (
         <div className="fixed top-20 right-6 space-y-2 z-40">
