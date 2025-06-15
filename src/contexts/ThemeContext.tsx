@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
@@ -48,26 +47,16 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(newTheme);
     localStorage.setItem('galyarderos-theme', newTheme);
     
-    // Apply theme to document with more comprehensive coverage
     const root = document.documentElement;
-    const body = document.body;
     
     if (newTheme === 'dark') {
       root.classList.add('dark');
-      body.classList.add('dark');
-      // Force dark theme on all elements
       root.style.setProperty('color-scheme', 'dark');
-      body.style.backgroundColor = '#111827';
-      body.style.color = '#f9fafb';
     } else {
       root.classList.remove('dark');
-      body.classList.remove('dark');
       root.style.setProperty('color-scheme', 'light');
-      body.style.backgroundColor = '#ffffff';
-      body.style.color = '#111827';
     }
     
-    // Dispatch custom event for components that need to react
     window.dispatchEvent(new CustomEvent('themeChange', { detail: newTheme }));
   };
 
@@ -84,20 +73,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     console.log('Theme effect triggered:', theme);
     const root = document.documentElement;
-    const body = document.body;
     
     if (theme === 'dark') {
       root.classList.add('dark');
-      body.classList.add('dark');
       root.style.setProperty('color-scheme', 'dark');
-      body.style.backgroundColor = '#111827';
-      body.style.color = '#f9fafb';
     } else {
       root.classList.remove('dark');
-      body.classList.remove('dark');
       root.style.setProperty('color-scheme', 'light');
-      body.style.backgroundColor = '#ffffff';
-      body.style.color = '#111827';
     }
   }, [theme]);
 

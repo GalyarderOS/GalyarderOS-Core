@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
@@ -76,13 +75,11 @@ const TopBar = ({ user, profile, theme, setTheme, language, onSearch, onSignOut,
       <div className="flex items-center justify-between h-full px-6">
         {/* Left Section - Logo and App Name */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
-              alt="GalyarderOS Logo" 
-              className="w-6 h-6 object-contain"
-            />
-          </div>
+          <img 
+            src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+            alt="GalyarderOS Logo" 
+            className="w-10 h-10 object-contain"
+          />
           <div>
             <h1 className="text-lg font-bold text-foreground font-playfair">GalyarderOS</h1>
           </div>
