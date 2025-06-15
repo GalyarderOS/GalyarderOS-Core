@@ -1,6 +1,29 @@
+
 import { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  LayoutDashboard, 
+  User, 
+  Target, 
+  Brain, 
+  Calendar, 
+  Timer, 
+  BookOpen, 
+  Edit, 
+  BarChart2, 
+  TrendingUp, 
+  DollarSign, 
+  Receipt, 
+  Building, 
+  Calculator, 
+  CreditCard, 
+  FileText, 
+  Sparkles,
+  Search
+} from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import VisionModule from '@/components/dashboard/VisionModule';
 import FocusTimer from '@/components/dashboard/FocusTimer';
@@ -23,14 +46,14 @@ import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
 import Reflection from "@/components/dashboard/Reflection";
 import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
 import CalendarModule from "@/components/dashboard/CalendarModule";
+import TopBar from "@/components/dashboard/os/TopBar";
+import DesktopGrid from "@/components/dashboard/os/DesktopGrid";
+import Dock from "@/components/dashboard/os/Dock";
+import WindowManager from "@/components/dashboard/os/WindowManager";
 
-interface OSStyleLayoutProps {
-  children: React.ReactNode;
-  onOpenAIAssistant?: () => void;
-  onOpenNotionAI?: () => void;
-}
-
-const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleLayoutProps) => {
+const Dashboard = () => {
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [isNotionAIOpen, setIsNotionAIOpen] = useState(false);
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -39,34 +62,123 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
   const { user, signOut } = useAuth();
   const { theme, setTheme, language } = useTheme();
 
-  const digitalSoulLayerModules = [
-    { id: 'dashboard', label: language === 'id' ? 'Command Center' : 'Command Center', icon: LayoutDashboard, path: '/dashboard' },
-    { id: 'identity-core', label: language === 'id' ? 'Identity Core' : 'Identity Core', icon: User, path: '/dashboard/identity' },
-    { id: 'vision-architecture', label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture', icon: Target, path: '/dashboard/vision' },
-    { id: 'life-balance', label: language === 'id' ? 'Life Balance' : 'Life Balance', icon: Brain, path: '/dashboard/balance' },
-    { id: 'ritual-engine', label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine', icon: Calendar, path: '/dashboard/ritual' },
-    { id: 'flow-state', label: language === 'id' ? 'Flow State' : 'Flow State', icon: Timer, path: '/dashboard/flow' },
-    { id: 'knowledge-hub', label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub', icon: BookOpen, path: '/dashboard/knowledge' },
-    { id: 'reflection', label: language === 'id' ? 'Reflection' : 'Reflection', icon: Edit, path: '/dashboard/reflection' },
-  ];
+  const handleOpenAIAssistant = () => setIsAIAssistantOpen(true);
+  const handleOpenNotionAI = () => setIsNotionAIOpen(true);
 
-  const analyticsModules = [
-    { id: 'life-analytics', label: language === 'id' ? 'Life Analytics' : 'Life Analytics', icon: BarChart2, path: '/dashboard/analytics' },
-    { id: 'investments', label: language === 'id' ? 'Investments' : 'Investments', icon: TrendingUp, path: '/dashboard/investments' },
-    { id: 'cashflow', label: language === 'id' ? 'Cashflow' : 'Cashflow', icon: DollarSign, path: '/dashboard/cashflow' },
-    { id: 'expenses', label: language === 'id' ? 'Expenses' : 'Expenses', icon: Receipt, path: '/dashboard/expenses' },
-    { id: 'wealth', label: language === 'id' ? 'Wealth' : 'Wealth', icon: Building, path: '/dashboard/wealth' },
-    { id: 'tax', label: language === 'id' ? 'Tax Optimizer' : 'Tax Optimizer', icon: Calculator, path: '/dashboard/tax' },
-    { id: 'debt', label: language === 'id' ? 'Debt Manager' : 'Debt Manager', icon: CreditCard, path: '/dashboard/debt' },
-  ];
-
-  const syncModules = [
-    { id: 'notion-sync', label: language === 'id' ? 'Notion Sync' : 'Notion Sync', icon: FileText, path: '/dashboard/notion' },
-    { id: 'ai-assistant', label: 'AI Assistant', icon: Sparkles, action: onOpenAIAssistant },
-  ];
-
-  const settingsModules = [
-    { id: 'settings', label: language === 'id' ? 'Settings' : 'Settings', icon: Settings, path: '/dashboard/settings' }
+  // Main modules (order similar with PersonalSystemsGrid, add Notion & AI Assistant)
+  const modules = [
+    {
+      id: 'dashboard',
+      label: language === 'id' ? 'Command Center' : 'Command Center',
+      icon: LayoutDashboard,
+      path: '/dashboard',
+      category: 'personal',
+      color: 'from-blue-500 to-indigo-600'
+    },
+    {
+      id: 'identity',
+      label: language === 'id' ? 'Identity Core' : 'Identity Core',
+      icon: User,
+      path: '/dashboard/identity',
+      category: 'personal',
+      color: 'from-purple-500 to-pink-600'
+    },
+    {
+      id: 'vision',
+      label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture',
+      icon: Target,
+      path: '/dashboard/vision',
+      category: 'personal',
+      color: 'from-green-500 to-emerald-600'
+    },
+    {
+      id: 'balance',
+      label: language === 'id' ? 'Life Balance' : 'Life Balance',
+      icon: Brain,
+      path: '/dashboard/balance',
+      category: 'personal',
+      color: 'from-emerald-500 to-teal-600'
+    },
+    {
+      id: 'ritual',
+      label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine',
+      icon: Calendar,
+      path: '/dashboard/ritual',
+      category: 'personal',
+      color: 'from-orange-500 to-red-600'
+    },
+    {
+      id: 'calendar',
+      label: language === 'id' ? 'Calendar' : 'Calendar',
+      icon: Calendar,
+      path: '/dashboard/calendar',
+      category: 'personal',
+      color: 'from-orange-500 to-pink-500'
+    },
+    {
+      id: 'focus',
+      label: language === 'id' ? 'Focus Engine' : 'Focus Engine',
+      icon: Timer,
+      path: '/dashboard/focus',
+      category: 'personal',
+      color: 'from-blue-500 to-cyan-600'
+    },
+    {
+      id: 'knowledge',
+      label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub',
+      icon: BookOpen,
+      path: '/dashboard/knowledge',
+      category: 'personal',
+      color: 'from-violet-500 to-purple-600'
+    },
+    {
+      id: 'reflection',
+      label: language === 'id' ? 'Reflection' : 'Reflection',
+      icon: Edit,
+      path: '/dashboard/reflection',
+      category: 'personal',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    {
+      id: 'analytics',
+      label: language === 'id' ? 'Life Analytics' : 'Life Analytics',
+      icon: BarChart2,
+      path: '/dashboard/analytics',
+      category: 'analytics',
+      color: 'from-pink-500 to-rose-600'
+    },
+    {
+      id: 'ai-assistant',
+      label: 'AI Assistant',
+      icon: Sparkles,
+      action: handleOpenAIAssistant,
+      category: 'ai',
+      color: 'from-purple-500 to-blue-600'
+    },
+    {
+      id: 'investments',
+      label: language === 'id' ? 'Investments' : 'Investments',
+      icon: TrendingUp,
+      path: '/dashboard/investments',
+      category: 'finance',
+      color: 'from-yellow-500 to-orange-600'
+    },
+    {
+      id: 'wealth',
+      label: language === 'id' ? 'Wealth' : 'Wealth',
+      icon: Building,
+      path: '/dashboard/wealth',
+      category: 'finance',
+      color: 'from-indigo-500 to-purple-600'
+    },
+    {
+      id: 'settings',
+      label: language === 'id' ? 'Settings' : 'Settings',
+      icon: Calculator,
+      path: '/dashboard/settings',
+      category: 'system',
+      color: 'from-gray-500 to-slate-600'
+    }
   ];
 
   const handleModuleClick = (module: any) => {
@@ -100,170 +212,10 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     }
   };
 
-  // --- Update modules: AI Assistant is full screen module, Notion is a main module, and Notion Sync is removed ---
-  // Main modules (order similar with PersonalSystemsGrid, add Notion & AI Assistant)
-  const modules = [
-    {
-      id: 'dashboard',
-      label: language === 'id' ? 'Command Center' : 'Command Center',
-      icon: LayoutDashboard,
-      path: '/dashboard',
-      category: 'personal',
-      color: 'from-blue-500 to-indigo-600'
-    },
-    {
-      id: 'identity-core',
-      label: language === 'id' ? 'Identity Core' : 'Identity Core',
-      icon: User,
-      path: '/dashboard/identity',
-      category: 'personal',
-      color: 'from-purple-500 to-pink-600'
-    },
-    {
-      id: 'vision-architecture',
-      label: language === 'id' ? 'Vision Architecture' : 'Vision Architecture',
-      icon: Target,
-      path: '/dashboard/vision',
-      category: 'personal',
-      color: 'from-green-500 to-emerald-600'
-    },
-    {
-      id: 'life-balance',
-      label: language === 'id' ? 'Life Balance' : 'Life Balance',
-      icon: Brain,
-      path: '/dashboard/balance',
-      category: 'personal',
-      color: 'from-emerald-500 to-teal-600'
-    },
-    {
-      id: 'ritual-engine',
-      label: language === 'id' ? 'Ritual Engine' : 'Ritual Engine',
-      icon: Calendar,
-      path: '/dashboard/ritual',
-      category: 'personal',
-      color: 'from-orange-500 to-red-600'
-    },
-    {
-      id: 'calendar',
-      label: language === 'id' ? 'Calendar' : 'Calendar',
-      icon: Calendar,
-      path: '/dashboard/calendar',
-      category: 'personal',
-      color: 'from-orange-500 to-pink-500'
-    },
-    {
-      id: 'focus-engine',
-      label: language === 'id' ? 'Focus Engine' : 'Focus Engine',
-      icon: Timer,
-      path: '/dashboard/focus',
-      category: 'personal',
-      color: 'from-blue-500 to-cyan-600'
-    },
-    {
-      id: 'knowledge-hub',
-      label: language === 'id' ? 'Knowledge Hub' : 'Knowledge Hub',
-      icon: BookOpen,
-      path: '/dashboard/knowledge',
-      category: 'personal',
-      color: 'from-violet-500 to-purple-600'
-    },
-    {
-      id: 'notion',
-      label: language === 'id' ? 'Notion' : 'Notion',
-      icon: FileText,
-      path: '/dashboard/notion',
-      category: 'main',
-      color: 'from-teal-500 to-green-600'
-    },
-    {
-      id: 'reflection',
-      label: language === 'id' ? 'Reflection' : 'Reflection',
-      icon: Edit,
-      path: '/dashboard/reflection',
-      category: 'personal',
-      color: 'from-indigo-500 to-purple-600'
-    },
-    {
-      id: 'life-analytics',
-      label: language === 'id' ? 'Life Analytics' : 'Life Analytics',
-      icon: BarChart2,
-      path: '/dashboard/analytics',
-      category: 'analytics',
-      color: 'from-pink-500 to-rose-600'
-    },
-    {
-      id: 'ai-assistant',
-      label: 'AI Assistant',
-      icon: Sparkles,
-      path: '/dashboard/ai-assistant',
-      category: 'ai',
-      color: 'from-purple-500 to-blue-600'
-    },
-    {
-      id: 'investments',
-      label: language === 'id' ? 'Investments' : 'Investments',
-      icon: TrendingUp,
-      path: '/dashboard/investments',
-      category: 'finance',
-      color: 'from-yellow-500 to-orange-600'
-    },
-    {
-      id: 'cashflow',
-      label: language === 'id' ? 'Cashflow' : 'Cashflow',
-      icon: DollarSign,
-      path: '/dashboard/cashflow',
-      category: 'finance',
-      color: 'from-emerald-500 to-teal-600'
-    },
-    {
-      id: 'expenses',
-      label: language === 'id' ? 'Expenses' : 'Expenses',
-      icon: Receipt,
-      path: '/dashboard/expenses',
-      category: 'finance',
-      color: 'from-red-500 to-pink-600'
-    },
-    {
-      id: 'wealth',
-      label: language === 'id' ? 'Wealth' : 'Wealth',
-      icon: Building,
-      path: '/dashboard/wealth',
-      category: 'finance',
-      color: 'from-indigo-500 to-purple-600'
-    },
-    {
-      id: 'tax',
-      label: language === 'id' ? 'Tax Optimizer' : 'Tax Optimizer',
-      icon: Calculator,
-      path: '/dashboard/tax',
-      category: 'finance',
-      color: 'from-blue-500 to-cyan-600'
-    },
-    {
-      id: 'debt',
-      label: language === 'id' ? 'Debt Manager' : 'Debt Manager',
-      icon: CreditCard,
-      path: '/dashboard/debt',
-      category: 'finance',
-      color: 'from-orange-500 to-yellow-600'
-    },
-    {
-      id: 'settings',
-      label: language === 'id' ? 'Settings' : 'Settings',
-      icon: Settings,
-      path: '/dashboard/settings',
-      category: 'system',
-      color: 'from-gray-500 to-slate-600'
-    }
-  ];
-
   const currentPath = location.pathname;
-  const currentModule = modules.find(m => m.path === currentPath);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
-      {/* Remove animated background particles completely */}
-
       {/* Top Bar */}
       <TopBar 
         user={user}
@@ -292,7 +244,27 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
               transition={{ duration: 0.3 }}
               className="max-w-7xl mx-auto"
             >
-              {children}
+              <Routes>
+                <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
+                <Route path="/identity" element={<IdentityCore />} />
+                <Route path="/vision" element={<VisionArchitecture />} />
+                <Route path="/balance" element={<LifeBalance />} />
+                <Route path="/ritual" element={<RitualEngine />} />
+                <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
+                <Route path="/focus" element={<FocusTimer />} />
+                <Route path="/calendar" element={<CalendarModule />} />
+                <Route path="/knowledge" element={<KnowledgeHub />} />
+                <Route path="/reflection" element={<Reflection />} />
+                <Route path="/analytics" element={<LifeAnalytics />} />
+                <Route path="/memory" element={<MemoryVault />} />
+                <Route path="/investments" element={<InvestmentTracker />} />
+                <Route path="/cashflow" element={<CashflowTracker />} />
+                <Route path="/expenses" element={<ExpenseManager />} />
+                <Route path="/wealth" element={<WealthBuilder />} />
+                <Route path="/tax" element={<TaxOptimizer />} />
+                <Route path="/debt" element={<DebtManager />} />
+                <Route path="/settings" element={<Settings />} />
+              </Routes>
             </motion.div>
           )}
         </AnimatePresence>
@@ -348,48 +320,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
           </>
         )}
       </AnimatePresence>
-    </div>
-  );
-};
-
-export default OSStyleLayout;
-
-const Dashboard = () => {
-  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
-  const [isNotionAIOpen, setIsNotionAIOpen] = useState(false);
-
-  const handleOpenAIAssistant = () => setIsAIAssistantOpen(true);
-  const handleOpenNotionAI = () => setIsNotionAIOpen(true);
-
-  return (
-    <OSStyleLayout
-      onOpenAIAssistant={handleOpenAIAssistant}
-      onOpenNotionAI={handleOpenNotionAI}
-    >
-      <Routes>
-        <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
-        <Route path="/identity" element={<IdentityCore />} />
-        <Route path="/vision" element={<VisionArchitecture />} />
-        <Route path="/balance" element={<LifeBalance />} />
-        <Route path="/ritual" element={<RitualEngine />} />
-        <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
-        <Route path="/focus" element={<FocusTimer />} />
-        <Route path="/calendar" element={<CalendarModule />} />
-        <Route path="/knowledge" element={<KnowledgeHub />} />
-        <Route path="/reflection" element={<Reflection />} />
-        <Route path="/analytics" element={<LifeAnalytics />} />
-        {/* NotionSync REMOVED (moved to settings) */}
-        <Route path="/memory" element={<MemoryVault />} />
-        {/* Finance Individual Modules */}
-        <Route path="/investments" element={<InvestmentTracker />} />
-        <Route path="/cashflow" element={<CashflowTracker />} />
-        <Route path="/expenses" element={<ExpenseManager />} />
-        <Route path="/wealth" element={<WealthBuilder />} />
-        <Route path="/tax" element={<TaxOptimizer />} />
-        <Route path="/debt" element={<DebtManager />} />
-        {/* Settings */}
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
 
       {/* Modal Components */}
       <AIAssistant
@@ -400,7 +330,7 @@ const Dashboard = () => {
         isOpen={isNotionAIOpen}
         onClose={() => setIsNotionAIOpen(false)}
       />
-    </OSStyleLayout>
+    </div>
   );
 };
 
