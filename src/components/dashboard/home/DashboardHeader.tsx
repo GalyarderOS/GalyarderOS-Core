@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Crown, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -31,7 +30,7 @@ export interface DashboardHeaderProps {
   };
 }
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
+export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
   const { language } = useTheme();
 
   const t = {
@@ -141,4 +140,3 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
 };
 
 export default DashboardHeader;
-

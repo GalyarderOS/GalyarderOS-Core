@@ -6,7 +6,7 @@ import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Brain, FileText } from 'lucide-react';
-import DashboardHeader from './home/DashboardHeader';
+import { DashboardHeader } from './home/DashboardHeader';
 import LifeOverviewSection from './home/LifeOverviewSection';
 import PersonalSystemsGrid from './home/PersonalSystemsGrid';
 import FinancialHealthSection from './home/FinancialHealthSection';
@@ -207,7 +207,7 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/50 dark:from-slate-950 dark:via-slate-900/50 dark:to-indigo-950/30">
-      {/* DashboardHeader takes a props object { stats } */}
+      {/* DashboardHeader now works via named import */}
       <DashboardHeader stats={stats} />
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <LifeOverviewSection stats={stats} />
