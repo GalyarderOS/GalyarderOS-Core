@@ -1,4 +1,5 @@
 
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,6 +12,7 @@ import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { applySecurityHeaders } from "@/utils/security";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,32 +24,38 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <NotificationProvider>
-          <AuthProvider>
-            <TooltipProvider>
-              <Toaster />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/auth" element={<AuthPage />} />
-                  <Route path="/dashboard/*" element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="*" element={<LandingPage />} />
-                </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AuthProvider>
-        </NotificationProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  useEffect(() => {
+    applySecurityHeaders();
+  }, []);
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <NotificationProvider>
+            <AuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/auth" element={<AuthPage />} />
+                    <Route path="/dashboard/*" element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="*" element={<LandingPage />} />
+                  </Routes>
+                </BrowserRouter>
+              </TooltipProvider>
+            </AuthProvider>
+          </NotificationProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
