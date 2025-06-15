@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -7,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Eye, EyeOff, Crown, Shield } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Crown, Shield, Mail, Lock, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const AuthPage = () => {
@@ -100,7 +101,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-2 font-playfair">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 font-playfair">
       <div className="w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -108,33 +109,33 @@ const AuthPage = () => {
           transition={{ duration: 0.5 }}
         >
           {/* Header */}
-          <div className="text-center mb-6 md:mb-8">
+          <div className="text-center mb-8">
             <Button
               variant="ghost"
               onClick={() => navigate('/')}
-              className="mb-4 md:mb-6 text-muted-foreground hover:text-foreground font-playfair text-xs md:text-base"
+              className="mb-6 text-muted-foreground hover:text-foreground font-playfair"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Button>
             
-            <div className="flex items-center justify-center space-x-2 md:space-x-3 mb-4 md:mb-6">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-muted rounded-xl flex items-center justify-center soft-shadow">
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center soft-shadow">
                 <img 
                   src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
                   alt="GalyarderOS Logo" 
-                  className="h-7 w-7 md:h-8 md:w-8 object-contain"
+                  className="h-8 w-8 object-contain"
                 />
               </div>
-              <span className="text-xl md:text-2xl font-bold text-foreground font-playfair">
+              <span className="text-2xl font-bold text-foreground font-playfair">
                 GalyarderOS
               </span>
             </div>
             
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-1 md:mb-2 font-playfair">
+            <h1 className="text-3xl font-bold text-foreground mb-2 font-playfair">
               {isLogin ? 'Welcome Back' : 'Join the Elite'}
             </h1>
-            <p className="text-sm md:text-base text-muted-foreground font-playfair">
+            <p className="text-muted-foreground font-playfair">
               {isLogin 
                 ? 'Access your personal operating system' 
                 : 'Begin your journey to refined productivity'
@@ -144,26 +145,26 @@ const AuthPage = () => {
 
           {/* Auth Form */}
           <Card className="border-2 border-border soft-shadow">
-            <CardHeader className="space-y-1 text-center">
-              <div className="flex items-center justify-center space-x-1 md:space-x-2 mb-2 md:mb-4">
+            <CardHeader className="space-y-1 text-center pb-4">
+              <div className="flex items-center justify-center space-x-2 mb-4">
                 {isLogin ? <Shield className="h-5 w-5 text-muted-foreground" /> : <Crown className="h-5 w-5 text-muted-foreground" />}
-                <CardTitle className="text-lg md:text-2xl text-foreground font-playfair">
+                <CardTitle className="text-2xl text-foreground font-playfair">
                   {isLogin ? 'Sign In' : 'Create Account'}
                 </CardTitle>
               </div>
-              <CardDescription className="text-xs md:text-base text-muted-foreground font-playfair">
+              <CardDescription className="text-muted-foreground font-playfair">
                 {isLogin 
                   ? 'Enter your credentials to continue' 
                   : 'Join the exclusive community of achievers'
                 }
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-2 md:p-6">
+            <CardContent className="p-6">
               {/* Google Sign In Button */}
               <Button
                 type="button"
                 variant="outline"
-                className="w-full mb-4 md:mb-6 h-10 md:h-12 border-2 hover:bg-muted/50 font-playfair text-xs md:text-base"
+                className="w-full mb-6 h-12 border-2 hover:bg-muted/50 font-playfair transition-all duration-300"
                 onClick={handleGoogleSignIn}
                 disabled={googleLoading}
               >
@@ -173,7 +174,7 @@ const AuthPage = () => {
                     <span>Connecting...</span>
                   </div>
                 ) : (
-                  <div className="flex items-center space-x-2 md:space-x-3">
+                  <div className="flex items-center space-x-3">
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                       <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -185,19 +186,22 @@ const AuthPage = () => {
                 )}
               </Button>
 
-              <div className="relative mb-4 md:mb-6">
+              <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center">
                   <Separator className="w-full" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 md:px-3 text-muted-foreground font-medium font-playfair">Or continue with email</span>
+                  <span className="bg-card px-3 text-muted-foreground font-medium font-playfair">Or continue with email</span>
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 {!isLogin && (
-                  <div className="space-y-1 md:space-y-2">
-                    <Label htmlFor="fullName" className="text-xs md:text-sm font-medium text-foreground font-playfair">Full Name</Label>
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName" className="text-sm font-medium text-foreground font-playfair flex items-center gap-2">
+                      <User className="h-4 w-4" />
+                      Full Name
+                    </Label>
                     <Input
                       id="fullName"
                       type="text"
@@ -205,13 +209,16 @@ const AuthPage = () => {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       required={!isLogin}
-                      className="h-10 md:h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair text-xs md:text-base"
+                      className="h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair"
                     />
                   </div>
                 )}
                 
-                <div className="space-y-1 md:space-y-2">
-                  <Label htmlFor="email" className="text-xs md:text-sm font-medium text-foreground font-playfair">Email Address</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium text-foreground font-playfair flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    Email Address
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -219,12 +226,15 @@ const AuthPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="h-10 md:h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair text-xs md:text-base"
+                    className="h-12 border-2 focus:border-muted-foreground transition-all duration-300 font-playfair"
                   />
                 </div>
                 
-                <div className="space-y-1 md:space-y-2">
-                  <Label htmlFor="password" className="text-xs md:text-sm font-medium text-foreground font-playfair">Password</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium text-foreground font-playfair flex items-center gap-2">
+                    <Lock className="h-4 w-4" />
+                    Password
+                  </Label>
                   <div className="relative">
                     <Input
                       id="password"
@@ -233,13 +243,13 @@ const AuthPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="h-10 md:h-12 border-2 focus:border-muted-foreground pr-10 md:pr-12 transition-all duration-300 font-playfair text-xs md:text-base"
+                      className="h-12 border-2 focus:border-muted-foreground pr-12 transition-all duration-300 font-playfair"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-0 top-0 h-full px-2 md:px-3 py-2 hover:bg-transparent"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -253,7 +263,7 @@ const AuthPage = () => {
 
                 <Button
                   type="submit"
-                  className="w-full h-10 md:h-12 bg-foreground hover:bg-foreground/90 text-background soft-shadow font-playfair text-xs md:text-base transition-all duration-300"
+                  className="w-full h-12 bg-foreground hover:bg-foreground/90 text-background soft-shadow font-playfair transition-all duration-300"
                   disabled={loading}
                 >
                   {loading ? (
@@ -267,13 +277,13 @@ const AuthPage = () => {
                 </Button>
               </form>
 
-              <div className="mt-4 md:mt-6 text-center">
-                <p className="text-xs md:text-sm text-muted-foreground font-playfair">
+              <div className="mt-6 text-center">
+                <p className="text-sm text-muted-foreground font-playfair">
                   {isLogin ? "New to our exclusive platform?" : "Already part of the community?"}
                   <Button
                     variant="link"
                     onClick={() => setIsLogin(!isLogin)}
-                    className="ml-1 p-0 h-auto text-foreground hover:text-foreground/80 font-medium font-playfair text-xs md:text-base"
+                    className="ml-1 p-0 h-auto text-foreground hover:text-foreground/80 font-medium font-playfair"
                   >
                     {isLogin ? 'Create account' : 'Sign in'}
                   </Button>
@@ -283,8 +293,8 @@ const AuthPage = () => {
           </Card>
 
           {/* Footer */}
-          <div className="mt-4 md:mt-8 text-center">
-            <p className="text-[10px] md:text-xs text-muted-foreground font-playfair">
+          <div className="mt-8 text-center">
+            <p className="text-xs text-muted-foreground font-playfair">
               By continuing, you agree to our refined terms of service
             </p>
           </div>
@@ -295,5 +305,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
-// File note: Please consider refactoring this file. It's now nearly 300 lines. Let me know if you'd like me to modularize it for better maintainability.

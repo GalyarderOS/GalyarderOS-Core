@@ -6,37 +6,48 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import LandingPage from "./pages/LandingPage";
 import AuthPage from "./pages/AuthPage";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+      staleTime: 5 * 60 * 1000, // 5 minutes
+    },
+  },
+});
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <NotificationProvider>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/dashboard/*" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="*" element={<LandingPage />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
-      </NotificationProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <NotificationProvider>
+          <AuthProvider>
+            <TooltipProvider>
+              <Toaster />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/dashboard/*" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="*" element={<LandingPage />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </AuthProvider>
+        </NotificationProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

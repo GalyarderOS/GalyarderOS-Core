@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -44,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // Ignore error for no rows found
+      if (error && error.code !== 'PGRST116') {
         console.error('Error fetching profile:', error);
         setProfile(null);
       } else {
@@ -93,14 +94,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
+        console.log('Auth state changed:', event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // Handle profile fetching asynchronously
+        if (session?.user) {
+          setTimeout(() => {
+            ensureProfileExists(session.user).then(() => {
+              fetchProfile(session.user.id);
+            });
+          }, 0);
+        } else {
+          setProfile(null);
+          setLoadingProfile(false);
+        }
       }
     );
 
+    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -109,17 +125,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => subscription.unsubscribe();
   }, []);
-
-  useEffect(() => {
-    if (user) {
-      ensureProfileExists(user).then(() => {
-        fetchProfile(user.id);
-      });
-    } else {
-      setProfile(null);
-      setLoadingProfile(false);
-    }
-  }, [user]);
 
   const signUp = async (email: string, password: string, fullName: string) => {
     const redirectUrl = `${window.location.origin}/dashboard`;
