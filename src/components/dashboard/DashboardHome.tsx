@@ -2,12 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import HeroSection from './home/HeroSection';
-import EnhancedPersonalModulesSection from './home/EnhancedPersonalModulesSection';
-import FinanceModulesSection from './home/FinanceModulesSection';
-import DashboardLoader from './home/DashboardLoader';
-import CommandPalette from './home/CommandPalette';
-import { useCommandPalette } from '@/hooks/useCommandPalette';
+import { motion } from 'framer-motion';
+import { useRealTimeData } from '@/hooks/useRealTimeData';
+import SystemStats from './home/SystemStats';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -25,14 +22,7 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     investments: 0
   });
   const [loading, setLoading] = useState(true);
-
-  const {
-    isOpen: isCommandPaletteOpen,
-    search: commandSearch,
-    setSearch: setCommandSearch,
-    commands,
-    executeCommand
-  } = useCommandPalette(onOpenAIAssistant, onOpenNotionAI);
+  const { data: realTimeData, isConnected, notifications } = useRealTimeData();
 
   useEffect(() => {
     if (user) {
@@ -107,28 +97,67 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
   };
 
   if (loading) {
-    return <DashboardLoader />;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full"
+        />
+      </div>
+    );
   }
 
+  // This component now serves as a fallback when not on the main dashboard
+  // The main desktop interface is handled by DesktopGrid in OSStyleLayout
   return (
-    <>
-      <div className="space-y-12 max-w-7xl mx-auto relative">
-        <HeroSection />
-        <EnhancedPersonalModulesSection 
-          onOpenAIAssistant={onOpenAIAssistant} 
-          onOpenNotionAI={onOpenNotionAI} 
-        />
-        <FinanceModulesSection stats={stats} />
-      </div>
-      
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        search={commandSearch}
-        setSearch={setCommandSearch}
-        commands={commands}
-        executeCommand={executeCommand}
+    <div className="space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center space-y-4"
+      >
+        <h1 className="text-4xl font-bold font-playfair text-foreground">
+          Welcome back to GalyarderOS
+        </h1>
+        <p className="text-xl text-muted-foreground">
+          Your personal operating system is ready
+        </p>
+      </motion.div>
+
+      {/* System Statistics */}
+      <SystemStats 
+        stats={stats}
+        realTimeData={realTimeData}
+        isConnected={isConnected}
       />
-    </>
+
+      {/* Real-time Notifications */}
+      {notifications.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, x: 300 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="fixed top-20 right-6 space-y-2 z-40"
+        >
+          {notifications.slice(0, 3).map((notification) => (
+            <div
+              key={notification.id}
+              className={`p-4 rounded-lg border backdrop-blur-md ${
+                notification.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600' :
+                notification.type === 'warning' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-600' :
+                notification.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-600' :
+                'bg-blue-500/10 border-blue-500/20 text-blue-600'
+              }`}
+            >
+              <p className="text-sm font-medium">{notification.message}</p>
+              <p className="text-xs opacity-70">
+                {notification.timestamp.toLocaleTimeString()}
+              </p>
+            </div>
+          ))}
+        </motion.div>
+      )}
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
 import ProfileModule from '@/components/dashboard/ProfileModule';
 import VisionModule from '@/components/dashboard/VisionModule';
@@ -26,7 +26,7 @@ const Dashboard = () => {
   const handleOpenNotionAI = () => setIsNotionAIOpen(true);
 
   return (
-    <DashboardLayout 
+    <OSStyleLayout
       onOpenAIAssistant={handleOpenAIAssistant}
       onOpenNotionAI={handleOpenNotionAI}
     >
@@ -55,7 +55,7 @@ const Dashboard = () => {
         isOpen={isNotionAIOpen} 
         onClose={() => setIsNotionAIOpen(false)} 
       />
-    </DashboardLayout>
+    </OSStyleLayout>
   );
 };
 
