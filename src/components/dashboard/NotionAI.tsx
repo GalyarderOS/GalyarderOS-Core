@@ -116,7 +116,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     }
   };
 
-  const fetchPages = async () => {
+  const fetchPages = async (showSuccessToast = false) => {
     setIsLoading(true);
     setConnectionError(false);
     
@@ -126,7 +126,8 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       setPages(allPages);
       setTotalPages(Math.ceil(allPages.length / itemsPerPage));
       
-      if (allPages.length > 0) {
+      // Only show success toast when explicitly requested (manual refresh)
+      if (showSuccessToast && allPages.length > 0) {
         toast({
           title: "Success",
           description: `Loaded ${allPages.length} pages from your Notion workspace`,
@@ -273,9 +274,13 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
     window.open(notionUrl, '_blank');
   };
 
+  const handleRefresh = () => {
+    fetchPages(true); // Pass true to show success toast on manual refresh
+  };
+
   useEffect(() => {
     if (isOpen && user && session) {
-      fetchPages();
+      fetchPages(); // No success toast on initial load
     }
   }, [isOpen, user, session]);
 
@@ -284,7 +289,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
       const timeoutId = setTimeout(searchPages, 500);
       return () => clearTimeout(timeoutId);
     } else {
-      fetchPages();
+      fetchPages(); // No success toast on search clear
     }
   }, [searchQuery]);
 
@@ -367,7 +372,7 @@ const NotionAI = ({ isOpen, onClose }: NotionAIProps) => {
             <TabsContent value="browse" className="flex-1 p-6 space-y-4">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">Your Notion Pages</h3>
-                <Button onClick={fetchPages} disabled={isLoading} size="sm">
+                <Button onClick={handleRefresh} disabled={isLoading} size="sm">
                   {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Refresh"}
                 </Button>
               </div>
