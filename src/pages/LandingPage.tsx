@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -22,7 +21,12 @@ import {
   User,
   Calendar,
   BookOpen,
-  Timer
+  Timer,
+  PiggyBank,
+  Receipt,
+  Wallet,
+  Shield,
+  CreditCard
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -38,7 +42,7 @@ const LandingPage = () => {
     }
   }, [user, navigate]);
 
-  // Core Modules (7 modules)
+  // Core Modules (13 modules total: 7 personal development + 6 finance)
   const coreModules = [
     {
       title: "Profile & Ethos",
@@ -81,6 +85,42 @@ const LandingPage = () => {
       description: "Enhanced note-taking with AI",
       icon: <Zap className="h-8 w-8" />,
       gradient: "from-teal-500/20 to-green-500/20"
+    },
+    {
+      title: "Investment Tracker",
+      description: "Monitor and analyze your investments",
+      icon: <TrendingUp className="h-8 w-8" />,
+      gradient: "from-emerald-500/20 to-teal-500/20"
+    },
+    {
+      title: "Cashflow Tracker",
+      description: "Track income and cash flow patterns",
+      icon: <DollarSign className="h-8 w-8" />,
+      gradient: "from-green-500/20 to-lime-500/20"
+    },
+    {
+      title: "Expense Manager",
+      description: "Manage and categorize expenses",
+      icon: <Receipt className="h-8 w-8" />,
+      gradient: "from-red-500/20 to-orange-500/20"
+    },
+    {
+      title: "Wealth Builder",
+      description: "Build long-term wealth strategies",
+      icon: <PiggyBank className="h-8 w-8" />,
+      gradient: "from-yellow-500/20 to-amber-500/20"
+    },
+    {
+      title: "Tax Optimizer",
+      description: "Optimize tax strategies and planning",
+      icon: <Shield className="h-8 w-8" />,
+      gradient: "from-blue-500/20 to-cyan-500/20"
+    },
+    {
+      title: "Debt Manager",
+      description: "Manage and optimize debt payments",
+      icon: <CreditCard className="h-8 w-8" />,
+      gradient: "from-slate-500/20 to-gray-500/20"
     }
   ];
 
