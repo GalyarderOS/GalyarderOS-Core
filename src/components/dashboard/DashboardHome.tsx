@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNotifications } from '@/contexts/NotificationContext';
@@ -30,8 +31,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     totalDebt: 0,
     wealthGoals: 0,
     investments: 0,
-    activeHabits: 0,
-    habitStreak: 0,
+    activeRituals: 0,
+    ritualStreak: 0,
     focusHoursToday: 0,
     notesCount: 0,
     reflectionEntries: 0,
@@ -39,7 +40,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     lifeBalanceScore: 0,
     weeklyFocusHours: 0,
     completedGoalsThisMonth: 0,
-    savingsRate: 0
+    savingsRate: 0,
+    calendarEventsThisWeek: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -99,9 +101,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         .select('id')
         .eq('user_id', user.id);
 
-      // Load personal data
-      const { data: habits } = await supabase
-        .from('habits')
+      // Load personal data - updated to use rituals instead of habits
+      const { data: rituals } = await supabase
+        .from('rituals')
         .select('id')
         .eq('user_id', user.id)
         .eq('is_active', true);
@@ -139,15 +141,22 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
       const weeklyFocusHours = weeklyFocus?.reduce((sum, session) => sum + (session.duration_minutes || 0), 0) / 60 || 0;
 
-      const { data: habitLogs } = await supabase
-        .from('habit_logs')
+      // Load calendar events for this week
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekEnd.getDate() + 7);
+      
+      // Simulate calendar events (since we don't have a calendar_events table yet)
+      const calendarEventsThisWeek = Math.floor(Math.random() * 15) + 5;
+
+      const { data: ritualLogs } = await supabase
+        .from('ritual_logs')
         .select('id')
         .eq('user_id', user.id)
         .gte('completed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
-      // Calculate life balance score (simplified)
+      // Calculate life balance score (simplified) - updated calculation
       const lifeBalanceScore = Math.round(
-        ((habits?.length || 0) / 5 * 25) + 
+        ((rituals?.length || 0) / 5 * 25) + 
         (Math.min(focusHoursToday / 4, 1) * 25) + 
         ((goals?.length || 0) / 3 * 25) + 
         (Math.min((monthlyIncome - monthlyExpenses) / monthlyIncome || 0, 1) * 25)
@@ -162,8 +171,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         totalDebt,
         wealthGoals: wealthGoals?.length || 0,
         investments: investments?.length || 0,
-        activeHabits: habits?.length || 0,
-        habitStreak: Math.min(habitLogs?.length || 0, 7),
+        activeRituals: rituals?.length || 0,
+        ritualStreak: Math.min(ritualLogs?.length || 0, 7),
         focusHoursToday: Math.round(focusHoursToday * 10) / 10,
         notesCount: memories?.length || 0,
         reflectionEntries: Math.floor(Math.random() * 5) + 1,
@@ -171,7 +180,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         lifeBalanceScore,
         weeklyFocusHours: Math.round(weeklyFocusHours * 10) / 10,
         completedGoalsThisMonth: Math.floor(Math.random() * 3) + 1,
-        savingsRate: Math.round(savingsRate * 10) / 10
+        savingsRate: Math.round(savingsRate * 10) / 10,
+        calendarEventsThisWeek
       });
 
     } catch (error) {
@@ -209,9 +219,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
             <p className="text-slate-600 dark:text-slate-400">Enhance your productivity with AI-powered assistance</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            <Card className="border-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <Card className="group border-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-indigo-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02]">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform">
                   <Brain className="h-8 w-8 text-white" />
                 </div>
                 <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">AI Assistant</CardTitle>
@@ -224,9 +234,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
               </CardContent>
             </Card>
 
-            <Card className="border-0 bg-gradient-to-br from-teal-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+            <Card className="group border-0 bg-gradient-to-br from-teal-500/10 via-green-500/5 to-emerald-500/10 backdrop-blur-sm hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-[1.02]">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 mx-auto shadow-lg group-hover:scale-110 transition-transform">
                   <FileText className="h-8 w-8 text-white" />
                 </div>
                 <CardTitle className="text-xl font-bold text-slate-800 dark:text-slate-100">Notion AI</CardTitle>

@@ -1,7 +1,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Crown, Sparkles, Award, TrendingUp, Calendar, Target, Brain } from 'lucide-react';
+import { Crown, Sparkles, Award, TrendingUp, Calendar, Target, Brain, Activity } from 'lucide-react';
 
 interface HeroSectionProps {
   stats: {
@@ -17,6 +17,10 @@ interface HeroSectionProps {
     notesCount: number;
     reflectionEntries: number;
     activeGoals: number;
+    lifeBalanceScore: number;
+    weeklyFocusHours: number;
+    completedGoalsThisMonth: number;
+    savingsRate: number;
   };
 }
 
@@ -29,7 +33,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
           welcomeDescription: "Your complete life system dashboard with real-time insights.",
           activeModules: "Active Modules",
           portfolioValue: "Portfolio Value",
-          habitsStreak: "Habits Streak",
+          lifeBalance: "Life Balance",
           focusToday: "Focus Today"
         },
         id: {
@@ -38,7 +42,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
           welcomeDescription: "Dashboard sistem hidup lengkap dengan wawasan real-time.",
           activeModules: "Modul Aktif",
           portfolioValue: "Nilai Portofolio", 
-          habitsStreak: "Streak Kebiasaan",
+          lifeBalance: "Keseimbangan Hidup",
           focusToday: "Fokus Hari Ini"
         }
       }[language];
@@ -57,9 +61,9 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
             color: "text-green-600"
         },
         { 
-            label: t.habitsStreak, 
-            value: `${stats.habitStreak} days`, 
-            icon: <Calendar className="h-5 w-5" />,
+            label: t.lifeBalance, 
+            value: `${stats.lifeBalanceScore}%`, 
+            icon: <Activity className="h-5 w-5" />,
             color: "text-orange-600"
         },
         { 
@@ -89,7 +93,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
                 <p className="text-base md:text-lg text-muted-foreground max-w-2xl font-playfair">{t.welcomeDescription}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
                   {heroStats.map((stat, idx) => (
-                    <div key={idx} className="flex flex-col items-start p-4 bg-muted/20 rounded-xl border border-border">
+                    <div key={idx} className="flex flex-col items-start p-4 bg-muted/20 rounded-xl border border-border hover:bg-muted/30 transition-colors cursor-pointer">
                         <div className={`flex items-center gap-2 font-playfair ${stat.color}`}>
                           <span>{stat.icon}</span>
                           <span className="font-bold text-lg">{stat.value}</span>
@@ -100,7 +104,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
                 </div>
             </div>
             <div className="hidden md:flex flex-col items-center justify-center">
-              <div className="w-28 h-28 bg-muted/30 rounded-full flex items-center justify-center border-4 border-card">
+              <div className="w-28 h-28 bg-muted/30 rounded-full flex items-center justify-center border-4 border-card hover:scale-105 transition-transform cursor-pointer">
                 <Sparkles className="h-14 w-14 text-muted-foreground" />
               </div>
             </div>

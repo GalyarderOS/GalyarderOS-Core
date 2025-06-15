@@ -1,10 +1,9 @@
-
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, User, Calendar, Timer, BookOpen, Brain, FileText, Target } from "lucide-react";
+import { ArrowRight, User, Calendar, Timer, BookOpen, Brain, FileText, Target, Activity } from "lucide-react";
 
 interface PersonalModulesSectionProps {
   onOpenAIAssistant: () => void;
@@ -18,7 +17,7 @@ const getInitialModules = (language: string) => [
     icon: <User className="h-8 w-8" />,
     value: "Complete",
     change: "Profile Set",
-    path: "/dashboard/profile",
+    path: "/dashboard/identity",
     gradient: "from-blue-400/50 via-indigo-400/40 to-indigo-300/60",
   },
   {
@@ -31,13 +30,31 @@ const getInitialModules = (language: string) => [
     gradient: "from-purple-400/50 via-pink-400/40 to-pink-300/60",
   },
   {
-    title: language === "id" ? "Ritual Harian" : "Daily Rituals",
-    description: language === "id" ? "Bangun dan lacak kebiasaan bermakna" : "Build and track meaningful habits",
+    title: language === "id" ? "Keseimbangan Hidup" : "Life Balance",
+    description: language === "id" ? "Monitor dan atur keseimbangan hidup" : "Monitor and manage life balance",
+    icon: <Activity className="h-8 w-8" />,
+    value: "85%",
+    change: "Balanced",
+    path: "/dashboard/balance",
+    gradient: "from-emerald-400/50 via-teal-400/40 to-teal-300/60",
+  },
+  {
+    title: language === "id" ? "Ritual Engine" : "Ritual Engine",
+    description: language === "id" ? "Bangun dan lacak ritual bermakna" : "Build and track meaningful rituals",
     icon: <Calendar className="h-8 w-8" />,
-    value: "8 Habits",
+    value: "8 Rituals",
     change: "75% Complete",
-    path: "/dashboard/habits",
+    path: "/dashboard/ritual",
     gradient: "from-green-400/50 via-emerald-400/40 to-emerald-300/60",
+  },
+  {
+    title: language === "id" ? "Kalender" : "Calendar",
+    description: language === "id" ? "Kelola jadwal dan acara penting" : "Manage schedule and important events",
+    icon: <Calendar className="h-8 w-8" />,
+    value: "12 Events",
+    change: "This Week",
+    path: "/dashboard/calendar",
+    gradient: "from-orange-400/50 via-red-400/40 to-red-300/60",
   },
   {
     title: language === "id" ? "Timer Fokus" : "Focus Timer",
@@ -46,16 +63,16 @@ const getInitialModules = (language: string) => [
     value: "2.5 hrs",
     change: "Today",
     path: "/dashboard/focus",
-    gradient: "from-orange-400/50 via-red-400/40 to-red-300/60",
+    gradient: "from-cyan-400/50 via-blue-400/40 to-blue-300/60",
   },
   {
-    title: language === "id" ? "Brankas Memori" : "Memory Vault",
+    title: language === "id" ? "Knowledge Hub" : "Knowledge Hub",
     description: language === "id" ? "Manajemen pengetahuan dan wawasan" : "Knowledge management and insights",
     icon: <BookOpen className="h-8 w-8" />,
     value: "24 Notes",
     change: "Organized",
-    path: "/dashboard/memory",
-    gradient: "from-cyan-400/50 via-blue-400/40 to-blue-300/60",
+    path: "/dashboard/knowledge",
+    gradient: "from-violet-400/50 via-purple-400/40 to-purple-300/60",
   },
   {
     title: "AI Assistant",
@@ -64,16 +81,7 @@ const getInitialModules = (language: string) => [
     value: "Active",
     change: "Ready",
     action: "ai-assistant",
-    gradient: "from-violet-400/50 via-purple-400/40 to-purple-300/60",
-  },
-  {
-    title: "Notion AI",
-    description: language === "id" ? "Pencatatan ditingkatkan dengan AI" : "Enhanced note-taking with AI",
-    icon: <FileText className="h-8 w-8" />,
-    value: "Synced",
-    change: "Connected",
-    action: "notion-ai",
-    gradient: "from-teal-400/50 via-green-400/40 to-green-300/60",
+    gradient: "from-pink-400/50 via-rose-400/40 to-rose-300/60",
   },
 ];
 
@@ -107,7 +115,6 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
   };
   const handleDragEnd = () => setDraggedIdx(null);
 
-  // TILT / 3D parallax effect
   const handlePointerMove = (idx: number, e: React.PointerEvent<HTMLDivElement>) => {
     const target = e.currentTarget as HTMLDivElement;
     const rect = target.getBoundingClientRect();
@@ -125,7 +132,6 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
     target.style.boxShadow = '';
   };
 
-  // RIPPLE EFFECT
   const triggerRipple = (idx: number, e: React.MouseEvent) => {
     const el = rippleRefs.current[idx];
     if (!el) return;
@@ -162,7 +168,7 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
         </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
         {modules.map((module, index) => (
           <motion.div
             key={index}
@@ -185,18 +191,15 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
           >
             <Card className="relative overflow-hidden border-2 border-border group-hover:border-primary/70 transition-all duration-500 bg-card/85 group-hover:bg-card/95 soft-shadow group-hover:soft-shadow-2xl h-full backdrop-blur-md"
               style={{
-                // Subtle border + glow and extra depth
                 boxShadow: "0 8px 36px -8px rgba(98,105,245,0.14), 0 0 100px 36px rgba(149,30,250,0.05)",
                 transition: "box-shadow 0.23s cubic-bezier(0.4,0,0.2,1),transform 0.16s"
               }}
             >
-              {/* Ripple effect */}
               <span
                 ref={el => (rippleRefs.current[index] = el)}
                 className="pointer-events-none absolute rounded-full bg-primary/25 opacity-70 scale-100 z-10"
                 style={{ transform: "scale(0)", transition: "transform 0.38s" }}
               ></span>
-              {/* Animated BG Gradient */}
               <motion.div
                 className={`absolute z-0 left-1/2 top-0 w-[115%] h-32 -translate-x-1/2 blur-2xl rounded-xl opacity-60 group-hover:opacity-100 animate-gradient-move`}
                 style={{
@@ -239,7 +242,6 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
           </motion.div>
         ))}
       </div>
-      {/* Ripple & BG animation styles */}
       <style>{`
         .animate-ripple-effect {
           animation: ripple-effect 0.7s cubic-bezier(0.4,0,0.2,1) forwards;

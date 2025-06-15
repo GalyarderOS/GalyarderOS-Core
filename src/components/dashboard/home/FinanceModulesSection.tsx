@@ -2,7 +2,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
-import { TrendingUp, DollarSign, Receipt, Building, Calculator, CreditCard, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { TrendingUp, DollarSign, Receipt, Building, Calculator, CreditCard, ArrowRight } from 'lucide-react';
 
 interface Stats {
   totalPortfolioValue: number;
@@ -19,6 +20,7 @@ interface FinanceModulesSectionProps {
 
 const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
     const { language } = useTheme();
+    const navigate = useNavigate();
 
     const t = {
         en: { 
@@ -39,7 +41,8 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: `$${stats.totalPortfolioValue.toLocaleString()}`,
           change: "+12.5%",
           changeType: "positive",
-          subtitle: `${stats.investments} investments`
+          subtitle: `${stats.investments} investments`,
+          path: "/dashboard/investments"
         },
         {
           title: language === 'id' ? 'Arus Kas Bulanan' : 'Monthly Cashflow',
@@ -48,7 +51,8 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: `$${(stats.monthlyIncome - stats.monthlyExpenses).toLocaleString()}`,
           change: "+8.2%",
           changeType: "positive",
-          subtitle: language === 'id' ? 'Surplus bulan ini' : 'This month surplus'
+          subtitle: language === 'id' ? 'Surplus bulan ini' : 'This month surplus',
+          path: "/dashboard/cashflow"
         },
         {
           title: language === 'id' ? 'Pengeluaran Bulanan' : 'Monthly Expenses',
@@ -57,7 +61,8 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: `$${stats.monthlyExpenses.toLocaleString()}`,
           change: "-3.1%",
           changeType: "negative",
-          subtitle: language === 'id' ? 'Dari bulan lalu' : 'From last month'
+          subtitle: language === 'id' ? 'Dari bulan lalu' : 'From last month',
+          path: "/dashboard/expenses"
         },
         {
           title: language === 'id' ? 'Target Kekayaan' : 'Wealth Goals',
@@ -66,7 +71,8 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: `${stats.wealthGoals}`,
           change: "75% avg",
           changeType: "neutral",
-          subtitle: language === 'id' ? 'Target aktif' : 'Active goals'
+          subtitle: language === 'id' ? 'Target aktif' : 'Active goals',
+          path: "/dashboard/wealth"
         },
         {
           title: language === 'id' ? 'Penghematan Pajak' : 'Tax Savings',
@@ -75,7 +81,8 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: "$15,240",
           change: "Saved",
           changeType: "positive",
-          subtitle: language === 'id' ? 'Total hemat' : 'Total saved'
+          subtitle: language === 'id' ? 'Total hemat' : 'Total saved',
+          path: "/dashboard/tax"
         },
         {
           title: language === 'id' ? 'Sisa Hutang' : 'Remaining Debt',
@@ -84,9 +91,14 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
           value: `$${stats.totalDebt.toLocaleString()}`,
           change: "-15.8%",
           changeType: "negative",
-          subtitle: language === 'id' ? 'Pengurangan YTD' : 'YTD reduction'
+          subtitle: language === 'id' ? 'Pengurangan YTD' : 'YTD reduction',
+          path: "/dashboard/debt"
         }
     ];
+
+    const handleModuleClick = (path: string) => {
+        navigate(path);
+    };
 
     return (
         <div>
@@ -99,12 +111,19 @@ const FinanceModulesSection = ({ stats }: FinanceModulesSectionProps) => {
             {financeModules.map((module, index) => {
                 const Icon = module.icon;
                 return (
-                <Card key={index} className="border bg-card hover:shadow-lg transition-shadow duration-200 h-full">
+                <Card 
+                  key={index} 
+                  className="group border bg-card hover:shadow-lg hover:border-primary/50 transition-all duration-300 h-full cursor-pointer transform hover:scale-[1.02]"
+                  onClick={() => handleModuleClick(module.path)}
+                >
                     <CardHeader className="pb-3">
-                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+                      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                         <Icon className="h-7 w-7 text-primary" />
                       </div>
-                      <CardTitle className="text-lg font-bold font-playfair text-foreground">{module.title}</CardTitle>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg font-bold font-playfair text-foreground group-hover:text-primary transition-colors">{module.title}</CardTitle>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-1 transition-transform opacity-0 group-hover:opacity-100" />
+                      </div>
                       <CardDescription className="font-playfair text-sm text-muted-foreground">{module.description}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4 pt-0">
