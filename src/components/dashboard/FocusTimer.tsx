@@ -1,278 +1,250 @@
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Play, Pause, Square, Clock, RotateCcw, Settings } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Play, Pause, StopCircle, Repeat, List, Timer } from "lucide-react";
 
-const FocusTimer = () => {
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
-  const [initialTime, setInitialTime] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
-  const [currentTask, setCurrentTask] = useState('');
-  const [sessions, setSessions] = useState([
-    { task: 'Code Review', duration: 25, completed: true, date: '2024-06-14' },
-    { task: 'Design Research', duration: 45, completed: true, date: '2024-06-14' },
-    { task: 'Documentation', duration: 25, completed: false, date: '2024-06-14' },
-  ]);
+type SessionHistory = {
+  id: number;
+  task: string;
+  duration: number;
+  completed: boolean;
+  start: string;
+};
+
+const presets = [
+  { label: "Pomodoro", time: 25 },
+  { label: "Short Break", time: 5 },
+  { label: "Long Break", time: 15 },
+];
+
+export default function FocusTimer() {
+  const [duration, setDuration] = useState(25);
+  const [secondsLeft, setSecondsLeft] = useState(duration * 60);
+  const [isActive, setIsActive] = useState(false);
+  const [currentTask, setCurrentTask] = useState("");
+  const [history, setHistory] = useState<SessionHistory[]>([]);
+  const [sessionId, setSessionId] = useState(0);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    
-    if (isRunning && timeLeft > 0) {
+    setSecondsLeft(duration * 60);
+  }, [duration]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | undefined;
+    if (isActive && secondsLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(time => time - 1);
+        setSecondsLeft((s) => s - 1);
       }, 1000);
-    } else if (timeLeft === 0) {
-      setIsRunning(false);
-      // Timer completed logic here
     }
+    if (secondsLeft === 0 && isActive) {
+      handleCompletion(true);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+    // eslint-disable-next-line
+  }, [isActive, secondsLeft]);
 
-    return () => clearInterval(interval);
-  }, [isRunning, timeLeft]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  const formatTime = (s: number) => {
+    const m = Math.floor(s / 60)
+      .toString()
+      .padStart(2, "0");
+    const x = (s % 60).toString().padStart(2, "0");
+    return `${m}:${x}`;
   };
 
-  const handleStart = () => {
+  function handleStart() {
     if (!currentTask.trim()) return;
-    setIsRunning(true);
-  };
+    setIsActive(true);
+  }
 
-  const handlePause = () => {
-    setIsRunning(false);
-  };
+  function handlePause() {
+    setIsActive(false);
+  }
 
-  const handleStop = () => {
-    setIsRunning(false);
-    setTimeLeft(initialTime);
-  };
+  function handleReset() {
+    setIsActive(false);
+    setSecondsLeft(duration * 60);
+  }
 
-  const handleReset = () => {
-    setIsRunning(false);
-    setTimeLeft(initialTime);
-  };
+  function handleCompletion(isCompleted: boolean) {
+    setIsActive(false);
+    setSecondsLeft(duration * 60);
+    if (!currentTask.trim()) return;
+    setHistory([
+      {
+        id: sessionId + 1,
+        task: currentTask,
+        duration: duration,
+        completed: isCompleted,
+        start: new Date().toLocaleTimeString(),
+      },
+      ...history,
+    ]);
+    setSessionId((prev) => prev + 1);
+  }
 
-  const setTimer = (minutes: number) => {
-    const seconds = minutes * 60;
-    setInitialTime(seconds);
-    setTimeLeft(seconds);
-    setIsRunning(false);
-  };
+  function changePreset(minutes: number) {
+    setDuration(minutes);
+    setIsActive(false);
+    setSecondsLeft(minutes * 60);
+  }
 
-  const getProgress = () => {
-    return ((initialTime - timeLeft) / initialTime) * 100;
-  };
-
-  const getTodaysSessions = () => {
-    const today = new Date().toISOString().split('T')[0];
-    return sessions.filter(session => session.date === today);
-  };
-
-  const getCompletedSessions = () => {
-    return getTodaysSessions().filter(session => session.completed).length;
-  };
-
-  const getTotalFocusTime = () => {
-    return getTodaysSessions()
-      .filter(session => session.completed)
-      .reduce((total, session) => total + session.duration, 0);
-  };
+  const completedSessions = history.filter((h) => h.completed).length;
+  const interruptedSessions = history.filter((h) => !h.completed).length;
+  const totalMinutes = history.filter((x) => x.completed).reduce((acc, curr) => acc + curr.duration, 0);
 
   return (
-    <div className="space-y-6">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center"
-      >
-        <h1 className="text-3xl font-bold text-[#1a1a1a] mb-2" style={{ fontFamily: 'Playfair Display' }}>
-          Focus Timer
+    <div className="max-w-2xl mx-auto py-8 space-y-10">
+      <div className="text-center mb-4">
+        <h1 className="text-3xl font-bold font-playfair mb-2 text-foreground flex items-center gap-2 justify-center">
+          <Timer className="inline-block mr-2" /> Focus Timer
         </h1>
-        <p className="text-gray-600">Deep work sessions for maximum productivity</p>
-      </motion.div>
+        <p className="text-muted-foreground">
+          {`Stay focused and get things done with interval-based sessions.`}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Timer Section */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="text-center">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-center space-x-2">
-                <Clock className="h-5 w-5 text-[#FFD700]" />
-                <span>Focus Session</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Timer Display */}
-              <div className="relative">
-                <div className="text-6xl font-bold text-[#1a1a1a] mb-4">
-                  {formatTime(timeLeft)}
-                </div>
-                <Progress value={getProgress()} className="h-3 mb-4" />
-                <div className="text-sm text-gray-500">
-                  {Math.round(getProgress())}% complete
-                </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2">
+            Current Session
+          </CardTitle>
+          <CardDescription>
+            Input your task, pick a preset, and start focusing!
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center gap-4">
+          <Input
+            placeholder="What are you working on?"
+            value={currentTask}
+            onChange={(e) => setCurrentTask(e.target.value)}
+            disabled={isActive}
+            className="font-playfair text-center"
+          />
+          <div className="flex gap-2 mt-2 mb-1">
+            {presets.map((p) => (
+              <Button
+                key={p.label}
+                onClick={() => changePreset(p.time)}
+                variant={duration === p.time ? "default" : "outline"}
+                size="sm"
+                className={duration === p.time ? "font-bold bg-cyan-600 text-white" : ""}
+                disabled={isActive}
+              >
+                {p.label} ({p.time}m)
+              </Button>
+            ))}
+          </div>
+          <div className="text-6xl font-mono mb-1">{formatTime(secondsLeft)}</div>
+          <Progress value={100 - (secondsLeft / (duration * 60)) * 100} className="h-3 w-full max-w-xs mb-2" />
+          <div className="flex gap-2">
+            {!isActive ? (
+              <Button
+                onClick={handleStart}
+                disabled={!currentTask.trim() || secondsLeft === 0}
+                className="bg-cyan-800 text-white font-bold"
+              >
+                <Play className="mr-2" size={18} /> Start
+              </Button>
+            ) : (
+              <Button
+                onClick={handlePause}
+                variant="outline"
+                className="font-bold"
+              >
+                <Pause className="mr-2" size={18} /> Pause
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              disabled={!isActive && secondsLeft === duration * 60}
+              onClick={() => handleCompletion(false)}
+              className=""
+            >
+              <StopCircle className="mr-2" size={18} /> Stop
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleReset}
+              disabled={secondsLeft === duration * 60}
+              className=""
+            >
+              <Repeat className="mr-2" size={18} /> Reset
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="flex flex-col md:flex-row gap-4">
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle className="flex gap-2 items-center">
+              <List className="w-5 h-5" /> Stats
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-around my-2">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{completedSessions}</div>
+                <div className="text-xs text-gray-500">Completed</div>
               </div>
-
-              {/* Task Input */}
-              <div className="space-y-2">
-                <Input
-                  placeholder="What are you working on?"
-                  value={currentTask}
-                  onChange={(e) => setCurrentTask(e.target.value)}
-                  disabled={isRunning}
-                  className="text-center"
-                />
+              <div className="text-center">
+                <div className="text-2xl font-bold">{interruptedSessions}</div>
+                <div className="text-xs text-gray-500">Interrupted</div>
               </div>
-
-              {/* Timer Presets */}
-              <div className="flex justify-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setTimer(25)}
-                  disabled={isRunning}
-                >
-                  25m
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setTimer(45)}
-                  disabled={isRunning}
-                >
-                  45m
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setTimer(60)}
-                  disabled={isRunning}
-                >
-                  60m
-                </Button>
+              <div className="text-center">
+                <div className="text-2xl font-bold">{totalMinutes}m</div>
+                <div className="text-xs text-gray-500">Focus (total)</div>
               </div>
-
-              {/* Timer Controls */}
-              <div className="flex justify-center space-x-3">
-                {!isRunning ? (
-                  <Button
-                    onClick={handleStart}
-                    disabled={!currentTask.trim()}
-                    className="bg-[#FFD700] hover:bg-[#FFD700]/90 text-[#1a1a1a]"
-                  >
-                    <Play className="h-4 w-4 mr-2" />
-                    Start
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handlePause}
-                    variant="outline"
-                  >
-                    <Pause className="h-4 w-4 mr-2" />
-                    Pause
-                  </Button>
-                )}
-                
-                <Button
-                  onClick={handleStop}
-                  variant="outline"
-                  disabled={!isRunning && timeLeft === initialTime}
-                >
-                  <Square className="h-4 w-4 mr-2" />
-                  Stop
-                </Button>
-                
-                <Button
-                  onClick={handleReset}
-                  variant="outline"
-                  disabled={timeLeft === initialTime}
-                >
-                  <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Stats and History */}
-        <div className="space-y-6">
-          {/* Today's Stats */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Today's Progress</CardTitle>
-                <CardDescription>Your focus session statistics</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-blue-600">
-                      {getCompletedSessions()}
-                    </div>
-                    <div className="text-sm text-gray-500">Sessions</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-purple-600">
-                      {getTotalFocusTime()}m
-                    </div>
-                    <div className="text-sm text-gray-500">Focus Time</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Recent Sessions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Sessions</CardTitle>
-                <CardDescription>Your focus session history</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {sessions.slice(0, 5).map((session, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                      <div className="flex-1">
-                        <div className="font-medium text-sm">{session.task}</div>
-                        <div className="text-xs text-gray-500">{session.duration} minutes</div>
-                      </div>
-                      <Badge 
-                        variant={session.completed ? "default" : "secondary"}
-                        className={session.completed ? "bg-green-100 text-green-800" : ""}
-                      >
-                        {session.completed ? "Completed" : "Interrupted"}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="flex-1">
+          <CardHeader>
+            <CardTitle className="flex gap-2 items-center">
+              <List className="w-5 h-5" /> Recent Sessions
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-auto max-h-40">
+              {history.length === 0 ? (
+                <div className="text-muted-foreground text-sm text-center py-4">No focus sessions yet.</div>
+              ) : (
+                <table className="w-full text-left text-xs font-mono">
+                  <thead>
+                    <tr>
+                      <th className="pb-1">Task</th>
+                      <th className="pb-1">Dur</th>
+                      <th className="pb-1">Status</th>
+                      <th className="pb-1">Start</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.slice(0, 6).map((h) => (
+                      <tr key={h.id} className="border-b last:border-0">
+                        <td className="pr-2">{h.task}</td>
+                        <td className="pr-2">{h.duration}m</td>
+                        <td className="pr-2">
+                          <Badge variant={h.completed ? "default" : "secondary"} className={h.completed ? "bg-green-100 text-green-800" : ""}>
+                            {h.completed ? "Done" : "Interrupted"}
+                          </Badge>
+                        </td>
+                        <td className="pr-2">{h.start}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
-};
+}
 
-export default FocusTimer;
