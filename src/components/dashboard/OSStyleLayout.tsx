@@ -14,6 +14,7 @@ interface OSStyleLayoutProps {
 const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleLayoutProps) => {
   const {
     user,
+    profile,
     theme,
     setTheme,
     language,
@@ -31,6 +32,7 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
     <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
       <TopBar 
         user={user}
+        profile={profile}
         theme={theme}
         setTheme={setTheme}
         language={language}

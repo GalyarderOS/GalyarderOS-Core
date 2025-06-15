@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
@@ -7,9 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { useCommandPalette } from '@/hooks/useCommandPalette';
 import NotificationCenter from './NotificationCenter';
 import SystemStatusIndicator from './SystemStatusIndicator';
+import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { AccountSettingsDialog } from './AccountSettingsDialog';
+import { Profile } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface TopBarProps {
   user: any;
+  profile: Profile | null;
   theme: string;
   setTheme: (theme: string) => void;
   language: string;
@@ -19,8 +25,9 @@ interface TopBarProps {
   onOpenNotionAI?: () => void;
 }
 
-const TopBar = ({ user, theme, setTheme, language, onSearch, onSignOut, onOpenAIAssistant, onOpenNotionAI }: TopBarProps) => {
+const TopBar = ({ user, profile, theme, setTheme, language, onSearch, onSignOut, onOpenAIAssistant, onOpenNotionAI }: TopBarProps) => {
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
   const [localSearch, setLocalSearch] = useState('');
   
   const { commands } = useCommandPalette(onOpenAIAssistant, onOpenNotionAI);
@@ -179,17 +186,27 @@ const TopBar = ({ user, theme, setTheme, language, onSearch, onSignOut, onOpenAI
 
           {/* User Menu */}
           {user && (
-            <div className="flex items-center space-x-2">
-              <div className="hidden md:block text-sm">
-                <p className="font-medium text-foreground">{user.email}</p>
+            <Dialog open={isAccountSettingsOpen} onOpenChange={setIsAccountSettingsOpen}>
+              <div className="flex items-center space-x-2">
+                <div className="hidden md:block text-sm text-right">
+                  <p className="font-medium text-foreground truncate max-w-[150px]">{profile?.full_name || user.email}</p>
+                </div>
+                <DialogTrigger asChild>
+                   <Button variant="ghost" size="icon" className="rounded-full">
+                     <Avatar className="h-8 w-8">
+                       <AvatarImage src={profile?.avatar_url || user.user_metadata?.avatar_url} />
+                       <AvatarFallback>
+                         <UserIcon className="h-4 w-4" />
+                       </AvatarFallback>
+                     </Avatar>
+                   </Button>
+                </DialogTrigger>
+                <Button variant="ghost" size="sm" onClick={onSignOut}>
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
-              <Button variant="ghost" size="sm">
-                <UserIcon className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" onClick={onSignOut}>
-                <LogOut className="h-4 w-4" />
-              </Button>
-            </div>
+              <AccountSettingsDialog onOpenChange={setIsAccountSettingsOpen} />
+            </Dialog>
           )}
 
           {/* Time and Date */}

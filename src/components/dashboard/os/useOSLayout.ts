@@ -11,7 +11,7 @@ export const useOSLayout = (onOpenAIAssistant?: () => void, onOpenNotionAI?: () 
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, signOut, profile } = useAuth();
   const { theme, setTheme, language } = useTheme();
 
   const modules = getDashboardModules(language, onOpenAIAssistant, onOpenNotionAI);
@@ -51,6 +51,7 @@ export const useOSLayout = (onOpenAIAssistant?: () => void, onOpenNotionAI?: () 
 
   return {
     user,
+    profile,
     theme,
     setTheme,
     language,

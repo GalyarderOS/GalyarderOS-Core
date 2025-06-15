@@ -1,10 +1,14 @@
+
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
 import InteractiveAIChatbot from './InteractiveAIChatbot';
 import { DashboardStats } from '@/types/dashboard';
+import { useAuth } from '@/contexts/AuthContext';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export interface DashboardHeaderProps {
   stats: DashboardStats;
@@ -12,6 +16,7 @@ export interface DashboardHeaderProps {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
   const { language } = useTheme();
+  const { user, profile, loadingProfile } = useAuth();
 
   const t = {
     en: {
@@ -30,6 +35,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
     }
   }[language];
 
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
+  const displayName = profile?.full_name || user?.email;
+
   return (
     <div className="relative overflow-hidden border-b bg-gradient-to-b from-muted/20 to-background">
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16">
@@ -41,12 +49,21 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
         >
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-20 h-20 bg-card/80 backdrop-blur-md rounded-3xl flex items-center justify-center border shadow-2xl p-2">
-                <img src="/lovable-uploads/cb9e2457-6d30-446c-8cd4-3890fb59efa9.png" alt="GalyarderOS Logo" className="w-full h-full object-contain" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-white" />
-              </div>
+              {loadingProfile ? (
+                <Skeleton className="w-20 h-20 rounded-3xl" />
+              ) : (
+                <>
+                  <Avatar className="w-20 h-20 border-2 border-primary/20 shadow-lg">
+                    <AvatarImage src={avatarUrl} alt="User avatar" />
+                    <AvatarFallback className="bg-card">
+                      <User className="w-10 h-10 text-muted-foreground" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                    <Sparkles className="h-4 w-4 text-white" />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -56,12 +73,21 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <Badge variant="outline" className="mb-4 bg-card/80 backdrop-blur-md">
-              GalyarderOS
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
-              {t.welcome}
-            </h1>
+            {loadingProfile ? (
+              <div className="flex flex-col items-center gap-2">
+                <Skeleton className="h-7 w-40" />
+                <Skeleton className="h-12 w-3/4" />
+              </div>
+            ) : (
+              <>
+                <Badge variant="outline" className="mb-4 bg-card/80 backdrop-blur-md">
+                  {displayName}
+                </Badge>
+                <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
+                  {t.welcome}
+                </h1>
+              </>
+            )}
           </motion.div>
 
           {/* === AI Chatbot Moved Here === */}
