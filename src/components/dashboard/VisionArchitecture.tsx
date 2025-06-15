@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,6 +87,35 @@ const VisionArchitecture = () => {
     timeframe: "medium" as Goal["timeframe"],
     deadline: ""
   });
+
+  // Static vision board data (will be connected to database later)
+  const visionBoard: VisionBoard[] = [
+    {
+      id: "1",
+      title: "Financial Freedom",
+      description: "Achieve complete financial independence",
+      priority: 1
+    },
+    {
+      id: "2", 
+      title: "Health & Wellness",
+      description: "Maintain optimal physical and mental health",
+      priority: 2
+    },
+    {
+      id: "3",
+      title: "Career Growth",
+      description: "Become a leader in my field",
+      priority: 3
+    },
+    {
+      id: "4",
+      title: "Relationships",
+      description: "Build meaningful connections with others",
+      priority: 4
+    }
+  ];
+
   const { user } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -475,7 +503,7 @@ const VisionArchitecture = () => {
             </CardContent>
           </Card>
         </motion.div>
-        {/* Vision Board (statis untuk sekarang) */}
+        {/* Vision Board (static for now) */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -524,4 +552,3 @@ const VisionArchitecture = () => {
 };
 
 export default VisionArchitecture;
-
