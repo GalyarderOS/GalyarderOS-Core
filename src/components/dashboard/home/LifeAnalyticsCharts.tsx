@@ -1,10 +1,37 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Target, Clock, Zap } from 'lucide-react';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const LifeAnalyticsCharts = () => {
+  const { theme } = useTheme();
+  const [chartColors, setChartColors] = useState({
+    grid: 'hsl(var(--border))',
+    tick: 'hsl(var(--muted-foreground))',
+    tooltipBg: 'hsl(var(--popover))',
+    tooltipText: 'hsl(var(--popover-foreground))',
+    area1Fill: theme === 'dark' ? 'rgba(245, 158, 11, 0.2)' : '#FEF3C7',
+    area2Fill: theme === 'dark' ? 'rgba(16, 185, 129, 0.2)' : '#D1FAE5',
+  });
+
+  useEffect(() => {
+    // This ensures that the CSS variables have been applied before we read them.
+    const timeoutId = setTimeout(() => {
+      const rootStyles = getComputedStyle(document.documentElement);
+      setChartColors({
+        grid: `hsl(${rootStyles.getPropertyValue('--border').trim()})`,
+        tick: `hsl(${rootStyles.getPropertyValue('--muted-foreground').trim()})`,
+        tooltipBg: `hsl(${rootStyles.getPropertyValue('--popover').trim()})`,
+        tooltipText: `hsl(${rootStyles.getPropertyValue('--popover-foreground').trim()})`,
+        area1Fill: theme === 'dark' ? 'rgba(245, 158, 11, 0.2)' : '#FEF3C7',
+        area2Fill: theme === 'dark' ? 'rgba(16, 185, 129, 0.2)' : '#D1FAE5',
+      });
+    }, 100);
+    return () => clearTimeout(timeoutId);
+  }, [theme]);
+
   // Sample data for different metrics
   const productivityData = [
     { name: 'Mon', focus: 85, energy: 70, mood: 80 },
@@ -31,12 +58,10 @@ const LifeAnalyticsCharts = () => {
     { activity: 'Break', hours: 1, color: '#8B5CF6' }
   ];
 
-  const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444'];
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Productivity Trends */}
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center space-x-2 text-lg">
             <TrendingUp className="h-5 w-5 text-blue-600" />
@@ -46,23 +71,24 @@ const LifeAnalyticsCharts = () => {
         <CardContent>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={productivityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis 
                 dataKey="name" 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
               />
               <YAxis 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '8px',
+                  backgroundColor: chartColors.tooltipBg, 
+                  color: chartColors.tooltipText,
+                  border: '1px solid hsl(var(--border))', 
+                  borderRadius: 'var(--radius)',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}
               />
@@ -88,7 +114,7 @@ const LifeAnalyticsCharts = () => {
       </Card>
 
       {/* Goal Progress */}
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center space-x-2 text-lg">
             <Target className="h-5 w-5 text-green-600" />
@@ -114,9 +140,10 @@ const LifeAnalyticsCharts = () => {
               </Pie>
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '8px',
+                  backgroundColor: chartColors.tooltipBg,
+                  color: chartColors.tooltipText,
+                  border: '1px solid hsl(var(--border))', 
+                  borderRadius: 'var(--radius)',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}
               />
@@ -126,7 +153,7 @@ const LifeAnalyticsCharts = () => {
       </Card>
 
       {/* Time Tracking */}
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center space-x-2 text-lg">
             <Clock className="h-5 w-5 text-purple-600" />
@@ -135,42 +162,46 @@ const LifeAnalyticsCharts = () => {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={timeTrackingData} layout="horizontal">
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+            <BarChart data={timeTrackingData} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis 
                 type="number"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
               />
               <YAxis 
                 type="category"
                 dataKey="activity"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
                 width={80}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '8px',
+                  backgroundColor: chartColors.tooltipBg,
+                  color: chartColors.tooltipText,
+                  border: '1px solid hsl(var(--border))', 
+                  borderRadius: 'var(--radius)',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}
               />
               <Bar 
                 dataKey="hours" 
-                fill="#8B5CF6"
                 radius={[0, 4, 4, 0]}
-              />
+              >
+                {timeTrackingData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
       </Card>
 
       {/* Energy Levels */}
-      <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
+      <Card>
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center space-x-2 text-lg">
             <Zap className="h-5 w-5 text-yellow-600" />
@@ -180,23 +211,24 @@ const LifeAnalyticsCharts = () => {
         <CardContent>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={productivityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis 
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
               />
               <YAxis 
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fill: '#6B7280' }}
+                tick={{ fontSize: 12, fill: chartColors.tick }}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: 'white', 
-                  border: 'none', 
-                  borderRadius: '8px',
+                  backgroundColor: chartColors.tooltipBg, 
+                  color: chartColors.tooltipText,
+                  border: '1px solid hsl(var(--border))', 
+                  borderRadius: 'var(--radius)',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                 }}
               />
@@ -204,14 +236,14 @@ const LifeAnalyticsCharts = () => {
                 type="monotone" 
                 dataKey="energy" 
                 stroke="#F59E0B" 
-                fill="#FEF3C7"
+                fill={chartColors.area1Fill}
                 strokeWidth={2}
               />
               <Area 
                 type="monotone" 
                 dataKey="mood" 
                 stroke="#10B981" 
-                fill="#D1FAE5"
+                fill={chartColors.area2Fill}
                 strokeWidth={2}
               />
             </AreaChart>
