@@ -73,14 +73,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       color: 'from-purple-500 to-pink-600'
     },
     { 
-      id: 'profile', 
-      label: language === 'id' ? 'Profil' : 'Profile', 
-      icon: User, 
-      path: '/dashboard/profile',
-      category: 'personal',
-      color: 'from-purple-500 to-pink-600'
-    },
-    { 
       id: 'vision', 
       label: language === 'id' ? 'Visi' : 'Vision Architecture', 
       icon: Target, 
@@ -119,14 +111,6 @@ const OSStyleLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: OSStyleL
       path: '/dashboard/focus',
       category: 'personal',
       color: 'from-cyan-500 to-blue-600'
-    },
-    { 
-      id: 'flow', 
-      label: language === 'id' ? 'Flow State' : 'Flow State', 
-      icon: Zap, 
-      path: '/dashboard/flow',
-      category: 'personal',
-      color: 'from-yellow-500 to-orange-600'
     },
     { 
       id: 'knowledge', 

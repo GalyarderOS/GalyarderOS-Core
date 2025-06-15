@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
-import ProfileModule from '@/components/dashboard/ProfileModule';
 import VisionModule from '@/components/dashboard/VisionModule';
 import HabitsModule from '@/components/dashboard/HabitsModule';
 import FocusTimer from '@/components/dashboard/FocusTimer';
@@ -22,7 +21,6 @@ import IdentityCore from "@/components/dashboard/IdentityCore";
 import VisionArchitecture from "@/components/dashboard/VisionArchitecture";
 import LifeBalance from "@/components/dashboard/LifeBalance";
 import RitualEngine from "@/components/dashboard/RitualEngine";
-import FlowState from "@/components/dashboard/FlowState";
 import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
 import Reflection from "@/components/dashboard/Reflection";
 import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
@@ -43,13 +41,11 @@ const Dashboard = () => {
       <Routes>
         <Route path="/" element={<DashboardHome onOpenAIAssistant={handleOpenAIAssistant} onOpenNotionAI={handleOpenNotionAI} />} />
         <Route path="/identity" element={<IdentityCore />} />
-        <Route path="/profile" element={<ProfileModule />} />
         <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/balance" element={<LifeBalance />} />
         <Route path="/ritual" element={<RitualEngine />} />
         <Route path="/habits" element={<HabitsModule />} />
         <Route path="/focus" element={<FocusTimer />} />
-        <Route path="/flow" element={<FlowState />} />
         <Route path="/knowledge" element={<KnowledgeHub />} />
         <Route path="/reflection" element={<Reflection />} />
         <Route path="/analytics" element={<LifeAnalytics />} />

@@ -13,8 +13,8 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
   // Include all Digital Soul modules and frequently used finance modules
   const dockModules = modules.filter(m => 
     [
-      'dashboard', 'profile', 'identity', 'vision', 'balance', 'ritual', 
-      'habits', 'focus', 'flow', 'knowledge', 'reflection', 'analytics', 
+      'dashboard', 'identity', 'vision', 'balance', 'ritual', 
+      'habits', 'focus', 'knowledge', 'reflection', 'analytics', 
       'notion', 'ai-assistant', 'investments', 'wealth', 'settings'
     ].includes(m.id)
   );
