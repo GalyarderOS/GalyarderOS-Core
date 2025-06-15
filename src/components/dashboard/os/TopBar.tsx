@@ -75,7 +75,7 @@ const TopBar = ({
     y: 0,
     opacity: 1
   }} className="fixed top-0 left-0 right-0 h-16 bg-card/80 backdrop-blur-md border-b border-border z-40">
-      <div className="flex items-center justify-between h-full px-6 bg-neutral-700 rounded">
+      <div className="flex items-center justify-between h-full px-6 rounded bg-neutral-600">
         {/* Left Section - Logo and App Name */}
         <div className="flex items-center space-x-3">
           <img src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" alt="GalyarderOS Logo" className="w-10 h-10 object-contain" />
