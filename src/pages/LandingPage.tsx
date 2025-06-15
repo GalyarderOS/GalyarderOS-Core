@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -328,7 +327,7 @@ const LandingPage = () => {
                 "Imagine a world where everyone has their own personal operating system."
               </p>
               <p className="text-xl text-muted-foreground font-playfair max-w-4xl mx-auto">
-                Not just your average productivity tools, okay? We're talking a full-stack digital system, powered by AI, totally customizable, super adaptive, and completely in sync with who you are, your values, and your biggest life goals!
+                GalyarderOS isn't just another productivity platform—it's a totally customizable digital system, powered by AI and designed to help you align your unique identity and aspirations into everything you do.
               </p>
             </motion.div>
 
@@ -340,10 +339,10 @@ const LandingPage = () => {
             >
               <div className="bg-gradient-to-r from-muted/30 to-muted/10 rounded-2xl p-8 max-w-4xl mx-auto border border-border">
                 <p className="text-xl md:text-2xl font-bold text-foreground font-playfair mb-4">
-                  "I'm Galyarder, and I'm building a system that's going to totally revolutionize how we live, work, and grow."
+                  "GalyarderOS brings together your goals, habits, finances, and daily workflow into a single, unified platform."
                 </p>
                 <p className="text-lg text-muted-foreground font-playfair">
-                  It's not just software; it's an entire ecosystem. It's all about empowering people to hit their absolute maximum potential – mentally, spiritually, financially, and physically. The whole shebang!
+                  More than just software—it's a system to help you thrive through clarity, structure, and deep personal alignment.
                 </p>
               </div>
             </motion.div>
@@ -389,13 +388,13 @@ const LandingPage = () => {
                 <AlertTriangle className="h-8 w-8 text-red-600" />
               </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Problem I'm Solving</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Problem GalyarderOS Solves</h2>
             <div className="max-w-4xl mx-auto space-y-6">
               <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair">
-                "Let's be real, 95% of people are living life on default mode, not by their own design..."
+                "Most people live life on default mode—not by their own design..."
               </p>
               <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
-                They're just reacting, not being proactive. The world's getting more complicated, and honestly, people are overwhelmed. Most productivity tools are fragmented, impersonal, and don't understand YOU as a unique individual.
+                GalyarderOS exists because the world is more complex than ever, and it's easy to feel overwhelmed or disconnected from your true direction. Most tools are fragmented, impersonal, and fail to help you take charge as the designer of your own life.
               </p>
             </div>
           </motion.div>
@@ -416,13 +415,13 @@ const LandingPage = () => {
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Solution: GalyarderOS!</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">The Solution: GalyarderOS</h2>
             <div className="max-w-4xl mx-auto space-y-6">
               <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair">
-                "A personalized, AI-powered life management system..."
+                "The world's first personal operating system—tailored to you."
               </p>
               <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
-                Imagine mashing up Notion, ChatGPT, Apple Health, TradingView, Asana, and a spiritual journal – but it's all seamlessly integrated and tweaked to fit your personality and your needs.
+                GalyarderOS unifies goal setting, financial health, habit tracking, knowledge, and AI—so you can focus, grow, and achieve by design, not by accident.
               </p>
             </div>
           </motion.div>
@@ -463,7 +462,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Why Now & Why Me Section */}
+      {/* Why Now & Why GalyarderOS Section */}
       <section className="py-20 px-6 bg-muted/20">
         <div className="max-w-7xl mx-auto">
           <motion.div
@@ -477,18 +476,18 @@ const LandingPage = () => {
                 <Lightbulb className="h-8 w-8 text-purple-600" />
               </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">Why Now? And Why Me?</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">Why GalyarderOS? Why Now?</h2>
             <div className="max-w-4xl mx-auto space-y-8">
               <div className="bg-gradient-to-r from-muted/50 to-muted/20 rounded-2xl p-8 border border-border">
                 <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair mb-4">
-                  "Look, I didn't dream this up in some boardroom."
+                  "We're entering a new era where your digital world should work for you, not the other way around."
                 </p>
                 <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
-                  I built this system from the trenches of my own life. I'm user number one, and I'm living proof this system works! I live by this system every single day.
+                  Technology, AI, and self-growth best practices have never been more accessible. GalyarderOS integrates them into a seamless system—so you can control your life, become your best self, and make your vision a reality.
                 </p>
               </div>
               <p className="text-lg text-muted-foreground font-playfair">
-                This isn't theory – it's battle-tested in the real world of someone who's actually using it to level up their life.
+                It's not just theory—it's a system built to empower anyone to design, track, and live their best life through clarity, structure, and continuous progress.
               </p>
             </div>
           </motion.div>
@@ -724,13 +723,13 @@ const LandingPage = () => {
           >
             <div className="bg-gradient-to-r from-muted/30 to-muted/10 rounded-3xl p-12 mb-12 border border-border">
               <h2 className="text-4xl md:text-5xl font-bold mb-6 font-playfair text-foreground">
-                The Closing Statement
+                Transform Your Life by Design
               </h2>
               <p className="text-2xl md:text-3xl font-bold text-foreground font-playfair mb-6">
-                "I'm not just making software here. I'm laying the foundation for a whole new way of living..."
+                "GalyarderOS is your platform for structured growth, self-mastery, and total clarity. Live with intention—break out of default mode—even as the world becomes more complex."
               </p>
               <p className="text-xl text-muted-foreground font-playfair leading-relaxed">
-                GalyarderOS isn't just a tool; it's the key to unlocking that massive transformation. Ready to stop living on default mode and start designing your life?
+                Join a new generation choosing to shape their own lives. Remove barriers, get inspired, and build the future—with GalyarderOS.
               </p>
             </div>
             
@@ -743,6 +742,55 @@ const LandingPage = () => {
               <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform" />
             </Button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Inspirational Quotes Section */}
+      <section className="py-16 px-6 bg-muted/10">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="text-3xl md:text-4xl font-bold font-playfair text-foreground mb-12"
+          >
+            Inspiration for Your Journey
+          </motion.h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-card/70 rounded-xl p-8 border border-border flex flex-col justify-center items-center space-y-6">
+              <blockquote className="italic font-playfair text-lg text-muted-foreground mb-6">
+                “The people who are crazy enough to think they can change the world are the ones who do.”
+              </blockquote>
+              <span className="font-semibold text-foreground font-playfair">Steve Jobs</span>
+            </div>
+            <div className="bg-card/70 rounded-xl p-8 border border-border flex flex-col justify-center items-center space-y-6">
+              <blockquote className="italic font-playfair text-lg text-muted-foreground mb-6">
+                “When something is important enough, you do it even if the odds are not in your favor.”
+              </blockquote>
+              <span className="font-semibold text-foreground font-playfair">Elon Musk</span>
+            </div>
+            <div className="bg-card/70 rounded-xl p-8 border border-border flex flex-col justify-center items-center space-y-6">
+              <blockquote className="italic font-playfair text-lg text-muted-foreground mb-6">
+                “You don’t get what you want in life. You get who you are.”
+              </blockquote>
+              <span className="font-semibold text-foreground font-playfair">Naval Ravikant</span>
+            </div>
+            <div className="bg-card/70 rounded-xl p-8 border border-border flex flex-col justify-center items-center space-y-6">
+              <blockquote className="italic font-playfair text-lg text-muted-foreground mb-6">
+                "You do not rise to the level of your goals. You fall to the level of your systems."
+              </blockquote>
+              <span className="font-semibold text-foreground font-playfair">James Clear</span>
+            </div>
+          </div>
+          <div className="border-t border-border my-12"/>
+          
+          {/* Galyarder quote at the end */}
+          <div className="mx-auto text-center mt-8">
+            <blockquote className="text-xl italic text-foreground font-playfair mb-4">
+              "There’s no limit to what you can design for your own life, if you make yourself the architect."
+            </blockquote>
+            <span className="font-semibold text-muted-foreground font-playfair">Galyarder</span>
+          </div>
         </div>
       </section>
 
