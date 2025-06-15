@@ -30,9 +30,9 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     totalDebt: 0,
     wealthGoals: 0,
     investments: 0,
-    activeHabits: 0, // Keep for compatibility with existing components
+    activeHabits: 0,
     activeRituals: 0,
-    habitStreak: 0, // Keep for compatibility with existing components
+    habitStreak: 0,
     ritualStreak: 0,
     focusHoursToday: 0,
     notesCount: 0,
@@ -42,7 +42,8 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     weeklyFocusHours: 0,
     completedGoalsThisMonth: 0,
     savingsRate: 0,
-    calendarEventsThisWeek: 0
+    calendarEventsThisWeek: 0,
+    notionPagesCount: 0
   });
   const [loading, setLoading] = useState(true);
 
