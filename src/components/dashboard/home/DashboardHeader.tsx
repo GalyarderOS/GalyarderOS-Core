@@ -30,7 +30,7 @@ export interface DashboardHeaderProps {
   };
 }
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
+const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
   const { language } = useTheme();
 
   const t = {
