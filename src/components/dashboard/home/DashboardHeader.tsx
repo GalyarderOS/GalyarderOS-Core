@@ -30,8 +30,7 @@ export interface DashboardHeaderProps {
   };
 }
 
-// Explicitly type the props here!
-const DashboardHeader = ({ stats }: DashboardHeaderProps) => {
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({ stats }) => {
   const { language } = useTheme();
 
   const t = {
