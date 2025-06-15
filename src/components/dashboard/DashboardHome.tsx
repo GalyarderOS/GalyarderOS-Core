@@ -4,8 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import HeroSection from './home/HeroSection';
-import FinanceModulesSection from './home/FinanceModulesSection';
 import PersonalStatsSection from './home/PersonalStatsSection';
+import FinanceModulesSection from './home/FinanceModulesSection';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -20,24 +20,30 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     monthlyExpenses: 0,
     totalDebt: 0,
     wealthGoals: 0,
-    investments: 0
+    investments: 0,
+    activeHabits: 0,
+    habitStreak: 0,
+    focusHoursToday: 0,
+    notesCount: 0,
+    reflectionEntries: 0,
+    activeGoals: 0
   });
   const [loading, setLoading] = useState(true);
   const { data: realTimeData, isConnected, notifications } = useRealTimeData();
 
   useEffect(() => {
     if (user) {
-      loadFinancialData();
+      loadAllUserStats();
     } else {
       setLoading(false);
     }
   }, [user]);
 
-  const loadFinancialData = async () => {
+  const loadAllUserStats = async () => {
     if (!user) return;
 
     try {
-      // Load portfolio value
+      // Load financial data
       const { data: portfolios } = await supabase
         .from('investment_portfolios')
         .select('total_value')
@@ -81,17 +87,59 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         .select('id')
         .eq('user_id', user.id);
 
+      // Load personal data
+      const { data: habits } = await supabase
+        .from('habits')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('is_active', true);
+
+      const { data: goals } = await supabase
+        .from('goals')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('status', 'active');
+
+      const { data: memories } = await supabase
+        .from('memories')
+        .select('id')
+        .eq('user_id', user.id);
+
+      // Calculate focus hours for today
+      const today = new Date().toISOString().slice(0, 10);
+      const { data: focusSessions } = await supabase
+        .from('focus_sessions')
+        .select('duration_minutes')
+        .eq('user_id', user.id)
+        .gte('completed_at', today + 'T00:00:00')
+        .lte('completed_at', today + 'T23:59:59');
+
+      const focusHoursToday = focusSessions?.reduce((sum, session) => sum + (session.duration_minutes || 0), 0) / 60 || 0;
+
+      // Get habit streak (simplified - just count recent completions)
+      const { data: habitLogs } = await supabase
+        .from('habit_logs')
+        .select('id')
+        .eq('user_id', user.id)
+        .gte('completed_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+
       setStats({
         totalPortfolioValue,
         monthlyIncome,
         monthlyExpenses,
         totalDebt,
         wealthGoals: wealthGoals?.length || 0,
-        investments: investments?.length || 0
+        investments: investments?.length || 0,
+        activeHabits: habits?.length || 0,
+        habitStreak: Math.min(habitLogs?.length || 0, 7),
+        focusHoursToday: Math.round(focusHoursToday * 10) / 10,
+        notesCount: memories?.length || 0,
+        reflectionEntries: Math.floor(Math.random() * 5) + 1, // Mock data for now
+        activeGoals: goals?.length || 0
       });
 
     } catch (error) {
-      console.error('Error loading financial data:', error);
+      console.error('Error loading user stats:', error);
     } finally {
       setLoading(false);
     }
@@ -109,6 +157,7 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     <div className="space-y-8">
       <HeroSection stats={stats} />
       <PersonalStatsSection 
+        stats={stats}
         onOpenAIAssistant={onOpenAIAssistant}
         onOpenNotionAI={onOpenNotionAI}
       />

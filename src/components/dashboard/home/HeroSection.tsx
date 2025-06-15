@@ -1,16 +1,22 @@
 
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Crown, Sparkles, Award, TrendingUp, Wifi, Calendar, Target, Brain } from 'lucide-react';
+import { Crown, Sparkles, Award, TrendingUp, Calendar, Target, Brain } from 'lucide-react';
 
 interface HeroSectionProps {
-  stats?: {
+  stats: {
     totalPortfolioValue: number;
     monthlyIncome: number;
     monthlyExpenses: number;
     totalDebt: number;
     wealthGoals: number;
     investments: number;
+    activeHabits: number;
+    habitStreak: number;
+    focusHoursToday: number;
+    notesCount: number;
+    reflectionEntries: number;
+    activeGoals: number;
   };
 }
 
@@ -46,19 +52,19 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
         },
         { 
             label: t.portfolioValue, 
-            value: `$${stats?.totalPortfolioValue?.toLocaleString() || '0'}`, 
+            value: `$${stats.totalPortfolioValue.toLocaleString()}`, 
             icon: <TrendingUp className="h-5 w-5" />,
             color: "text-green-600"
         },
         { 
             label: t.habitsStreak, 
-            value: "7 days", 
+            value: `${stats.habitStreak} days`, 
             icon: <Calendar className="h-5 w-5" />,
             color: "text-orange-600"
         },
         { 
             label: t.focusToday, 
-            value: "2.5 hrs", 
+            value: `${stats.focusHoursToday}h`, 
             icon: <Brain className="h-5 w-5" />,
             color: "text-purple-600"
         }

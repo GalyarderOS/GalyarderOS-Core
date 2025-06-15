@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -21,178 +20,192 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 
 interface PersonalStatsSectionProps {
+  stats: {
+    activeHabits: number;
+    habitStreak: number;
+    focusHoursToday: number;
+    notesCount: number;
+    reflectionEntries: number;
+    activeGoals: number;
+  };
   onOpenAIAssistant: () => void;
   onOpenNotionAI: () => void;
 }
-
-const SOUL_MODULES = [
-  {
-    group: "Digital Soul Layer",
-    color: "from-primary to-muted/50",
-    modules: [
-      {
-        id: "identity",
-        title: "Identity Core",
-        description: "Core values & character development",
-        icon: <User className="h-6 w-6" />,
-        value: "87%",
-        subtitle: "Identity clarity score",
-        gradient: "from-blue-400/50 via-indigo-400/40 to-indigo-300/60",
-        progress: 87
-      },
-      {
-        id: "vision",
-        title: "Vision Architecture", 
-        description: "Life goals & strategic planning",
-        icon: <Target className="h-6 w-6" />,
-        value: "5 Goals",
-        subtitle: "3 in progress, 2 completed",
-        gradient: "from-purple-400/50 via-pink-400/40 to-pink-300/60",
-        progress: 60
-      },
-    ],
-  },
-  {
-    group: "Life Balance",
-    color: "from-green-500 to-emerald-300",
-    modules: [
-      {
-        id: "balance",
-        title: "Life Balance",
-        description: "Work-life harmony metrics",
-        icon: <Activity className="h-6 w-6" />,
-        value: "78%",
-        subtitle: "Balance score this week",
-        gradient: "from-emerald-400/50 via-green-400/40 to-green-300/60",
-        progress: 78
-      },
-      {
-        id: "ritual",
-        title: "Ritual Engine",
-        description: "Daily routines & systems",
-        icon: <CheckCircle className="h-6 w-6" />,
-        value: "12/15",
-        subtitle: "Rituals completed today",
-        gradient: "from-teal-400/50 via-cyan-400/40 to-cyan-300/60",
-        progress: 80
-      }
-    ]
-  },
-  {
-    group: "Productivity Engine",
-    color: "from-orange-500 to-red-300",
-    modules: [
-      {
-        id: "habits",
-        title: "Daily Habits",
-        description: "Habit tracking & streaks",
-        icon: <Calendar className="h-6 w-6" />,
-        value: "7 days",
-        subtitle: "Current streak average",
-        gradient: "from-green-400/50 via-emerald-400/40 to-emerald-300/60",
-        progress: 85
-      },
-      {
-        id: "focus",
-        title: "Focus Sessions",
-        description: "Deep work & productivity",
-        icon: <Timer className="h-6 w-6" />,
-        value: "2.5 hrs",
-        subtitle: "Focused today",
-        gradient: "from-orange-400/50 via-red-400/40 to-red-300/60",
-        progress: 62
-      },
-      {
-        id: "flow",
-        title: "Flow State",
-        description: "Peak performance tracking",
-        icon: <Zap className="h-6 w-6" />,
-        value: "3 sessions",
-        subtitle: "Flow states this week",
-        gradient: "from-yellow-400/50 via-orange-400/40 to-orange-300/60",
-        progress: 75
-      }
-    ]
-  },
-  {
-    group: "Knowledge System",
-    color: "from-blue-500 to-blue-300",
-    modules: [
-      {
-        id: "knowledge",
-        title: "Knowledge Hub",
-        description: "Learning & knowledge management",
-        icon: <BookOpen className="h-6 w-6" />,
-        value: "24 Notes",
-        subtitle: "3 added this week",
-        gradient: "from-cyan-400/50 via-blue-400/40 to-blue-300/60",
-        progress: 90
-      },
-      {
-        id: "reflection",
-        title: "Daily Reflection",
-        description: "Self-awareness & growth",
-        icon: <BookMarked className="h-6 w-6" />,
-        value: "5 entries",
-        subtitle: "This week's reflections",
-        gradient: "from-indigo-400/50 via-purple-400/40 to-purple-300/60",
-        progress: 71
-      },
-      {
-        id: "analytics",
-        title: "Life Analytics",
-        description: "Personal metrics & insights",
-        icon: <TrendingUp className="h-6 w-6" />,
-        value: "↗ 15%",
-        subtitle: "Overall improvement",
-        gradient: "from-pink-400/50 via-rose-400/40 to-rose-300/60",
-        progress: 82
-      }
-    ]
-  },
-  {
-    group: "AI Integration",
-    color: "from-pink-500 to-rose-300",
-    modules: [
-      {
-        id: "notion",
-        title: "Notion Sync",
-        description: "Synchronized knowledge base",
-        icon: <FileText className="h-6 w-6" />,
-        value: "Synced",
-        subtitle: "Last sync: 2 min ago",
-        gradient: "from-teal-400/50 via-green-400/40 to-green-300/60",
-        progress: 100
-      }
-    ]
-  }
-];
 
 const trans = {
   en: {
     personalModules: "Personal System Overview",
     description: "Real-time insights from your life management modules",
     connected: "Live Data Connected",
-    offline: "Offline Mode"
+    offline: "Offline Mode",
+    aiAssistant: "AI Assistant",
+    notionAI: "Notion AI"
   },
   id: {
     personalModules: "Ikhtisar Sistem Pribadi",
     description: "Wawasan real-time dari modul manajemen hidup Anda",
     connected: "Data Live Terhubung",
-    offline: "Mode Offline"
+    offline: "Mode Offline",
+    aiAssistant: "Asisten AI",
+    notionAI: "Notion AI"
   }
 };
 
 const PersonalStatsSection = ({
+  stats,
   onOpenAIAssistant,
   onOpenNotionAI
 }: PersonalStatsSectionProps) => {
   const { language } = useTheme();
   const t = trans[language];
   const { data: realTimeData, isConnected } = useRealTimeData();
+
+  const personalModules = [
+    {
+      group: "Digital Soul Layer",
+      color: "from-primary to-muted/50",
+      modules: [
+        {
+          id: "identity",
+          title: "Identity Core",
+          description: "Core values & character development",
+          icon: <User className="h-6 w-6" />,
+          value: "87%",
+          subtitle: "Identity clarity score",
+          gradient: "from-blue-400/50 via-indigo-400/40 to-indigo-300/60",
+          progress: 87
+        },
+        {
+          id: "vision",
+          title: "Vision Architecture", 
+          description: "Life goals & strategic planning",
+          icon: <Target className="h-6 w-6" />,
+          value: `${stats.activeGoals} Goals`,
+          subtitle: "Active life goals",
+          gradient: "from-purple-400/50 via-pink-400/40 to-pink-300/60",
+          progress: Math.min((stats.activeGoals / 5) * 100, 100)
+        },
+      ],
+    },
+    {
+      group: "Life Balance",
+      color: "from-green-500 to-emerald-300",
+      modules: [
+        {
+          id: "balance",
+          title: "Life Balance",
+          description: "Work-life harmony metrics",
+          icon: <Activity className="h-6 w-6" />,
+          value: "78%",
+          subtitle: "Balance score this week",
+          gradient: "from-emerald-400/50 via-green-400/40 to-green-300/60",
+          progress: 78
+        },
+        {
+          id: "ritual",
+          title: "Ritual Engine",
+          description: "Daily routines & systems",
+          icon: <CheckCircle className="h-6 w-6" />,
+          value: "12/15",
+          subtitle: "Rituals completed today",
+          gradient: "from-teal-400/50 via-cyan-400/40 to-cyan-300/60",
+          progress: 80
+        }
+      ]
+    },
+    {
+      group: "Productivity Engine",
+      color: "from-orange-500 to-red-300",
+      modules: [
+        {
+          id: "habits",
+          title: "Daily Habits",
+          description: "Habit tracking & streaks",
+          icon: <Calendar className="h-6 w-6" />,
+          value: `${stats.habitStreak} days`,
+          subtitle: `${stats.activeHabits} active habits`,
+          gradient: "from-green-400/50 via-emerald-400/40 to-emerald-300/60",
+          progress: Math.min((stats.habitStreak / 30) * 100, 100)
+        },
+        {
+          id: "focus",
+          title: "Focus Sessions",
+          description: "Deep work & productivity",
+          icon: <Timer className="h-6 w-6" />,
+          value: `${stats.focusHoursToday}h`,
+          subtitle: "Focused today",
+          gradient: "from-orange-400/50 via-red-400/40 to-red-300/60",
+          progress: Math.min((stats.focusHoursToday / 8) * 100, 100)
+        },
+        {
+          id: "flow",
+          title: "Flow State",
+          description: "Peak performance tracking",
+          icon: <Zap className="h-6 w-6" />,
+          value: "3 sessions",
+          subtitle: "Flow states this week",
+          gradient: "from-yellow-400/50 via-orange-400/40 to-orange-300/60",
+          progress: 75
+        }
+      ]
+    },
+    {
+      group: "Knowledge System",
+      color: "from-blue-500 to-blue-300",
+      modules: [
+        {
+          id: "knowledge",
+          title: "Knowledge Hub",
+          description: "Learning & knowledge management",
+          icon: <BookOpen className="h-6 w-6" />,
+          value: `${stats.notesCount} Notes`,
+          subtitle: "Knowledge entries",
+          gradient: "from-cyan-400/50 via-blue-400/40 to-blue-300/60",
+          progress: Math.min((stats.notesCount / 50) * 100, 100)
+        },
+        {
+          id: "reflection",
+          title: "Daily Reflection",
+          description: "Self-awareness & growth",
+          icon: <BookMarked className="h-6 w-6" />,
+          value: `${stats.reflectionEntries} entries`,
+          subtitle: "This week's reflections",
+          gradient: "from-indigo-400/50 via-purple-400/40 to-purple-300/60",
+          progress: Math.min((stats.reflectionEntries / 7) * 100, 100)
+        },
+        {
+          id: "analytics",
+          title: "Life Analytics",
+          description: "Personal metrics & insights",
+          icon: <TrendingUp className="h-6 w-6" />,
+          value: "↗ 15%",
+          subtitle: "Overall improvement",
+          gradient: "from-pink-400/50 via-rose-400/40 to-rose-300/60",
+          progress: 82
+        }
+      ]
+    },
+    {
+      group: "AI Integration",
+      color: "from-pink-500 to-rose-300",
+      modules: [
+        {
+          id: "notion",
+          title: "Notion Sync",
+          description: "Synchronized knowledge base",
+          icon: <FileText className="h-6 w-6" />,
+          value: "Synced",
+          subtitle: "Last sync: 2 min ago",
+          gradient: "from-teal-400/50 via-green-400/40 to-green-300/60",
+          progress: 100
+        }
+      ]
+    }
+  ];
 
   return (
     <div className="relative">
@@ -229,7 +242,7 @@ const PersonalStatsSection = ({
       </motion.div>
       
       <div className="relative z-10 space-y-8">
-        {SOUL_MODULES.map((group, idx) => (
+        {personalModules.map((group, idx) => (
           <section key={group.group} className="space-y-5">
             <div className="flex items-baseline space-x-5">
               <h3 className="text-2xl font-extrabold font-playfair text-foreground">{group.group}</h3>
@@ -262,6 +275,45 @@ const PersonalStatsSection = ({
             </div>
           </section>
         ))}
+
+        {/* AI Tools Section */}
+        <section className="space-y-5">
+          <div className="flex items-baseline space-x-5">
+            <h3 className="text-2xl font-extrabold font-playfair text-foreground">AI Tools</h3>
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-300 block" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400/50 via-blue-400/40 to-blue-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                  <Brain className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-bold font-playfair text-foreground">{t.aiAssistant}</CardTitle>
+                <p className="text-sm text-muted-foreground font-playfair">Personal AI assistant for productivity</p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <Button onClick={onOpenAIAssistant} variant="outline" className="w-full">
+                  Open Assistant
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border bg-card hover:shadow-lg transition-all duration-200 h-full">
+              <CardHeader className="pb-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-gray-400/50 via-slate-400/40 to-slate-300/60 rounded-xl flex items-center justify-center mb-4 shadow-lg">
+                  <FileText className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-bold font-playfair text-foreground">{t.notionAI}</CardTitle>
+                <p className="text-sm text-muted-foreground font-playfair">AI-powered knowledge management</p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <Button onClick={onOpenNotionAI} variant="outline" className="w-full">
+                  Open Notion AI
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
       </div>
     </div>
   );
