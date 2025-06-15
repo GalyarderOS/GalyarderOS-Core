@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNotifications } from '@/contexts/NotificationContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,9 @@ interface DashboardHomeProps {
 
 const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps) => {
   const { user } = useAuth();
+  const { notifications } = useNotifications();
+  const { data: realTimeData, isConnected } = useRealTimeData();
+  
   const [stats, setStats] = useState({
     totalPortfolioValue: 0,
     monthlyIncome: 0,
@@ -38,7 +42,6 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     savingsRate: 0
   });
   const [loading, setLoading] = useState(true);
-  const { data: realTimeData, isConnected, notifications } = useRealTimeData();
 
   useEffect(() => {
     if (user) {
@@ -238,27 +241,6 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
           </div>
         </section>
       </div>
-      
-      {notifications.length > 0 && (
-        <div className="fixed top-20 right-6 space-y-2 z-40">
-          {notifications.slice(0, 3).map((notification) => (
-            <div
-              key={notification.id}
-              className={`p-4 rounded-lg border backdrop-blur-md ${
-                notification.type === 'success' ? 'bg-green-500/10 border-green-500/20 text-green-600' :
-                notification.type === 'warning' ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-600' :
-                notification.type === 'error' ? 'bg-red-500/10 border-red-500/20 text-red-600' :
-                'bg-blue-500/10 border-blue-500/20 text-blue-600'
-              }`}
-            >
-              <p className="text-sm font-medium">{notification.message}</p>
-              <p className="text-xs opacity-70">
-                {notification.timestamp.toLocaleTimeString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 };
