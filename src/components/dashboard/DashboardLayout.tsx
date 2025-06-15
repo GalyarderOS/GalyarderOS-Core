@@ -145,9 +145,9 @@ const DashboardLayout = () => {
     },
     {
       id: 'notion',
-      label: 'Notion Sync',
+      label: 'NotionAI',
       icon: FileText,
-      path: '/dashboard/notion-sync',
+      action: handleOpenNotionAI,
       category: 'ai',
       color: 'from-gray-500 to-slate-600'
     },
