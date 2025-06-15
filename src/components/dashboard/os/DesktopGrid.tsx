@@ -48,12 +48,12 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
         onDoubleClick={() => onModuleOpen(module.id)}
       >
         <Card className="relative overflow-hidden border-2 border-border hover:border-primary/50 transition-all duration-500 bg-card/60 hover:bg-card/80 backdrop-blur-md h-40">
-          {/* Animated background */}
+          {/* Static background - only animates on hover */}
           <motion.div
             className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500`}
           />
           
-          {/* Floating particles */}
+          {/* Floating particles - only show on hover */}
           {isHovered && (
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               {[...Array(6)].map((_, i) => (
@@ -89,16 +89,16 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
               </h3>
             </div>
             
-            {/* Live indicator for real-time modules */}
+            {/* Live indicator for real-time modules - static dot, no auto-animation */}
             {isConnected && ['habits', 'focus', 'investments'].includes(module.id) && (
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span className="text-xs text-green-600 font-medium">Live</span>
               </div>
             )}
           </CardContent>
 
-          {/* Glow effect */}
+          {/* Glow effect - only on hover */}
           <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${module.color} opacity-20 blur-xl`} />
           </div>
@@ -122,20 +122,16 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps)
           Your personal operating system for life management and productivity
         </p>
         <div className="flex items-center justify-center space-x-4">
-          <motion.div
-            animate={{ scale: isConnected ? [1, 1.1, 1] : 1 }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
-              isConnected 
-                ? 'bg-green-500/10 border-green-500/20 text-green-600' 
-                : 'bg-red-500/10 border-red-500/20 text-red-600'
-            }`}
-          >
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
+          <div className={`flex items-center space-x-2 px-4 py-2 rounded-full border ${
+            isConnected 
+              ? 'bg-green-500/10 border-green-500/20 text-green-600' 
+              : 'bg-red-500/10 border-red-500/20 text-red-600'
+          }`}>
+            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
             <span className="text-sm font-medium">
               {isConnected ? 'System Online' : 'System Offline'}
             </span>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
 
