@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,7 +28,11 @@ import {
   Clock,
   BookOpen,
   Brain,
-  Calculator
+  Calculator,
+  Timer,
+  Receipt,
+  Building,
+  FileText
 } from 'lucide-react';
 
 const DashboardHome = () => {
@@ -123,83 +128,21 @@ const DashboardHome = () => {
       welcomeTitle: "Your Personal Operating System",
       welcomeSubtitle: "Master Your Life with AI-Powered Intelligence",
       welcomeDescription: "Access all your personal development and wealth management tools in one unified dashboard. From habits to investments, vision to focus - everything you need to live by design.",
-      marketStats: "System Status",
+      personalModules: "Personal Development",
+      financeModules: "Wealth Management",
       totalModules: "Active Modules",
       globalUsers: "Global Users",
       aiPowered: "AI-Powered",
-      personalModules: "Personal Development",
-      financeModules: "Wealth Management",
-      
-      // Personal Development Modules
-      profileModule: "Profile & Ethos",
-      profileDesc: "Define your identity and core values",
-      visionModule: "Vision & Roadmap", 
-      visionDesc: "Strategic planning for your future",
-      habitsModule: "Daily Rituals",
-      habitsDesc: "Build and track meaningful habits",
-      focusModule: "Focus Timer",
-      focusDesc: "Deep work and productivity sessions",
-      memoryModule: "Memory Vault",
-      memoryDesc: "Knowledge management and insights",
-      aiModule: "AI Assistant",
-      aiDesc: "Intelligent personal assistant",
-      notionModule: "Notion AI",
-      notionDesc: "Enhanced note-taking with AI",
-      
-      // Finance Modules
-      investmentTracker: "Investment Tracker",
-      investmentDesc: "Monitor portfolio performance with precision",
-      cashflowTracker: "Cashflow Tracker", 
-      cashflowDesc: "Track income and expenses intelligently",
-      expenseManager: "Expense Manager",
-      expenseDesc: "Optimize spending with AI insights",
-      wealthBuilder: "Wealth Builder",
-      wealthDesc: "Set and achieve financial goals",
-      taxOptimizer: "Tax Optimizer",
-      taxDesc: "Minimize tax burden strategically",
-      debtManager: "Debt Manager",
-      debtDesc: "Eliminate debt efficiently"
     },
     id: {
       welcomeTitle: "Sistem Operasi Personal Anda",
       welcomeSubtitle: "Kuasai Hidup Anda dengan Kecerdasan AI",
       welcomeDescription: "Akses semua alat pengembangan diri dan manajemen kekayaan dalam satu dashboard terpadu. Dari kebiasaan hingga investasi, visi hingga fokus - semua yang Anda butuhkan untuk hidup sesuai desain.",
-      marketStats: "Status Sistem",
+      personalModules: "Pengembangan Personal",
+      financeModules: "Manajemen Kekayaan",
       totalModules: "Modul Aktif",
       globalUsers: "Pengguna Global",
       aiPowered: "Bertenaga AI",
-      personalModules: "Pengembangan Personal",
-      financeModules: "Manajemen Kekayaan",
-      
-      // Personal Development Modules
-      profileModule: "Profil & Etos",
-      profileDesc: "Definisikan identitas dan nilai inti",
-      visionModule: "Visi & Roadmap",
-      visionDesc: "Perencanaan strategis masa depan",
-      habitsModule: "Ritual Harian",
-      habitsDesc: "Bangun dan lacak kebiasaan bermakna",
-      focusModule: "Timer Fokus",
-      focusDesc: "Sesi kerja mendalam dan produktivitas",
-      memoryModule: "Brankas Memori",
-      memoryDesc: "Manajemen pengetahuan dan wawasan",
-      aiModule: "Asisten AI",
-      aiDesc: "Asisten personal cerdas",
-      notionModule: "Notion AI",
-      notionDesc: "Pencatatan ditingkatkan dengan AI",
-      
-      // Finance Modules
-      investmentTracker: "Pelacak Investasi",
-      investmentDesc: "Pantau kinerja portofolio dengan presisi",
-      cashflowTracker: "Pelacak Arus Kas",
-      cashflowDesc: "Lacak pendapatan dan pengeluaran secara cerdas",
-      expenseManager: "Manajer Pengeluaran",
-      expenseDesc: "Optimalkan pengeluaran dengan wawasan AI",
-      wealthBuilder: "Pembangun Kekayaan",
-      wealthDesc: "Tetapkan dan capai tujuan keuangan",
-      taxOptimizer: "Optimisasi Pajak",
-      taxDesc: "Minimalkan beban pajak secara strategis",
-      debtManager: "Manajer Utang",
-      debtDesc: "Hilangkan utang secara efisien"
     }
   };
 
@@ -208,8 +151,8 @@ const DashboardHome = () => {
   // Personal Development Modules (7)
   const personalModules = [
     {
-      title: t.profileModule,
-      description: t.profileDesc,
+      title: language === 'id' ? 'Profil & Etos' : 'Profile & Ethos',
+      description: language === 'id' ? 'Definisikan identitas dan nilai inti' : 'Define your identity and core values',
       icon: <User className="h-8 w-8" />,
       value: "Complete",
       change: "Profile Set",
@@ -217,8 +160,8 @@ const DashboardHome = () => {
       gradient: "from-blue-500/20 to-indigo-500/20"
     },
     {
-      title: t.visionModule,
-      description: t.visionDesc,
+      title: language === 'id' ? 'Visi & Roadmap' : 'Vision & Roadmap',
+      description: language === 'id' ? 'Perencanaan strategis masa depan' : 'Strategic planning for your future',
       icon: <Target className="h-8 w-8" />,
       value: "5 Goals",
       change: "Active",
@@ -226,8 +169,8 @@ const DashboardHome = () => {
       gradient: "from-purple-500/20 to-pink-500/20"
     },
     {
-      title: t.habitsModule,
-      description: t.habitsDesc,
+      title: language === 'id' ? 'Ritual Harian' : 'Daily Rituals',
+      description: language === 'id' ? 'Bangun dan lacak kebiasaan bermakna' : 'Build and track meaningful habits',
       icon: <Calendar className="h-8 w-8" />,
       value: "8 Habits",
       change: "75% Complete",
@@ -235,17 +178,17 @@ const DashboardHome = () => {
       gradient: "from-green-500/20 to-emerald-500/20"
     },
     {
-      title: t.focusModule,
-      description: t.focusDesc,
-      icon: <Clock className="h-8 w-8" />,
+      title: language === 'id' ? 'Timer Fokus' : 'Focus Timer',
+      description: language === 'id' ? 'Sesi kerja mendalam dan produktivitas' : 'Deep work and productivity sessions',
+      icon: <Timer className="h-8 w-8" />,
       value: "2.5 hrs",
       change: "Today",
       path: "/dashboard/focus",
       gradient: "from-orange-500/20 to-red-500/20"
     },
     {
-      title: t.memoryModule,
-      description: t.memoryDesc,
+      title: language === 'id' ? 'Brankas Memori' : 'Memory Vault',
+      description: language === 'id' ? 'Manajemen pengetahuan dan wawasan' : 'Knowledge management and insights',
       icon: <BookOpen className="h-8 w-8" />,
       value: "24 Notes",
       change: "Organized",
@@ -253,21 +196,21 @@ const DashboardHome = () => {
       gradient: "from-cyan-500/20 to-blue-500/20"
     },
     {
-      title: t.aiModule,
-      description: t.aiDesc,
+      title: 'AI Assistant',
+      description: language === 'id' ? 'Asisten personal cerdas' : 'Intelligent personal assistant',
       icon: <Brain className="h-8 w-8" />,
       value: "Active",
       change: "Ready",
-      path: "/dashboard/ai-assistant",
+      action: "ai-assistant",
       gradient: "from-violet-500/20 to-purple-500/20"
     },
     {
-      title: t.notionModule,
-      description: t.notionDesc,
-      icon: <Sparkles className="h-8 w-8" />,
+      title: 'Notion AI',
+      description: language === 'id' ? 'Pencatatan ditingkatkan dengan AI' : 'Enhanced note-taking with AI',
+      icon: <FileText className="h-8 w-8" />,
       value: "Synced",
       change: "Connected",
-      path: "/dashboard/notion-ai",
+      action: "notion-ai",
       gradient: "from-teal-500/20 to-green-500/20"
     }
   ];
@@ -275,8 +218,8 @@ const DashboardHome = () => {
   // Finance Modules (6)
   const financeModules = [
     {
-      title: t.investmentTracker,
-      description: t.investmentDesc,
+      title: language === 'id' ? 'Pelacak Investasi' : 'Investment Tracker',
+      description: language === 'id' ? 'Pantau kinerja portofolio dengan presisi' : 'Monitor portfolio performance with precision',
       icon: <TrendingUp className="h-8 w-8" />,
       value: `$${stats.totalPortfolioValue.toLocaleString()}`,
       change: "+12.5%",
@@ -284,8 +227,8 @@ const DashboardHome = () => {
       gradient: "from-emerald-500/20 to-teal-500/20"
     },
     {
-      title: t.cashflowTracker,
-      description: t.cashflowDesc,
+      title: language === 'id' ? 'Pelacak Arus Kas' : 'Cashflow Tracker',
+      description: language === 'id' ? 'Lacak pendapatan dan pengeluaran secara cerdas' : 'Track income and expenses intelligently',
       icon: <DollarSign className="h-8 w-8" />,
       value: `$${(stats.monthlyIncome - stats.monthlyExpenses).toLocaleString()}`,
       change: "+8.2%",
@@ -293,26 +236,26 @@ const DashboardHome = () => {
       gradient: "from-blue-500/20 to-indigo-500/20"
     },
     {
-      title: t.expenseManager,
-      description: t.expenseDesc,
-      icon: <BarChart3 className="h-8 w-8" />,
+      title: language === 'id' ? 'Manajer Pengeluaran' : 'Expense Manager',
+      description: language === 'id' ? 'Optimalkan pengeluaran dengan wawasan AI' : 'Optimize spending with AI insights',
+      icon: <Receipt className="h-8 w-8" />,
       value: `$${stats.monthlyExpenses.toLocaleString()}`,
       change: "-3.1%",
       path: "/dashboard/expenses",
       gradient: "from-purple-500/20 to-pink-500/20"
     },
     {
-      title: t.wealthBuilder,
-      description: t.wealthDesc,
-      icon: <Target className="h-8 w-8" />,
+      title: language === 'id' ? 'Pembangun Kekayaan' : 'Wealth Builder',
+      description: language === 'id' ? 'Tetapkan dan capai tujuan keuangan' : 'Set and achieve financial goals',
+      icon: <Building className="h-8 w-8" />,
       value: `${stats.wealthGoals} Goals`,
       change: "75% Complete",
       path: "/dashboard/wealth",
       gradient: "from-amber-500/20 to-orange-500/20"
     },
     {
-      title: t.taxOptimizer,
-      description: t.taxDesc,
+      title: language === 'id' ? 'Optimisasi Pajak' : 'Tax Optimizer',
+      description: language === 'id' ? 'Minimalkan beban pajak secara strategis' : 'Minimize tax burden strategically',
       icon: <Calculator className="h-8 w-8" />,
       value: "$15,240",
       change: "Saved",
@@ -320,8 +263,8 @@ const DashboardHome = () => {
       gradient: "from-green-500/20 to-emerald-500/20"
     },
     {
-      title: t.debtManager,
-      description: t.debtDesc,
+      title: language === 'id' ? 'Manajer Utang' : 'Debt Manager',
+      description: language === 'id' ? 'Hilangkan utang secara efisien' : 'Eliminate debt efficiently',
       icon: <CreditCard className="h-8 w-8" />,
       value: `$${stats.totalDebt.toLocaleString()}`,
       change: "-15.8%",
@@ -335,6 +278,18 @@ const DashboardHome = () => {
     { label: t.globalUsers, value: "50K+", icon: <Users className="h-6 w-6" /> },
     { label: t.aiPowered, value: "24/7", icon: <Zap className="h-6 w-6" /> }
   ];
+
+  const handleModuleClick = (module: any) => {
+    if (module.path) {
+      navigate(module.path);
+    } else if (module.action === 'ai-assistant') {
+      // This will be handled by parent component
+      console.log('Open AI Assistant');
+    } else if (module.action === 'notion-ai') {
+      // This will be handled by parent component
+      console.log('Open Notion AI');
+    }
+  };
 
   if (loading) {
     return (
@@ -440,7 +395,7 @@ const DashboardHome = () => {
               transition={{ delay: index * 0.1 + 0.5 }}
               whileHover={{ y: -8, scale: 1.02 }}
               className="group cursor-pointer"
-              onClick={() => navigate(module.path)}
+              onClick={() => handleModuleClick(module)}
             >
               <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-500 bg-card/80 hover:bg-card soft-shadow hover:soft-shadow-lg h-full">
                 <CardHeader className="pb-4">
@@ -496,7 +451,7 @@ const DashboardHome = () => {
               transition={{ delay: index * 0.1 + 0.8 }}
               whileHover={{ y: -8, scale: 1.02 }}
               className="group cursor-pointer"
-              onClick={() => navigate(module.path)}
+              onClick={() => handleModuleClick(module)}
             >
               <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-500 bg-card/80 hover:bg-card soft-shadow hover:soft-shadow-lg h-full">
                 <CardHeader className="pb-6">

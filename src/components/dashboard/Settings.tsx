@@ -20,8 +20,6 @@ import {
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-type Language = 'en' | 'id';
-
 const Settings = () => {
   const { user } = useAuth();
   const { theme, language, setTheme, setLanguage } = useTheme();
@@ -57,16 +55,12 @@ const Settings = () => {
       }
 
       if (data) {
-        // Safely cast the language with fallback
-        const dbLanguage = data.language as Language;
-        const validLanguage = (dbLanguage === 'en' || dbLanguage === 'id') ? dbLanguage : 'en';
-        
         setSettings({
           gemini_api_key: data.gemini_api_key || '',
           notion_token: data.notion_token || '',
           notifications_enabled: true,
           dark_mode: data.theme === 'dark',
-          language: validLanguage
+          language: data.language || 'en'
         });
       }
     } catch (error) {
@@ -97,9 +91,9 @@ const Settings = () => {
         setTheme(settings.dark_mode ? 'dark' : 'light');
       }
 
-      // Update language context
+      // Update language context with proper type casting
       if (settings.language !== language) {
-        setLanguage(settings.language);
+        setLanguage(settings.language as 'en' | 'id');
       }
 
       toast({

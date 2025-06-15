@@ -25,7 +25,8 @@ import {
   Settings,
   LogOut,
   Moon,
-  Sun
+  Sun,
+  Crown
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -91,11 +92,11 @@ const DashboardLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: Dashbo
       <div className="flex min-h-screen w-full bg-background">
         <Sidebar className="border-r border-border bg-card/50 backdrop-blur-sm">
           <SidebarContent className="p-6 space-y-6">
-            {/* Header */}
+            {/* Header with Logo */}
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-muted rounded-xl flex items-center justify-center">
-                  <LayoutDashboard className="h-6 w-6 text-muted-foreground" />
+                <div className="w-12 h-12 bg-gradient-to-br from-foreground to-muted-foreground rounded-xl flex items-center justify-center border-2 border-border">
+                  <Crown className="h-7 w-7 text-background" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-foreground font-playfair">GalyarderOS</h2>
@@ -240,6 +241,10 @@ const DashboardLayout = ({ children, onOpenAIAssistant, onOpenNotionAI }: Dashbo
           <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="flex h-16 items-center px-6">
               <SidebarTrigger className="mr-4" />
+              <div className="flex items-center space-x-2">
+                <Crown className="h-6 w-6 text-foreground" />
+                <span className="font-bold text-lg font-playfair text-foreground">GalyarderOS</span>
+              </div>
               <div className="flex-1" />
             </div>
           </header>
