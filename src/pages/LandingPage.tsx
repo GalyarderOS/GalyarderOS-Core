@@ -18,7 +18,11 @@ import {
   Globe,
   Users,
   Zap,
-  Award
+  Award,
+  User,
+  Calendar,
+  BookOpen,
+  Timer
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -34,39 +38,49 @@ const LandingPage = () => {
     }
   }, [user, navigate]);
 
-  // Market Opportunities (4 instead of 7 modules)
-  const marketOpportunities = [
+  // Core Modules (7 modules)
+  const coreModules = [
     {
-      title: "Productivity Software",
-      marketSize: "$47B",
-      description: "Global productivity software market with massive growth potential",
+      title: "Profile & Ethos",
+      description: "Define your identity and core values",
+      icon: <User className="h-8 w-8" />,
+      gradient: "from-blue-500/20 to-indigo-500/20"
+    },
+    {
+      title: "Vision & Roadmap", 
+      description: "Strategic planning for your future",
       icon: <Target className="h-8 w-8" />,
-      gradient: "from-blue-500/20 to-indigo-500/20",
-      stats: "Growing 15% annually"
+      gradient: "from-purple-500/20 to-pink-500/20"
     },
     {
-      title: "Mental Health Tech",
-      marketSize: "$26B", 
-      description: "Digital mental health solutions market expanding rapidly",
+      title: "Daily Rituals",
+      description: "Build and track meaningful habits",
+      icon: <Calendar className="h-8 w-8" />,
+      gradient: "from-green-500/20 to-emerald-500/20"
+    },
+    {
+      title: "Focus Timer",
+      description: "Deep work and productivity sessions",
+      icon: <Timer className="h-8 w-8" />,
+      gradient: "from-orange-500/20 to-red-500/20"
+    },
+    {
+      title: "Memory Vault",
+      description: "Knowledge management and insights",
+      icon: <BookOpen className="h-8 w-8" />,
+      gradient: "from-cyan-500/20 to-blue-500/20"
+    },
+    {
+      title: "AI Assistant",
+      description: "Intelligent personal assistant",
       icon: <Brain className="h-8 w-8" />,
-      gradient: "from-purple-500/20 to-pink-500/20",
-      stats: "23% CAGR through 2030"
+      gradient: "from-violet-500/20 to-purple-500/20"
     },
     {
-      title: "Self-Development",
-      marketSize: "$13B",
-      description: "Personal development industry with strong digital adoption",
-      icon: <Award className="h-8 w-8" />,
-      gradient: "from-green-500/20 to-emerald-500/20",
-      stats: "12% annual growth"
-    },
-    {
-      title: "Personal Finance",
-      marketSize: "$1.2T",
-      description: "Massive fintech opportunity in personal wealth management",
-      icon: <DollarSign className="h-8 w-8" />,
-      gradient: "from-amber-500/20 to-orange-500/20",
-      stats: "Largest market segment"
+      title: "Notion AI",
+      description: "Enhanced note-taking with AI",
+      icon: <Zap className="h-8 w-8" />,
+      gradient: "from-teal-500/20 to-green-500/20"
     }
   ];
 
@@ -191,7 +205,7 @@ const LandingPage = () => {
             </div>
           </motion.div>
 
-          {/* Market Opportunities Section */}
+          {/* Core Modules Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -199,14 +213,14 @@ const LandingPage = () => {
             className="mb-20"
           >
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4 font-playfair text-foreground">Market Opportunities</h2>
+              <h2 className="text-4xl font-bold mb-4 font-playfair text-foreground">Core Modules</h2>
               <p className="text-xl text-muted-foreground font-playfair max-w-2xl mx-auto">
-                Positioned at the intersection of massive, growing markets
+                Everything you need to transform your life in one integrated system
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {marketOpportunities.map((opportunity, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {coreModules.map((module, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 30 }}
@@ -217,27 +231,21 @@ const LandingPage = () => {
                 >
                   <Card className="border-2 border-border hover:border-muted-foreground/30 transition-all duration-500 bg-card/80 hover:bg-card h-full">
                     <CardHeader className="text-center pb-4">
-                      <div className={`w-full h-24 bg-gradient-to-br ${opportunity.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
+                      <div className={`w-full h-24 bg-gradient-to-br ${module.gradient} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-500 border border-border`}>
                         <div className="text-foreground">
-                          {opportunity.icon}
+                          {module.icon}
                         </div>
                       </div>
                       
                       <CardTitle className="text-xl font-bold font-playfair text-foreground">
-                        {opportunity.title}
+                        {module.title}
                       </CardTitle>
-                      <div className="text-3xl font-bold text-foreground font-playfair">
-                        {opportunity.marketSize}
-                      </div>
                     </CardHeader>
                     
-                    <CardContent className="text-center space-y-4">
+                    <CardContent className="text-center">
                       <CardDescription className="font-playfair text-muted-foreground">
-                        {opportunity.description}
+                        {module.description}
                       </CardDescription>
-                      <Badge variant="secondary" className="font-playfair">
-                        {opportunity.stats}
-                      </Badge>
                     </CardContent>
                   </Card>
                 </motion.div>
