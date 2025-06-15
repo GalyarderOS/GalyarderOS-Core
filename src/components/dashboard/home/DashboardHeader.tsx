@@ -1,20 +1,17 @@
-
 import { motion } from 'framer-motion';
 import { Crown, Sparkles } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useTheme } from '@/contexts/ThemeContext';
-// Import InteractiveAIChatbot here!
 import InteractiveAIChatbot from './InteractiveAIChatbot';
 
-interface DashboardHeaderProps {
+export interface DashboardHeaderProps {
   stats: {
     lifeBalanceScore: number;
     activeHabits: number;
     activeGoals: number;
     focusHoursToday: number;
     totalPortfolioValue: number;
-    // Add all the other stats properties that are being passed
     monthlyIncome: number;
     monthlyExpenses: number;
     totalDebt: number;
