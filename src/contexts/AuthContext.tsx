@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -59,6 +58,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const ensureProfileExists = async (user: User) => {
+    const { error } = await supabase
+      .from('profiles')
+      .select('user_id')
+      .eq('user_id', user.id)
+      .single();
+
+    if (error && error.code === 'PGRST116') {
+      console.log('No profile found for user, creating one.');
+      const newUserProfile = {
+        user_id: user.id,
+        full_name: user.user_metadata?.full_name || user.email,
+        email: user.email,
+        avatar_url: user.user_metadata?.avatar_url,
+      };
+
+      const { error: createError } = await supabase.from('profiles').insert(newUserProfile);
+
+      if (createError) {
+        console.error('Error creating profile:', createError.message);
+      } else {
+        console.log('Profile created successfully.');
+      }
+    } else if (error) {
+      console.error("Error checking for profile:", error);
+    }
+  };
+
   const reloadProfile = async () => {
     if (user) {
       await fetchProfile(user.id);
@@ -85,7 +112,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     if (user) {
-      fetchProfile(user.id);
+      ensureProfileExists(user).then(() => {
+        fetchProfile(user.id);
+      });
     } else {
       setProfile(null);
       setLoadingProfile(false);

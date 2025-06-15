@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Plus, Target } from 'lucide-react';
 import EmptyState from './home/EmptyState';
+import { CreateGoalModal } from './vision/CreateGoalModal';
 
 interface Goal {
   id: string;
@@ -18,24 +19,25 @@ interface Goal {
 
 const VisionModule = () => {
   const [goals, setGoals] = useState<Goal[]>([]);
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   if (goals.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
-        <div className="max-w-6xl mx-auto p-6">
-          <EmptyState
-            icon={Target}
-            title="Create Your Vision & Goals"
-            description="Define your long-term vision and break it down into actionable goals. Track your progress and celebrate milestones along the way."
-            actionLabel="Create First Goal"
-            onAction={() => {
-              // Add goal creation logic here
-              console.log('Create first goal');
-            }}
-            gradient="from-blue-600 to-purple-600"
-          />
+      <>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
+          <div className="max-w-6xl mx-auto p-6">
+            <EmptyState
+              icon={Target}
+              title="Create Your Vision & Goals"
+              description="Define your long-term vision and break it down into actionable goals. Track your progress and celebrate milestones along the way."
+              actionLabel="Create First Goal"
+              onAction={() => setCreateModalOpen(true)}
+              gradient="from-blue-600 to-purple-600"
+            />
+          </div>
         </div>
-      </div>
+        <CreateGoalModal isOpen={isCreateModalOpen} onClose={() => setCreateModalOpen(false)} />
+      </>
     );
   }
 

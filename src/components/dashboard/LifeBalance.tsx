@@ -8,6 +8,7 @@ import {
   Activity
 } from "lucide-react";
 import EmptyState from "./home/EmptyState";
+import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
 
 interface LifeArea {
   id: string;
@@ -31,24 +32,25 @@ interface Metric {
 
 const LifeBalance = () => {
   const [lifeAreas, setLifeAreas] = useState<LifeArea[]>([]);
+  const [isSetupModalOpen, setSetupModalOpen] = useState(false);
 
   if (lifeAreas.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
-        <div className="max-w-6xl mx-auto p-6">
-          <EmptyState
-            icon={Brain}
-            title="Start Tracking Life Balance"
-            description="Monitor and optimize all dimensions of your life. Create a holistic view of your physical health, mental wellness, relationships, career, and personal growth."
-            actionLabel="Setup Life Areas"
-            onAction={() => {
-              // Add setup logic here
-              console.log('Setup life areas');
-            }}
-            gradient="from-blue-600 to-indigo-600"
-          />
+      <>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+          <div className="max-w-6xl mx-auto p-6">
+            <EmptyState
+              icon={Brain}
+              title="Start Tracking Life Balance"
+              description="Monitor and optimize all dimensions of your life. Create a holistic view of your physical health, mental wellness, relationships, career, and personal growth."
+              actionLabel="Setup Life Areas"
+              onAction={() => setSetupModalOpen(true)}
+              gradient="from-blue-600 to-indigo-600"
+            />
+          </div>
         </div>
-      </div>
+        <SetupLifeAreasModal isOpen={isSetupModalOpen} onClose={() => setSetupModalOpen(false)} />
+      </>
     );
   }
 
