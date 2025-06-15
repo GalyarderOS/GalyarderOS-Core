@@ -206,7 +206,17 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
       
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <LifeOverviewSection stats={stats} />
-        <PersonalSystemsGrid stats={stats} />
+        <PersonalSystemsGrid stats={{
+          activeRituals: stats.activeRituals,
+          ritualStreak: stats.ritualStreak,
+          focusHoursToday: stats.focusHoursToday,
+          weeklyFocusHours: stats.weeklyFocusHours,
+          notesCount: stats.notesCount,
+          reflectionEntries: stats.reflectionEntries,
+          activeGoals: stats.activeGoals,
+          completedGoalsThisMonth: stats.completedGoalsThisMonth,
+          calendarEventsThisWeek: stats.calendarEventsThisWeek
+        }} />
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           <FinancialHealthSection stats={stats} />
           <ProductivityMetrics stats={stats} />

@@ -11,14 +11,15 @@ import { useTheme } from '@/contexts/ThemeContext';
 
 interface PersonalSystemsGridProps {
   stats: {
-    activeHabits: number;
-    habitStreak: number;
+    activeRituals: number;
+    ritualStreak: number;
     focusHoursToday: number;
     weeklyFocusHours: number;
     notesCount: number;
     reflectionEntries: number;
     activeGoals: number;
     completedGoalsThisMonth: number;
+    calendarEventsThisWeek: number;
   };
 }
 
@@ -32,10 +33,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       identity: "Identity Core",
       vision: "Vision & Goals",
       balance: "Life Balance",
-      ritual: "Daily Rituals",
-      habits: "Habit Tracker",
+      ritual: "Ritual Engine",
+      calendar: "Calendar",
       focus: "Focus Engine",
-      flow: "Flow State",
       knowledge: "Knowledge Hub",
       reflection: "Reflection",
       analytics: "Life Analytics",
@@ -47,7 +47,8 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       entries: "Entries",
       complete: "Complete",
       sessions: "Sessions",
-      improvement: "Improvement"
+      improvement: "Improvement",
+      events: "Events"
     },
     id: {
       personalSystems: "Sistem Pengembangan Pribadi",
@@ -55,10 +56,9 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       identity: "Inti Identitas",
       vision: "Visi & Tujuan",
       balance: "Keseimbangan Hidup",
-      ritual: "Ritual Harian",
-      habits: "Pelacak Kebiasaan",
+      ritual: "Mesin Ritual",
+      calendar: "Kalender",
       focus: "Mesin Fokus",
-      flow: "Flow State",
       knowledge: "Hub Pengetahuan",
       reflection: "Refleksi",
       analytics: "Analitik Hidup",
@@ -70,7 +70,8 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       entries: "Entri",
       complete: "Lengkap",
       sessions: "Sesi",
-      improvement: "Peningkatan"
+      improvement: "Peningkatan",
+      events: "Acara"
     }
   }[language];
 
@@ -112,20 +113,20 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       id: "ritual",
       title: t.ritual,
       icon: <CheckCircle className="h-5 w-5" />,
-      value: "12/15",
-      metric: `Rituals ${t.today}`,
-      progress: 80,
+      value: `${stats.activeRituals}`,
+      metric: `${stats.ritualStreak} day ${t.streak}`,
+      progress: Math.min((stats.ritualStreak / 30) * 100, 100),
       gradient: "from-teal-500/20 to-cyan-500/20",
       borderGradient: "from-teal-500 to-cyan-500",
       bgGradient: "from-teal-500/10 to-cyan-500/10"
     },
     {
-      id: "habits",
-      title: t.habits,
+      id: "calendar",
+      title: t.calendar,
       icon: <Calendar className="h-5 w-5" />,
-      value: `${stats.habitStreak}`,
-      metric: `${stats.activeHabits} ${t.active} habits`,
-      progress: Math.min((stats.habitStreak / 30) * 100, 100),
+      value: `${stats.calendarEventsThisWeek}`,
+      metric: `${t.events} ${t.week}`,
+      progress: Math.min((stats.calendarEventsThisWeek / 20) * 100, 100),
       gradient: "from-orange-500/20 to-red-500/20",
       borderGradient: "from-orange-500 to-red-500",
       bgGradient: "from-orange-500/10 to-red-500/10"
@@ -140,17 +141,6 @@ const PersonalSystemsGrid = ({ stats }: PersonalSystemsGridProps) => {
       gradient: "from-blue-500/20 to-cyan-500/20",
       borderGradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10"
-    },
-    {
-      id: "flow",
-      title: t.flow,
-      icon: <Zap className="h-5 w-5" />,
-      value: "3",
-      metric: `${t.sessions} ${t.week}`,
-      progress: 75,
-      gradient: "from-yellow-500/20 to-orange-500/20",
-      borderGradient: "from-yellow-500 to-orange-500",
-      bgGradient: "from-yellow-500/10 to-orange-500/10"
     },
     {
       id: "knowledge",
