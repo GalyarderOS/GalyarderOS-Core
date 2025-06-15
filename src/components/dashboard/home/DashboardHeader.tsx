@@ -18,7 +18,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 }) => {
   const { language } = useTheme();
   const { user, profile, loadingProfile } = useAuth();
-  const { isFirstTime } = useFirstTimeUser();
+  const { isFirstTimeUser } = useFirstTimeUser();
 
   const t = {
     en: {
@@ -41,8 +41,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     }
   }[language];
 
-  const welcomeMessage = isFirstTime ? t.welcomeNew : t.welcomeBack;
-  const subtitle = isFirstTime ? t.subtitleNew : t.subtitle;
+  const welcomeMessage = isFirstTimeUser ? t.welcomeNew : t.welcomeBack;
+  const subtitle = isFirstTimeUser ? t.subtitleNew : t.subtitle;
 
   return (
     <div className="relative overflow-hidden border-b bg-gradient-to-b from-muted/20 to-background">
