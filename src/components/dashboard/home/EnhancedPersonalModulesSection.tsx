@@ -218,6 +218,7 @@ const EnhancedPersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: E
             onClick={() => handleModuleClick(module)}
             onDragStart={() => handleDragStart(module.id)}
             onDragEnd={handleDragEnd}
+            onContextMenu={() => {}}
             isDragging={draggedItem === module.id}
           />
         ))}
