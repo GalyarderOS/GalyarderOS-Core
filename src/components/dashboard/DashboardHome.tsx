@@ -3,9 +3,11 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import HeroSection from './home/HeroSection';
-import PersonalModulesSection from './home/PersonalModulesSection';
+import EnhancedPersonalModulesSection from './home/EnhancedPersonalModulesSection';
 import FinanceModulesSection from './home/FinanceModulesSection';
 import DashboardLoader from './home/DashboardLoader';
+import CommandPalette from './home/CommandPalette';
+import { useCommandPalette } from '@/hooks/useCommandPalette';
 
 interface DashboardHomeProps {
   onOpenAIAssistant: () => void;
@@ -23,6 +25,14 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
     investments: 0
   });
   const [loading, setLoading] = useState(true);
+
+  const {
+    isOpen: isCommandPaletteOpen,
+    search: commandSearch,
+    setSearch: setCommandSearch,
+    commands,
+    executeCommand
+  } = useCommandPalette(onOpenAIAssistant, onOpenNotionAI);
 
   useEffect(() => {
     if (user) {
@@ -44,7 +54,6 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
       const totalPortfolioValue = portfolios?.reduce((sum, portfolio) => sum + (portfolio.total_value || 0), 0) || 0;
 
-      // Load current month transactions
       const currentMonth = new Date().toISOString().slice(0, 7);
       const { data: transactions } = await supabase
         .from('cashflow_transactions')
@@ -63,7 +72,6 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
         }
       });
 
-      // Load total debt
       const { data: debts } = await supabase
         .from('debts')
         .select('remaining_amount')
@@ -71,14 +79,12 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
 
       const totalDebt = debts?.reduce((sum, debt) => sum + debt.remaining_amount, 0) || 0;
 
-      // Load wealth goals count
       const { data: wealthGoals } = await supabase
         .from('wealth_goals')
         .select('id')
         .eq('user_id', user.id)
         .eq('status', 'active');
 
-      // Load investments count
       const { data: investments } = await supabase
         .from('investments')
         .select('id')
@@ -105,11 +111,24 @@ const DashboardHome = ({ onOpenAIAssistant, onOpenNotionAI }: DashboardHomeProps
   }
 
   return (
-    <div className="space-y-12 max-w-7xl mx-auto">
-      <HeroSection />
-      <PersonalModulesSection onOpenAIAssistant={onOpenAIAssistant} onOpenNotionAI={onOpenNotionAI} />
-      <FinanceModulesSection stats={stats} />
-    </div>
+    <>
+      <div className="space-y-12 max-w-7xl mx-auto relative">
+        <HeroSection />
+        <EnhancedPersonalModulesSection 
+          onOpenAIAssistant={onOpenAIAssistant} 
+          onOpenNotionAI={onOpenNotionAI} 
+        />
+        <FinanceModulesSection stats={stats} />
+      </div>
+      
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        search={commandSearch}
+        setSearch={setCommandSearch}
+        commands={commands}
+        executeCommand={executeCommand}
+      />
+    </>
   );
 };
 

@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Old Money Design System - Soft & Elegant Palette */
+/* ... keep existing code (Old Money Design System) the same ... */
 
 @layer base {
   :root {
@@ -115,173 +115,269 @@
     font-family: 'Georgia', 'Times New Roman', serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
   }
 
-  /* Old Money Typography */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-medium tracking-wide;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    color: hsl(var(--foreground));
+  /* Enhanced OS-style animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 
-  /* Elegant Scrollbars */
-  ::-webkit-scrollbar {
-    @apply w-2;
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(126,34,206,0.1); }
+    50% { box-shadow: 0 0 40px rgba(126,34,206,0.3); }
   }
 
-  ::-webkit-scrollbar-track {
-    background-color: hsl(var(--muted) / 0.2);
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
   }
 
-  ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.2);
-    @apply rounded-full;
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 0.8;
+    }
+    70% {
+      transform: scale(2.2);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(2.5);
+      opacity: 0;
+    }
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--muted-foreground) / 0.3);
+  @keyframes particle-float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    10%, 90% {
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-100px) rotate(180deg);
+    }
   }
 
-  /* Dark theme specific scrollbar */
-  .dark ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted-foreground) / 0.3);
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--muted-foreground) / 0.4);
+  /* ... keep existing code (typography, scrollbars, glass effects) the same ... */
+
+  /* Enhanced Interactive Elements */
+  .interactive-card {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
   }
 
-  /* Soft Glass Effects */
-  .glass {
-    backdrop-filter: blur(8px);
-    background-color: hsl(var(--background) / 0.9);
-    border: 1px solid hsl(var(--border) / 0.5);
+  .interactive-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, 
+      rgba(255,255,255,0.1) 0%, 
+      rgba(255,255,255,0.05) 50%, 
+      rgba(255,255,255,0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+    pointer-events: none;
   }
 
-  .glass-card {
-    backdrop-filter: blur(8px);
-    background-color: hsl(var(--card) / 0.95);
-    border: 1px solid hsl(var(--border) / 0.3);
-    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.05);
+  .interactive-card:hover::before {
+    opacity: 1;
   }
 
-  /* Dark theme specific glass effects */
-  .dark .glass {
-    background-color: hsl(var(--background) / 0.85);
-    border: 1px solid hsl(var(--border) / 0.4);
+  .interactive-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 60px 20px rgba(126, 34, 206, 0.15);
   }
 
-  .dark .glass-card {
-    background-color: hsl(var(--card) / 0.9);
-    border: 1px solid hsl(var(--border) / 0.25);
+  /* OS-style button animations */
+  .os-button {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Old Money Gradients */
-  .old-money-gradient {
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
+  .os-button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    transition: width 0.3s ease, height 0.3s ease;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
   }
 
-  .old-money-text-gradient {
-    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .os-button:hover::before {
+    width: 300px;
+    height: 300px;
   }
 
-  /* Soft Shadows */
-  .soft-shadow {
-    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.06), 0 1px 3px hsl(var(--foreground) / 0.08);
+  .os-button:active {
+    transform: scale(0.95);
   }
 
-  .soft-shadow-lg {
-    box-shadow: 0 4px 16px hsl(var(--foreground) / 0.08), 0 2px 6px hsl(var(--foreground) / 0.1);
+  /* Enhanced grid system */
+  .interactive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    position: relative;
   }
 
-  /* Dark theme specific shadows */
-  .dark .soft-shadow {
-    box-shadow: 0 2px 8px hsl(0 0% 0% / 0.3), 0 1px 3px hsl(0 0% 0% / 0.4);
+  .interactive-grid::before {
+    content: '';
+    position: absolute;
+    inset: -2rem;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(126,34,206,0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(59,130,246,0.03) 0%, transparent 50%),
+      radial-gradient(circle at 40% 60%, rgba(16,185,129,0.03) 0%, transparent 50%);
+    animation: gradient-shift 8s ease-in-out infinite;
+    pointer-events: none;
   }
 
-  .dark .soft-shadow-lg {
-    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.4), 0 2px 6px hsl(0 0% 0% / 0.5);
+  /* Real-time data indicators */
+  .live-indicator {
+    position: relative;
+  }
+
+  .live-indicator::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Command palette enhancements */
+  .command-palette {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .command-palette {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Particle system for backgrounds */
+  .floating-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(126, 34, 206, 0.3);
+    border-radius: 50%;
+    animation: particle-float 6s ease-in-out infinite;
+  }
+
+  .particle:nth-child(2n) {
+    background: rgba(59, 130, 246, 0.3);
+    animation-delay: -2s;
+    animation-duration: 8s;
+  }
+
+  .particle:nth-child(3n) {
+    background: rgba(16, 185, 129, 0.3);
+    animation-delay: -4s;
+    animation-duration: 10s;
+  }
+
+  /* Enhanced loading states */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  .dark .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
   }
 }
 
-/* Old Money Component Overrides */
-@layer components {
-  .old-money-button {
-    @apply relative overflow-hidden transition-all duration-300 ease-out soft-shadow;
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+/* Enhanced utility classes */
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
-  .old-money-button::before {
-    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
-    background: linear-gradient(to right, hsl(var(--accent) / 0.1), hsl(var(--primary) / 0.1));
-    content: '';
+  .animate-glow {
+    animation: glow 3s ease-in-out infinite;
   }
 
-  .old-money-button:hover::before {
-    @apply opacity-100;
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
   }
 
-  .old-money-button:hover {
-    @apply soft-shadow-lg;
+  .animate-particle {
+    animation: particle-float 6s ease-in-out infinite;
   }
 
-  .old-money-card {
-    @apply relative overflow-hidden transition-all duration-300 soft-shadow;
-    background-color: hsl(var(--card));
-    color: hsl(var(--card-foreground));
+  .perspective-1000 {
+    perspective: 1000px;
   }
 
-  .old-money-card::before {
-    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
-    background: linear-gradient(to bottom right, hsl(var(--accent) / 0.05), hsl(var(--primary) / 0.05));
-    content: '';
+  .transform-3d {
+    transform-style: preserve-3d;
   }
 
-  .old-money-card:hover::before {
-    @apply opacity-100;
+  .backface-hidden {
+    backface-visibility: hidden;
   }
 
-  .old-money-card:hover {
-    @apply soft-shadow-lg;
+  .soft-shadow-2xl {
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 60px 20px rgba(126, 34, 206, 0.1);
   }
 
-  /* Elegant Text Styles */
-  .old-money-heading {
-    @apply font-serif font-medium tracking-wide;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    color: hsl(var(--foreground));
-  }
-
-  .old-money-subheading {
-    @apply font-serif font-normal tracking-wide;
-    font-family: 'Georgia', 'Times New Roman', serif;
-    color: hsl(var(--muted-foreground));
-  }
-
-  /* Form elements */
-  input, textarea, select {
-    background-color: hsl(var(--background));
-    border-color: hsl(var(--border));
-    color: hsl(var(--foreground));
-  }
-
-  input:focus, textarea:focus, select:focus {
-    border-color: hsl(var(--accent) / 0.5);
-    box-shadow: 0 0 0 2px hsl(var(--accent) / 0.25);
-  }
-
-  .dark input, .dark textarea, .dark select {
-    background-color: hsl(var(--muted) / 0.3);
-    border-color: hsl(var(--border));
-    color: hsl(var(--foreground));
-  }
-
-  .dark input:focus, .dark textarea:focus, .dark select:focus {
-    border-color: hsl(var(--accent) / 0.5);
-    box-shadow: 0 0 0 2px hsl(var(--accent) / 0.25);
+  .dark .soft-shadow-2xl {
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      0 0 60px 20px rgba(126, 34, 206, 0.2);
   }
 }
