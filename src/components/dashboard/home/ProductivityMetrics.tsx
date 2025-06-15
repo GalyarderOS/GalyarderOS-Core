@@ -8,7 +8,7 @@ import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, RadialBarChart, Rad
 import { Timer, Brain, Zap, Target, Calendar, BookOpen, TrendingUp } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 
-interface ProductivityMetricsProps {{
+interface ProductivityMetricsProps {
   stats: {
     focusHoursToday: number;
     weeklyFocusHours: number;
