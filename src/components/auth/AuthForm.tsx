@@ -36,30 +36,30 @@ export const AuthForm = ({
   handleGoogleSignIn,
 }: AuthFormProps) => {
   return (
-    <Card className="border-2 border-border soft-shadow">
-      <CardHeader className="space-y-1 text-center pb-4">
+    <Card className="border-2 border-border soft-shadow w-full max-w-md mx-auto">
+      <CardHeader className="space-y-1 text-center pb-4 px-4 sm:px-6">
         <div className="flex items-center justify-center space-x-2 mb-4">
           {isLogin ? <Shield className="h-5 w-5 text-muted-foreground" /> : <Crown className="h-5 w-5 text-muted-foreground" />}
-          <CardTitle className="text-2xl text-foreground font-playfair">
-            {isLogin ? 'Sign In' : 'Create Account'}
+          <CardTitle className="text-xl sm:text-2xl text-foreground font-playfair">
+            {isLogin ? 'Masuk' : 'Buat Akun'}
           </CardTitle>
         </div>
-        <CardDescription className="text-muted-foreground font-playfair">
+        <CardDescription className="text-sm sm:text-base text-muted-foreground font-playfair">
           {isLogin 
-            ? 'Enter your credentials to continue' 
-            : 'Join the exclusive community of achievers'
+            ? 'Masukkan kredensial Anda untuk melanjutkan' 
+            : 'Bergabunglah dengan komunitas eksklusif pencapai tujuan'
           }
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6 space-y-4">
         <GoogleSignInButton onClick={handleGoogleSignIn} disabled={googleLoading} />
 
-        <div className="relative mb-6">
+        <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <Separator className="w-full" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-3 text-muted-foreground font-medium font-playfair">Or continue with email</span>
+            <span className="bg-card px-3 text-muted-foreground font-medium font-playfair">Atau lanjut dengan email</span>
           </div>
         </div>
 
@@ -75,15 +75,15 @@ export const AuthForm = ({
           loading={loading}
         />
 
-        <div className="mt-6 text-center">
+        <div className="text-center pt-2">
           <p className="text-sm text-muted-foreground font-playfair">
-            {isLogin ? "New to our exclusive platform?" : "Already part of the community?"}
+            {isLogin ? "Baru di platform eksklusif kami?" : "Sudah menjadi bagian komunitas?"}
             <Button
               variant="link"
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-1 p-0 h-auto text-foreground hover:text-foreground/80 font-medium font-playfair"
+              className="ml-1 p-0 h-auto text-foreground hover:text-foreground/80 font-medium font-playfair text-sm"
             >
-              {isLogin ? 'Create account' : 'Sign in'}
+              {isLogin ? 'Buat akun' : 'Masuk'}
             </Button>
           </p>
         </div>

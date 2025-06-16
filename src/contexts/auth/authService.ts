@@ -51,7 +51,11 @@ export const ensureProfileExists = async (user: User): Promise<void> => {
 };
 
 export const signUpUser = async (email: string, password: string, fullName: string) => {
-  const redirectUrl = `${window.location.origin}/dashboard`;
+  // Get the current URL origin for redirect
+  const currentOrigin = window.location.origin;
+  const redirectUrl = `${currentOrigin}/dashboard`;
+  
+  console.log('Sign up redirect URL:', redirectUrl);
   
   const { error } = await supabase.auth.signUp({
     email,
@@ -75,7 +79,11 @@ export const signInUser = async (email: string, password: string) => {
 };
 
 export const signInWithGoogleUser = async () => {
-  const redirectUrl = `${window.location.origin}/dashboard`;
+  // Get the current URL origin for redirect
+  const currentOrigin = window.location.origin;
+  const redirectUrl = `${currentOrigin}/dashboard`;
+  
+  console.log('Google sign in redirect URL:', redirectUrl);
   
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',

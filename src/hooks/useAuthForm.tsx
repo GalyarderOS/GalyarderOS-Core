@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -24,8 +25,8 @@ export const useAuthForm = () => {
     if (isLogin && !loginRateLimiter.isAllowed(email)) {
       const remainingTime = Math.ceil(loginRateLimiter.getRemainingTime(email) / 1000 / 60);
       toast({
-        title: "Too many login attempts",
-        description: `Please wait for about ${remainingTime} minute(s) before trying again.`,
+        title: "Terlalu banyak percobaan login",
+        description: `Harap tunggu sekitar ${remainingTime} menit sebelum mencoba lagi.`,
         variant: "destructive",
       });
       return;
@@ -41,7 +42,7 @@ export const useAuthForm = () => {
         if (!fullName.trim()) {
           toast({
             title: "Error",
-            description: "Please enter your full name",
+            description: "Harap masukkan nama lengkap Anda",
             variant: "destructive"
           });
           setLoading(false);
@@ -51,16 +52,29 @@ export const useAuthForm = () => {
       }
 
       if (result.error) {
+        let errorMessage = result.error.message;
+        
+        // Translate common error messages to Indonesian
+        if (errorMessage.includes('Invalid login credentials')) {
+          errorMessage = 'Email atau password salah';
+        } else if (errorMessage.includes('User already registered')) {
+          errorMessage = 'Email sudah terdaftar';
+        } else if (errorMessage.includes('Password should be at least 6 characters')) {
+          errorMessage = 'Password harus minimal 6 karakter';
+        } else if (errorMessage.includes('Unable to validate email address')) {
+          errorMessage = 'Format email tidak valid';
+        }
+        
         toast({
           title: "Error",
-          description: result.error.message,
+          description: errorMessage,
           variant: "destructive"
         });
       } else {
         if (!isLogin) {
           toast({
-            title: "Success",
-            description: "Account created successfully! Please check your email to verify your account.",
+            title: "Berhasil!",
+            description: "Akun berhasil dibuat! Silakan cek email Anda untuk verifikasi akun.",
           });
         } else {
           navigate('/dashboard');
@@ -69,7 +83,7 @@ export const useAuthForm = () => {
     } catch (error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: "Terjadi kesalahan. Silakan coba lagi.",
         variant: "destructive"
       });
     } finally {
@@ -82,16 +96,25 @@ export const useAuthForm = () => {
     try {
       const result = await signInWithGoogle();
       if (result.error) {
+        let errorMessage = result.error.message;
+        
+        // Translate Google auth errors
+        if (errorMessage.includes('popup_closed_by_user')) {
+          errorMessage = 'Login Google dibatalkan';
+        } else if (errorMessage.includes('access_denied')) {
+          errorMessage = 'Akses ditolak oleh Google';
+        }
+        
         toast({
           title: "Error",
-          description: result.error.message,
+          description: errorMessage,
           variant: "destructive"
         });
       }
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to sign in with Google. Please try again.",
+        description: "Gagal masuk dengan Google. Silakan coba lagi.",
         variant: "destructive"
       });
     } finally {
