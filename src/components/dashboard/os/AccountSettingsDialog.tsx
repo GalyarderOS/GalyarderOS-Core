@@ -20,10 +20,26 @@ import { User, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 
 const profileSchema = z.object({
-  full_name: z.string().min(1, "Name is required."),
+  full_name: z.string().min(1, "Name is required.").max(100, "Name is too long"),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
+
+// Enhanced file validation
+const validateAvatarFile = (file: File): string | null => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  const maxSize = 2 * 1024 * 1024; // 2MB
+  
+  if (!allowedTypes.includes(file.type)) {
+    return "Only JPEG, PNG, and WebP images are allowed.";
+  }
+  
+  if (file.size > maxSize) {
+    return "File size must be less than 2MB.";
+  }
+  
+  return null;
+};
 
 export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => void }> = ({ onOpenChange }) => {
   const { user, profile, reloadProfile } = useAuth();
@@ -35,7 +51,9 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ProfileFormValues>();
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema)
+  });
 
   useEffect(() => {
     if (profile) {
@@ -46,10 +64,14 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if (file.size > 2 * 1024 * 1024) { // 2MB limit
-        toast.error("File is too large. Maximum size is 2MB.");
+      const validationError = validateAvatarFile(file);
+      
+      if (validationError) {
+        toast.error(validationError);
+        e.target.value = ''; // Clear the input
         return;
       }
+      
       setAvatarFile(file);
     }
   };
@@ -63,26 +85,46 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
       if (avatarFile) {
         setIsUploading(true);
         const fileExt = avatarFile.name.split('.').pop();
-        const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${user.id}/${fileName}`;
 
-        // Hapus avatar lama jika ada
+        // Delete old avatar if exists
         if (profile?.avatar_url) {
+          try {
             const oldAvatarPath = profile.avatar_url.split('/').pop();
-            if(oldAvatarPath) {
-                await supabase.storage.from('avatars').remove([`${user.id}/${oldAvatarPath}`]);
+            if (oldAvatarPath && oldAvatarPath !== fileName) {
+              await supabase.storage
+                .from('avatars')
+                .remove([`${user.id}/${oldAvatarPath}`]);
             }
+          } catch (error) {
+            console.warn('Could not delete old avatar:', error);
+          }
         }
 
-        const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, avatarFile);
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(filePath, avatarFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+          
         if (uploadError) throw uploadError;
 
-        const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(filePath);
+        const { data: { publicUrl } } = supabase.storage
+          .from('avatars')
+          .getPublicUrl(filePath);
+          
         avatarUrlToUpdate = publicUrl;
         setIsUploading(false);
       }
 
-      const updates: { full_name: string; avatar_url?: string; updated_at: string } = {
-        full_name: data.full_name,
+      const updates: { 
+        full_name: string; 
+        avatar_url?: string; 
+        updated_at: string;
+      } = {
+        full_name: data.full_name.trim(),
         updated_at: new Date().toISOString(),
       };
 
@@ -102,6 +144,7 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
       setAvatarFile(null);
       onOpenChange(false);
     } catch (error: any) {
+      console.error('Profile update error:', error);
       toast.error(error.message || 'Failed to update profile.');
       setIsUploading(false);
     }
@@ -128,22 +171,41 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
                 <User className="w-12 h-12" />
               </AvatarFallback>
             </Avatar>
-            <label htmlFor="avatar-upload" className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors">
+            <label 
+              htmlFor="avatar-upload" 
+              className="absolute bottom-0 right-0 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors"
+            >
               <Camera className="w-4 h-4" />
-              <input id="avatar-upload" type="file" className="hidden" accept="image/png, image/jpeg" onChange={handleAvatarChange} disabled={isUploading} />
+              <input 
+                id="avatar-upload" 
+                type="file" 
+                className="hidden" 
+                accept="image/jpeg,image/png,image/webp" 
+                onChange={handleAvatarChange} 
+                disabled={isUploading} 
+              />
             </label>
           </div>
         </div>
 
         <div>
           <label htmlFor="full_name" className="text-sm font-medium">Full Name</label>
-          <Input id="full_name" {...register('full_name')} className="mt-1"/>
-          {errors.full_name && <p className="text-red-500 text-sm mt-1">{errors.full_name.message}</p>}
+          <Input 
+            id="full_name" 
+            {...register('full_name')} 
+            className="mt-1"
+            disabled={isSubmitting || isUploading}
+          />
+          {errors.full_name && (
+            <p className="text-red-500 text-sm mt-1">{errors.full_name.message}</p>
+          )}
         </div>
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="button" variant="secondary">Cancel</Button>
+            <Button type="button" variant="secondary" disabled={isSubmitting || isUploading}>
+              Cancel
+            </Button>
           </DialogClose>
           <Button type="submit" disabled={isSubmitting || isUploading}>
             {isSubmitting || isUploading ? 'Saving...' : 'Save changes'}
