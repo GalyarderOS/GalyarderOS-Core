@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -77,77 +76,27 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
   };
 
   const onSubmit = async (data: ProfileFormValues) => {
-    if (!user) return;
-    
-    let avatarUrlToUpdate: string | undefined = undefined;
-
-    try {
-      if (avatarFile) {
-        setIsUploading(true);
-        const fileExt = avatarFile.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `${user.id}/${fileName}`;
-
-        // Delete old avatar if exists
-        if (profile?.avatar_url) {
-          try {
-            const oldAvatarPath = profile.avatar_url.split('/').pop();
-            if (oldAvatarPath && oldAvatarPath !== fileName) {
-              await supabase.storage
-                .from('avatars')
-                .remove([`${user.id}/${oldAvatarPath}`]);
-            }
-          } catch (error) {
-            console.warn('Could not delete old avatar:', error);
-          }
-        }
-
-        const { error: uploadError } = await supabase.storage
-          .from('avatars')
-          .upload(filePath, avatarFile, {
-            cacheControl: '3600',
-            upsert: false
-          });
-          
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('avatars')
-          .getPublicUrl(filePath);
-          
-        avatarUrlToUpdate = publicUrl;
-        setIsUploading(false);
-      }
-
-      const updates: { 
-        full_name: string; 
-        avatar_url?: string; 
-        updated_at: string;
-      } = {
-        full_name: data.full_name.trim(),
-        updated_at: new Date().toISOString(),
-      };
-
-      if (avatarUrlToUpdate) {
-        updates.avatar_url = avatarUrlToUpdate;
-      }
-      
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('user_id', user.id);
-      
-      if (updateError) throw updateError;
-
-      toast.success('Profile updated successfully!');
-      await reloadProfile();
-      setAvatarFile(null);
-      onOpenChange(false);
-    } catch (error: any) {
-      console.error('Profile update error:', error);
-      toast.error(error.message || 'Failed to update profile.');
-      setIsUploading(false);
+    // TODO: Replace with Bolt API
+    console.log("Updating profile with:", data);
+    if (avatarFile) {
+        console.log("New avatar file:", avatarFile.name);
     }
+    
+    setIsUploading(true);
+    
+    setTimeout(async () => {
+        try {
+            toast.success('Profile updated successfully!');
+            await reloadProfile(); // This will now use the mock service
+            setAvatarFile(null);
+            onOpenChange(false);
+        } catch (error) {
+            console.error('Profile update error:', error);
+            toast.error('Failed to update profile.');
+        } finally {
+            setIsUploading(false);
+        }
+    }, 1000);
   };
 
   const avatarPreview = avatarFile 

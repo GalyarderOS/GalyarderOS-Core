@@ -1,8 +1,25 @@
+// import { User, Session } from '@supabase/supabase-js';
+// import { Tables } from '@/integrations/supabase/types';
 
-import { User, Session } from '@supabase/supabase-js';
-import { Tables } from '@/integrations/supabase/types';
+// TODO: Replace with Bolt's user/session types
+export type User = {
+  id: string;
+  email?: string;
+  // add other user properties as needed
+};
 
-export type Profile = Tables<'profiles'>;
+export type Session = {
+  access_token: string;
+  refresh_token: string;
+  user: User;
+};
+
+export type Profile = {
+  id: string;
+  full_name?: string;
+  has_completed_onboarding?: boolean;
+  // add other profile properties as needed
+};
 
 export interface AuthContextType {
   user: User | null;

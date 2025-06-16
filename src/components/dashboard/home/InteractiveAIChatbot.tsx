@@ -1,6 +1,5 @@
-
 import { useState, useRef } from "react";
-import { supabase } from "@/integrations/supabase/client";
+// import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 interface Message {
@@ -8,19 +7,9 @@ interface Message {
   content: string;
 }
 const getAIAssistantReply = async (message: string) => {
-  // Call Supabase Edge Function (POST)
-  const {
-    data,
-    error
-  } = await supabase.functions.invoke('ai-chat', {
-    body: {
-      message
-    }
-  });
-  if (error) {
-    throw new Error(data?.error || "AI Assistant is not available.");
-  }
-  return data?.response || data?.error || "Sorry, something went wrong.";
+  // TODO: Replace with Bolt API
+  console.log('Sending message to AI:', message);
+  return new Promise(resolve => setTimeout(() => resolve("This is a mocked AI response. The real AI is currently offline."), 1500));
 };
 const InteractiveAIChatbot = () => {
   const [messages, setMessages] = useState<Message[]>([{

@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Send, 
@@ -73,72 +72,17 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
     setIsLoading(true);
     setConnectionError(false);
 
-    try {
-      console.log('Sending message to AI:', userMessage.content);
-      
-      const { data, error } = await supabase.functions.invoke('ai-chat', {
-        body: { message: userMessage.content },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      });
-
-      console.log('Response from edge function:', { data, error });
-
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Terjadi kesalahan saat menghubungi server');
-      }
-
-      if (data?.error) {
-        console.error('API error:', data.error);
-        throw new Error(data.error);
-      }
-
-      if (!data?.response) {
-        throw new Error('Tidak ada respons dari AI');
-      }
-
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, assistantMessage]);
-
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setConnectionError(true);
-      
-      let errorMessage = 'Maaf, terjadi kesalahan. Silakan coba lagi.';
-      
-      if (error.message?.includes('tidak tersedia')) {
-        errorMessage = 'AI Assistant sedang tidak tersedia. Silakan hubungi administrator atau tambahkan API key Gemini pribadi Anda di Settings.';
-      } else if (error.message?.includes('tidak valid')) {
-        errorMessage = 'Terjadi masalah dengan API key. Silakan hubungi administrator.';
-      } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
-        errorMessage = 'Masalah koneksi. Periksa koneksi internet Anda dan coba lagi.';
-      }
-
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive"
-      });
-
-      const errorResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: `❌ ${errorMessage}`,
-        timestamp: new Date()
-      };
-
-      setMessages(prev => [...prev, errorResponse]);
-    } finally {
-      setIsLoading(false);
-    }
+    // TODO: Replace with Bolt API
+    setTimeout(() => {
+        const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: "This is a mocked AI response. The real AI is currently offline.",
+            timestamp: new Date()
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+        setIsLoading(false);
+    }, 1500);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

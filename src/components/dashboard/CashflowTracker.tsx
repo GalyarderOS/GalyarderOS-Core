@@ -1,11 +1,37 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { TrendingUp, TrendingDown, Plus, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+
+const mockTransactions = [
+    {
+        id: '1',
+        description: 'Salary',
+        type: 'income',
+        amount: 5000,
+        transaction_date: '2024-07-25',
+        cashflow_categories: { name: 'Salary', color: '#10B981' }
+    },
+    {
+        id: '2',
+        description: 'Rent',
+        type: 'expense',
+        amount: 2000,
+        transaction_date: '2024-07-25',
+        cashflow_categories: { name: 'Housing', color: '#EF4444' }
+    },
+    {
+        id: '3',
+        description: 'Groceries',
+        type: 'expense',
+        amount: 300,
+        transaction_date: '2024-07-20',
+        cashflow_categories: { name: 'Food', color: '#F59E0B' }
+    },
+];
 
 const CashflowTracker = () => {
   const { user } = useAuth();
@@ -24,50 +50,31 @@ const CashflowTracker = () => {
   }, [user]);
 
   const loadCashflowData = async () => {
-    if (!user) return;
+    // TODO: Replace with Bolt API
+    setLoading(true);
+    setTimeout(() => {
+        const transactionsData = mockTransactions;
+        setTransactions(transactionsData || []);
 
-    try {
-      // Get current month transactions
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      const { data: transactionsData } = await supabase
-        .from('cashflow_transactions')
-        .select(`
-          *,
-          cashflow_categories (
-            name,
-            type,
-            color
-          )
-        `)
-        .eq('user_id', user.id)
-        .gte('transaction_date', currentMonth + '-01')
-        .order('transaction_date', { ascending: false });
+        // Calculate summary
+        let totalIncome = 0;
+        let totalExpenses = 0;
 
-      setTransactions(transactionsData || []);
+        transactionsData?.forEach(transaction => {
+            if (transaction.type === 'income') {
+                totalIncome += transaction.amount;
+            } else {
+                totalExpenses += transaction.amount;
+            }
+        });
 
-      // Calculate summary
-      let totalIncome = 0;
-      let totalExpenses = 0;
-
-      transactionsData?.forEach(transaction => {
-        if (transaction.type === 'income') {
-          totalIncome += transaction.amount;
-        } else {
-          totalExpenses += transaction.amount;
-        }
-      });
-
-      setSummary({
-        totalIncome,
-        totalExpenses,
-        netCashflow: totalIncome - totalExpenses
-      });
-
-    } catch (error) {
-      console.error('Error loading cashflow data:', error);
-    } finally {
-      setLoading(false);
-    }
+        setSummary({
+            totalIncome,
+            totalExpenses,
+            netCashflow: totalIncome - totalExpenses
+        });
+        setLoading(false);
+    }, 1000);
   };
 
   if (loading) {

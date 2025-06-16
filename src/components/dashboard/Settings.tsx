@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { 
   Save, 
   Palette, 
@@ -34,84 +34,39 @@ const Settings = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      loadUserSettings();
-    }
-  }, [user]);
-
-  const loadUserSettings = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('user_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error loading settings:', error);
-        return;
-      }
-
-      if (data) {
-        setSettings({
-          gemini_api_key: data.gemini_api_key || '',
-          notion_token: data.notion_token || '',
-          notifications_enabled: true,
-          dark_mode: data.theme === 'dark',
-          language: (data.language || 'en') as 'en' | 'id'
-        });
-      }
-    } catch (error) {
-      console.error('Error loading settings:', error);
-    }
-  };
+    // TODO: Replace with Bolt API
+    // Mock loading user settings
+    setSettings({
+      gemini_api_key: 'mock_gemini_key_loaded',
+      notion_token: 'mock_notion_token_loaded',
+      notifications_enabled: true,
+      dark_mode: theme === 'dark',
+      language: language as 'en' | 'id'
+    });
+  }, [user, theme, language]);
 
   const saveSettings = async () => {
-    if (!user) return;
-
     setLoading(true);
-    try {
-      const { error } = await supabase
-        .from('user_settings')
-        .upsert({
-          user_id: user.id,
-          gemini_api_key: settings.gemini_api_key,
-          notion_token: settings.notion_token,
-          theme: settings.dark_mode ? 'dark' : 'light',
-          language: settings.language,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id'
-        });
+    // TODO: Replace with Bolt API
+    console.log('Saving settings:', settings);
+    
+    // Update theme context
+    if (settings.dark_mode !== (theme === 'dark')) {
+      setTheme(settings.dark_mode ? 'dark' : 'light');
+    }
 
-      if (error) throw error;
-
-      // Update theme context
-      if (settings.dark_mode !== (theme === 'dark')) {
-        setTheme(settings.dark_mode ? 'dark' : 'light');
-      }
-
-      // Update language context
-      if (settings.language !== language) {
-        setLanguage(settings.language);
-      }
-
+    // Update language context
+    if (settings.language !== language) {
+      setLanguage(settings.language);
+    }
+    
+    setTimeout(() => {
+      setLoading(false);
       toast({
         title: "Settings saved",
         description: "Your preferences have been updated successfully.",
       });
-    } catch (error) {
-      console.error('Error saving settings:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save settings. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    }, 1000);
   };
 
   const translations = {

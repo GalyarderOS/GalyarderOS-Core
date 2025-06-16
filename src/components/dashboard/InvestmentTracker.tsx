@@ -1,12 +1,28 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { TrendingUp, TrendingDown, Plus, DollarSign, Target, PieChart } from 'lucide-react';
+
+const mockPortfolios = [
+    {
+        id: '1',
+        name: 'Growth Portfolio',
+        description: 'High-risk, high-reward investments.',
+        total_value: 50000,
+        investments: [{}, {}, {}],
+    },
+    {
+        id: '2',
+        name: 'Retirement Fund',
+        description: 'Long-term, stable investments.',
+        total_value: 150000,
+        investments: [{}, {}, {}, {}],
+    },
+];
 
 const InvestmentTracker = () => {
   const { user } = useAuth();
@@ -20,23 +36,12 @@ const InvestmentTracker = () => {
   }, [user]);
 
   const loadPortfolios = async () => {
-    if (!user) return;
-
-    try {
-      const { data: portfoliosData } = await supabase
-        .from('investment_portfolios')
-        .select(`
-          *,
-          investments (*)
-        `)
-        .eq('user_id', user.id);
-
-      setPortfolios(portfoliosData || []);
-    } catch (error) {
-      console.error('Error loading portfolios:', error);
-    } finally {
-      setLoading(false);
-    }
+    // TODO: Replace with Bolt API
+    setLoading(true);
+    setTimeout(() => {
+        setPortfolios(mockPortfolios);
+        setLoading(false);
+    }, 1000);
   };
 
   if (loading) {

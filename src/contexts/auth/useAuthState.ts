@@ -1,11 +1,21 @@
-
 import { useState, useEffect, useCallback } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
-import { SessionManager } from '@/utils/security';
-import { toast } from '@/hooks/use-toast';
-import { Profile } from './types';
-import { fetchProfile, ensureProfileExists, signOutUser } from './authService';
+// import { User, Session } from '@supabase/supabase-js';
+// import { supabase } from '@/integrations/supabase/client';
+// import { SessionManager } from '@/utils/security';
+// import { toast } from '@/hooks/use-toast';
+import { Profile, User, Session } from './types';
+import { fetchProfile, signOutUser } from './authService';
+
+const mockUser: User = {
+  id: 'mock-user-id',
+  email: 'user@example.com',
+};
+
+const mockSession: Session = {
+  access_token: 'mock-access-token',
+  refresh_token: 'mock-refresh-token',
+  user: mockUser,
+};
 
 export const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -15,73 +25,36 @@ export const useAuthState = () => {
   const [loadingProfile, setLoadingProfile] = useState(true);
 
   const signOut = useCallback(async () => {
+    // TODO: Replace with Bolt API
     await signOutUser();
+    setUser(null);
+    setSession(null);
     setProfile(null);
   }, []);
 
-  useEffect(() => {
-    let sessionManager: SessionManager | null = null;
+  const reloadProfile = useCallback(async () => {
     if (user) {
-      sessionManager = new SessionManager(30 * 60 * 1000, () => {
-        toast({
-          title: 'Session Expired',
-          description: 'You have been logged out due to inactivity.',
-        });
-        signOut();
-      });
-    }
-    return () => {
-      sessionManager?.destroy();
-    };
-  }, [user, signOut]);
-
-  const loadProfile = async (userId: string) => {
-    setLoadingProfile(true);
-    try {
-      const profileData = await fetchProfile(userId);
+      setLoadingProfile(true);
+      const profileData = await fetchProfile(user.id);
       setProfile(profileData);
-    } finally {
       setLoadingProfile(false);
     }
-  };
-
-  const reloadProfile = async () => {
-    if (user) {
-      await loadProfile(user.id);
-    }
-  };
+  }, [user]);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('Auth state changed:', event, session);
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-        
-        // Handle profile fetching asynchronously
-        if (session?.user) {
-          setTimeout(() => {
-            ensureProfileExists(session.user).then(() => {
-              loadProfile(session.user.id);
-            });
-          }, 0);
-        } else {
-          setProfile(null);
-          setLoadingProfile(false);
-        }
-      }
-    );
+    // TODO: Replace with Bolt's auth state management
+    setLoading(true);
+    setLoadingProfile(true);
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    setTimeout(() => {
+      setUser(mockUser);
+      setSession(mockSession);
+      fetchProfile(mockUser.id).then((profileData) => {
+        setProfile(profileData);
+        setLoadingProfile(false);
+      });
       setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }, 500);
   }, []);
 
   return {

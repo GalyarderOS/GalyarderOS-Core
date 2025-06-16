@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +5,31 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { CreditCard, Plus, Target, TrendingDown, Calendar, AlertTriangle } from 'lucide-react';
+
+const mockDebts = [
+  {
+    id: '1',
+    name: 'Chase Sapphire Reserve',
+    debt_type: 'credit_card',
+    total_amount: 15000,
+    remaining_amount: 8500,
+    interest_rate: 22.5,
+    minimum_payment: 250,
+    due_date: '2024-08-15',
+  },
+  {
+    id: '2',
+    name: 'Student Loan - Navient',
+    debt_type: 'student_loan',
+    total_amount: 40000,
+    remaining_amount: 35000,
+    interest_rate: 5.8,
+    minimum_payment: 400,
+    due_date: '2024-08-01',
+  },
+];
 
 const DebtManager = () => {
   const { user } = useAuth();
@@ -27,15 +49,10 @@ const DebtManager = () => {
   }, [user]);
 
   const loadDebts = async () => {
-    if (!user) return;
-
-    try {
-      const { data: debtsData } = await supabase
-        .from('debts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('remaining_amount', { ascending: false });
-
+    // TODO: Replace with Bolt API
+    setLoading(true);
+    setTimeout(() => {
+      const debtsData = mockDebts;
       setDebts(debtsData || []);
 
       // Calculate stats
@@ -51,12 +68,8 @@ const DebtManager = () => {
         averageInterestRate: avgInterestRate,
         payoffTimeframe: monthlyPayments > 0 ? Math.ceil(totalDebt / (monthlyPayments * 12)) : 0
       });
-
-    } catch (error) {
-      console.error('Error loading debts:', error);
-    } finally {
       setLoading(false);
-    }
+    }, 1000);
   };
 
   if (loading) {

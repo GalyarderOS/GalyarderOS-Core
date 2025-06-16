@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { User, Edit, Save, Plus, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { TablesUpdate } from '@/integrations/supabase/types';
+// import { supabase } from '@/integrations/supabase/client';
+// import { TablesUpdate } from '@/integrations/supabase/types';
 
 const ProfileModule = () => {
   const { user, profile, reloadProfile, loadingProfile } = useAuth();
@@ -43,28 +42,10 @@ const ProfileModule = () => {
 
 
   const handleSave = async () => {
-    if (!user) return;
-    
-    const profileUpdate: TablesUpdate<'profiles'> = {
-      full_name: formData.fullName,
-      professional_title: formData.professionalTitle,
-      life_purpose: formData.bio,
-      mission_statement: formData.mission,
-      vision_statement: formData.vision,
-      updated_at: new Date().toISOString(),
-    };
-
-    const { error } = await supabase
-      .from('profiles')
-      .update(profileUpdate)
-      .eq('user_id', user.id);
-
-    if (error) {
-      console.error("Error updating profile", error);
-    } else {
-      setIsEditing(false);
-      await reloadProfile();
-    }
+    // TODO: Replace with Bolt API
+    console.log('Saving profile data:', formData);
+    setIsEditing(false);
+    // You might want to show a toast notification here
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

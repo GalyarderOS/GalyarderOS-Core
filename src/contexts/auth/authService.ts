@@ -1,99 +1,38 @@
-
-import { supabase } from '@/integrations/supabase/client';
-import { User } from '@supabase/supabase-js';
+// import { supabase } from '@/integrations/supabase/client';
+// import { User } from '@supabase/supabase-js';
 import { Profile } from './types';
+import { User } from './types'; // Import our own User type
 
+// TODO: Replace with Bolt API
 export const fetchProfile = async (userId: string): Promise<Profile | null> => {
-  try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('user_id', userId)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching profile:', error);
-      return null;
-    }
-    return data;
-  } catch (e) {
-    console.error('Error fetching profile:', e);
-    return null;
-  }
+  console.log('Fetching profile for user:', userId);
+  return {
+    id: userId,
+    full_name: 'Mock User',
+    has_completed_onboarding: true,
+  };
 };
 
 export const ensureProfileExists = async (user: User): Promise<void> => {
-  const { error } = await supabase
-    .from('profiles')
-    .select('user_id')
-    .eq('user_id', user.id)
-    .single();
-
-  if (error && error.code === 'PGRST116') {
-    console.log('No profile found for user, creating one.');
-    const newUserProfile = {
-      user_id: user.id,
-      full_name: user.user_metadata?.full_name || user.email,
-      email: user.email,
-      avatar_url: user.user_metadata?.avatar_url,
-    };
-
-    const { error: createError } = await supabase.from('profiles').insert(newUserProfile);
-
-    if (createError) {
-      console.error('Error creating profile:', createError.message);
-    } else {
-      console.log('Profile created successfully.');
-    }
-  } else if (error) {
-    console.error("Error checking for profile:", error);
-  }
+  console.log('Ensuring profile exists for user:', user.id);
+  // No-op for now
 };
 
 export const signUpUser = async (email: string, password: string, fullName: string) => {
-  // Get the current URL origin for redirect
-  const currentOrigin = window.location.origin;
-  const redirectUrl = `${currentOrigin}/dashboard`;
-  
-  console.log('Sign up redirect URL:', redirectUrl);
-  
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: redirectUrl,
-      data: {
-        full_name: fullName
-      }
-    }
-  });
-  return { error };
+  console.log('Signing up user:', email, fullName);
+  return { error: null };
 };
 
 export const signInUser = async (email: string, password: string) => {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
-  return { error };
+  console.log('Signing in user:', email);
+  return { error: null };
 };
 
 export const signInWithGoogleUser = async () => {
-  // Get the current URL origin for redirect
-  const currentOrigin = window.location.origin;
-  const redirectUrl = `${currentOrigin}/dashboard`;
-  
-  console.log('Google sign in redirect URL:', redirectUrl);
-  
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: redirectUrl
-    }
-  });
-  return { error };
+  console.log('Signing in with Google');
+  return { error: null };
 };
 
 export const signOutUser = async () => {
-  await supabase.auth.signOut();
+  console.log('Signing out user');
 };

@@ -1,12 +1,38 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { BarChart3, Plus, TrendingDown, Calendar, Target } from 'lucide-react';
+
+const mockExpenses = [
+    {
+        id: '1',
+        description: 'Groceries',
+        category: 'Food',
+        amount: 150,
+        expense_date: '2024-07-25',
+        is_recurring: false,
+    },
+    {
+        id: '2',
+        description: 'Netflix Subscription',
+        category: 'Entertainment',
+        amount: 15.99,
+        expense_date: '2024-07-20',
+        is_recurring: true,
+    },
+    {
+        id: '3',
+        description: 'Dinner with friends',
+        category: 'Food',
+        amount: 75,
+        expense_date: '2024-07-18',
+        is_recurring: false,
+    },
+];
 
 const ExpenseManager = () => {
   const { user } = useAuth();
@@ -22,37 +48,25 @@ const ExpenseManager = () => {
   }, [user]);
 
   const loadExpenses = async () => {
-    if (!user) return;
+    // TODO: Replace with Bolt API
+    setLoading(true);
+    setTimeout(() => {
+        const expensesData = mockExpenses;
+        setExpenses(expensesData || []);
 
-    try {
-      // Get current month expenses
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      const { data: expensesData } = await supabase
-        .from('expenses')
-        .select('*')
-        .eq('user_id', user.id)
-        .gte('expense_date', currentMonth + '-01')
-        .order('expense_date', { ascending: false });
+        // Calculate category totals
+        const categoryTotals: { [key: string]: number } = {};
+        let total = 0;
 
-      setExpenses(expensesData || []);
+        expensesData?.forEach(expense => {
+            categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
+            total += expense.amount;
+        });
 
-      // Calculate category totals
-      const categoryTotals: { [key: string]: number } = {};
-      let total = 0;
-
-      expensesData?.forEach(expense => {
-        categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
-        total += expense.amount;
-      });
-
-      setCategories(categoryTotals);
-      setTotalExpenses(total);
-
-    } catch (error) {
-      console.error('Error loading expenses:', error);
-    } finally {
-      setLoading(false);
-    }
+        setCategories(categoryTotals);
+        setTotalExpenses(total);
+        setLoading(false);
+    }, 1000);
   };
 
   if (loading) {

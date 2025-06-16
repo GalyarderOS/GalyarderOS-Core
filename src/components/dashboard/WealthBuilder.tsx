@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,8 +5,38 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+// import { supabase } from '@/integrations/supabase/client';
 import { Target, Plus, Trophy, TrendingUp, Calendar } from 'lucide-react';
+
+const mockGoals = [
+    {
+        id: '1',
+        title: 'Emergency Fund',
+        description: 'Save 6 months of living expenses.',
+        target_amount: 30000,
+        current_amount: 15000,
+        status: 'active',
+        target_date: '2025-12-31',
+    },
+    {
+        id: '2',
+        title: 'House Down Payment',
+        description: 'Save for a 20% down payment on a house.',
+        target_amount: 100000,
+        current_amount: 25000,
+        status: 'active',
+        target_date: '2027-01-01',
+    },
+    {
+        id: '3',
+        title: 'New Car',
+        description: 'Buy a new car with cash.',
+        target_amount: 40000,
+        current_amount: 40000,
+        status: 'completed',
+        target_date: '2024-01-01',
+    }
+];
 
 const WealthBuilder = () => {
   const { user } = useAuth();
@@ -27,35 +56,26 @@ const WealthBuilder = () => {
   }, [user]);
 
   const loadWealthGoals = async () => {
-    if (!user) return;
+    // TODO: Replace with Bolt API
+    setLoading(true);
+    setTimeout(() => {
+        const goalsData = mockGoals;
+        setGoals(goalsData || []);
 
-    try {
-      const { data: goalsData } = await supabase
-        .from('wealth_goals')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        // Calculate stats
+        const totalGoals = goalsData?.length || 0;
+        const completedGoals = goalsData?.filter(goal => goal.status === 'completed').length || 0;
+        const totalTargetAmount = goalsData?.reduce((sum, goal) => sum + goal.target_amount, 0) || 0;
+        const totalCurrentAmount = goalsData?.reduce((sum, goal) => sum + (goal.current_amount || 0), 0) || 0;
 
-      setGoals(goalsData || []);
-
-      // Calculate stats
-      const totalGoals = goalsData?.length || 0;
-      const completedGoals = goalsData?.filter(goal => goal.status === 'completed').length || 0;
-      const totalTargetAmount = goalsData?.reduce((sum, goal) => sum + goal.target_amount, 0) || 0;
-      const totalCurrentAmount = goalsData?.reduce((sum, goal) => sum + (goal.current_amount || 0), 0) || 0;
-
-      setStats({
-        totalGoals,
-        completedGoals,
-        totalTargetAmount,
-        totalCurrentAmount
-      });
-
-    } catch (error) {
-      console.error('Error loading wealth goals:', error);
-    } finally {
-      setLoading(false);
-    }
+        setStats({
+            totalGoals,
+            completedGoals,
+            totalTargetAmount,
+            totalCurrentAmount
+        });
+        setLoading(false);
+    }, 1000);
   };
 
   if (loading) {

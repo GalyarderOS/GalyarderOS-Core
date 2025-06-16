@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+// import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,6 +56,31 @@ interface VisionBoard {
   imageUrl?: string;
   priority: number;
 }
+
+const mockGoals: Goal[] = [
+    {
+        id: '1',
+        title: 'Launch Galyarder OS',
+        description: 'Successfully launch the first version of the operating system.',
+        category: 'career',
+        timeframe: 'medium',
+        progress: 75,
+        deadline: '2024-12-31',
+        milestones: [],
+        status: 'active',
+    },
+    {
+        id: '2',
+        title: 'Achieve Financial Independence',
+        description: 'Build a sustainable business that generates passive income.',
+        category: 'financial',
+        timeframe: 'long',
+        progress: 20,
+        deadline: '2030-01-01',
+        milestones: [],
+        status: 'active',
+    },
+];
 
 const mapGoalDBtoApp = (g: any): Goal => ({
   id: g.id,
@@ -124,13 +149,9 @@ const VisionArchitecture = () => {
   const { data: goalsData, isLoading, isError } = useQuery({
     queryKey: ["goals"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("goals")
-        .select("*")
-        .eq("user_id", user?.id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return (data ?? []).map(mapGoalDBtoApp);
+      // TODO: Replace with Bolt API
+      console.log("Fetching goals...");
+      return new Promise(resolve => setTimeout(() => resolve(mockGoals), 1000));
     },
     enabled: !!user
   });
@@ -138,31 +159,9 @@ const VisionArchitecture = () => {
   // 2. REACT QUERY - Add New Goal
   const addGoalMutation = useMutation({
     mutationFn: async (goal: typeof newGoal) => {
-      const { error, data } = await supabase
-        .from("goals")
-        .insert([
-          {
-            title: goal.title,
-            description: goal.description,
-            deadline: goal.deadline || null,
-            user_id: user.id,
-            priority: goal.category === "career"
-              ? "high"
-              : goal.category === "financial"
-              ? "high"
-              : goal.category === "health"
-              ? "medium"
-              : goal.category === "relationships"
-              ? "medium"
-              : "low",
-            status: "active",
-            progress: 0
-          }
-        ])
-        .select()
-        .maybeSingle();
-      if (error) throw error;
-      return mapGoalDBtoApp(data);
+      // TODO: Replace with Bolt API
+      console.log("Adding new goal:", goal);
+      return new Promise(resolve => setTimeout(() => resolve({ id: 'new-mock-id', ...goal, progress: 0, status: 'active', milestones: [] }), 1000));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
@@ -184,13 +183,9 @@ const VisionArchitecture = () => {
   // 3. REACT QUERY - Delete Goal
   const deleteGoalMutation = useMutation({
     mutationFn: async (goalId: string) => {
-      const { error } = await supabase
-        .from("goals")
-        .delete()
-        .eq("id", goalId)
-        .eq("user_id", user.id);
-      if (error) throw error;
-      return goalId;
+      // TODO: Replace with Bolt API
+      console.log("Deleting goal:", goalId);
+      return new Promise(resolve => setTimeout(() => resolve(goalId), 500));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
@@ -204,13 +199,9 @@ const VisionArchitecture = () => {
   // 4. REACT QUERY - Update Progress (NOTE: No milestone on DB)
   const updateGoalProgressMutation = useMutation({
     mutationFn: async ({ goalId, progress }: { goalId: string; progress: number }) => {
-      const { error } = await supabase
-        .from("goals")
-        .update({ progress })
-        .eq("id", goalId)
-        .eq("user_id", user.id);
-      if (error) throw error;
-      return goalId;
+      // TODO: Replace with Bolt API
+      console.log("Updating progress for goal:", goalId, "to", progress);
+      return new Promise(resolve => setTimeout(() => resolve(goalId), 500));
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
