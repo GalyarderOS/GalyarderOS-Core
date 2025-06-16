@@ -1,4 +1,3 @@
-
 import { Mail, Phone } from 'lucide-react';
 
 const LandingFooter = () => {
@@ -9,7 +8,7 @@ const LandingFooter = () => {
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center overflow-hidden">
               <img 
-                src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+                src="/galyarder-logo.svg" 
                 alt="GalyarderOS Logo" 
                 className="w-5 h-5 object-contain"
               />

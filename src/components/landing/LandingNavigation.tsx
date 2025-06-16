@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { MobileHeader } from '@/components/ui/mobile-header';
@@ -21,7 +20,7 @@ const LandingNavigation = ({ theme, setTheme, onSignIn, onGetStarted }: LandingN
       transition={{ type: "spring", stiffness: 400, damping: 10 }}
     >
       <img 
-        src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+        src="/galyarder-logo.svg" 
         alt="GalyarderOS Logo" 
         className="w-6 h-6 object-contain"
       />

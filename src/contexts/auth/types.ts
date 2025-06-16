@@ -18,6 +18,7 @@ export type Profile = {
   id: string;
   full_name?: string;
   has_completed_onboarding?: boolean;
+  avatar_url?: string;
   // add other profile properties as needed
 };
 

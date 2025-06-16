@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -24,7 +23,7 @@ export const AuthHeader = ({ isLogin }: AuthHeaderProps) => {
       <div className="flex items-center justify-center space-x-3 mb-6">
         <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center soft-shadow">
           <img 
-            src="/lovable-uploads/e58a97fc-d08f-4514-be06-48ce8aaa4d1a.png" 
+            src="/galyarder-logo.svg" 
             alt="GalyarderOS Logo" 
             className="h-8 w-8 object-contain"
           />

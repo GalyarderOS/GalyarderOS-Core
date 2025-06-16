@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
@@ -94,7 +93,7 @@ const TopBar = ({
         {/* Left Section - Logo and App Name */}
         <div className="flex items-center space-x-3">
           <img 
-            src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" 
+            src="/galyarder-logo.svg" 
             alt="GalyarderOS Logo" 
             className="w-10 h-10 object-contain" 
           />

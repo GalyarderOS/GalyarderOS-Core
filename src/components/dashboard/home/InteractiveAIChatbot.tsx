@@ -63,7 +63,7 @@ const InteractiveAIChatbot = () => {
   return <section className="w-full max-w-2xl mx-auto">
       <div className="rounded-2xl border border-primary/60 bg-card/70 px-4 py-6 shadow-lg flex flex-col gap-4 animate-fade-in min-h-[380px]">
         <div className="flex items-center gap-2 mb-1">
-          <img src="/lovable-uploads/1933874e-bfc3-4397-b239-859be4a5d342.png" alt="Galyarder Logo" className="w-9 h-9 object-contain" />
+          <img src="/galyarder-logo.svg" alt="Galyarder Logo" className="w-9 h-9 object-contain" />
           <span className="font-semibold text-base">Galyarder Architect Intellegent</span>
         </div>
         <div id="ai-chatbot-scroll" className="flex-1 min-h-[180px] max-h-56 overflow-y-auto pb-2 space-y-3" style={{
