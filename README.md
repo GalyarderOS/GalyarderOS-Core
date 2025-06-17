@@ -5,13 +5,13 @@ Build the future of _self-mastery_, _financial sovereignty_, and _digital legacy
 
 ---
 
-## 🧭 Mission
+## Mission
 
 Empower individuals with **self-mastery**, **financial autonomy**, and **generational impact** via a precision-engineered, sovereign digital operating layer.
 
 ---
 
-## ⚒️ Core Stack
+## ⚒Core Stack
 
 - **Frontend:** React + Vite + Tailwind + shadcn/ui + **TypeScript**
 - **Backend:** Supabase (PostgreSQL, Auth)
@@ -20,7 +20,7 @@ Empower individuals with **self-mastery**, **financial autonomy**, and **generat
 
 ---
 
-## 🛠️ Key Modules
+## Key Modules
 
 - **GalyarderOS** — _Self-Mastery Operating System_
 - **ChronoVault** — _Journal & Memory Core_ *(private)*
@@ -29,7 +29,7 @@ Empower individuals with **self-mastery**, **financial autonomy**, and **generat
 
 ---
 
-## 🧬 Design Principles
+## Design Principles
 
 - **Systems > Hustle**
 - **Discipline > Motivation**
@@ -38,7 +38,7 @@ Empower individuals with **self-mastery**, **financial autonomy**, and **generat
 
 ---
 
-## 🧠 Core Skills
+## Core Skills
 
 - **Blockchain:** Solidity, EVM, zk, L2s
 - **Web3 Design:** DeFi, Tokenomics, Airdrops
@@ -48,7 +48,7 @@ Empower individuals with **self-mastery**, **financial autonomy**, and **generat
 
 ---
 
-## 🧘 Peak Performance Habits
+## Peak Performance Habits
 
 Monk Mode • Intermittent Fasting • Daily Strength  
 Stoicism • No-Phone Zones • Journaling  
@@ -57,7 +57,7 @@ _Deep Work Protocol • Dopamine Detox_
 
 ---
 
-## 📊 GitHub Mastery Metrics
+## GitHub Mastery Metrics
 
 ![GalyarderOS's GitHub stats](https://github-readme-stats.vercel.app/api?username=GalyarderOS&show_icons=true&hide_title=true&hide=stars,prs,issues&theme=dark&hide_border=true)
 ![GalyarderOS Streak](https://github-readme-streak-stats.herokuapp.com?user=GalyarderOS&theme=dark&hide_border=true)
@@ -65,14 +65,14 @@ _Deep Work Protocol • Dopamine Detox_
 
 ---
 
-## 🎯 10-Year North Star
+## 10-Year North Star
 
 From **Galyarder → Quantum Sovereign → Legacy Architect**  
 _A roadmap: Self-Mastery → Digital Empire → Impact Beyond Self._
 
 ---
 
-## 🌐 Connect
+## Connect
 
 [Website](https://galyarder.my.id) • [X/Twitter](https://x.com/galyarder) • [Mirror](https://mirror.xyz/galyarder.eth) • [Telegram](https://t.me/galyarder)
 
