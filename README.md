@@ -11,7 +11,7 @@ Empower individuals with **self-mastery**, **financial autonomy**, and **generat
 
 ---
 
-## ⚒Core Stack
+## Core Stack
 
 - **Frontend:** React + Vite + Tailwind + shadcn/ui + **TypeScript**
 - **Backend:** Supabase (PostgreSQL, Auth)
