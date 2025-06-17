@@ -74,7 +74,7 @@ _A roadmap: Self-Mastery → Digital Empire → Impact Beyond Self._
 
 ## Connect
 
-[Website](https://galyarder.my.id) • [X/Twitter](https://x.com/galyarder) • [Mirror](https://mirror.xyz/galyarder.eth) • [Telegram](https://t.me/galyarder)
+[Website](https://galyarder.my.id) • [X](https://x.com/galyarder) • [Mirror](https://mirror.xyz/galyarder.eth) • [Telegram](https://t.me/galyarders)
 
 ---
 
