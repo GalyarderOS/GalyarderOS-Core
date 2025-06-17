@@ -44,7 +44,7 @@ const ProfileModule = () => {
   const handleSave = async () => {
     // TODO: Replace with Bolt API
     console.log('Saving profile data:', formData);
-    setIsEditing(false);
+      setIsEditing(false);
     // You might want to show a toast notification here
   };
 

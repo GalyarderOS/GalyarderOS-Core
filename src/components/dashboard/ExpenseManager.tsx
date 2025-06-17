@@ -52,20 +52,20 @@ const ExpenseManager = () => {
     setLoading(true);
     setTimeout(() => {
         const expensesData = mockExpenses;
-        setExpenses(expensesData || []);
+      setExpenses(expensesData || []);
 
-        // Calculate category totals
-        const categoryTotals: { [key: string]: number } = {};
-        let total = 0;
+      // Calculate category totals
+      const categoryTotals: { [key: string]: number } = {};
+      let total = 0;
 
-        expensesData?.forEach(expense => {
-            categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
-            total += expense.amount;
-        });
+      expensesData?.forEach(expense => {
+        categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
+        total += expense.amount;
+      });
 
-        setCategories(categoryTotals);
-        setTotalExpenses(total);
-        setLoading(false);
+      setCategories(categoryTotals);
+      setTotalExpenses(total);
+      setLoading(false);
     }, 1000);
   };
 

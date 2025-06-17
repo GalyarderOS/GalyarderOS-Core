@@ -32,7 +32,7 @@ export const useAuthForm = () => {
         toast({
           title: "Check your email",
           description: "We've sent you a verification link.",
-        });
+          });
       }
     }, 1000);
   };

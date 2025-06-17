@@ -60,21 +60,21 @@ const WealthBuilder = () => {
     setLoading(true);
     setTimeout(() => {
         const goalsData = mockGoals;
-        setGoals(goalsData || []);
+      setGoals(goalsData || []);
 
-        // Calculate stats
-        const totalGoals = goalsData?.length || 0;
-        const completedGoals = goalsData?.filter(goal => goal.status === 'completed').length || 0;
-        const totalTargetAmount = goalsData?.reduce((sum, goal) => sum + goal.target_amount, 0) || 0;
-        const totalCurrentAmount = goalsData?.reduce((sum, goal) => sum + (goal.current_amount || 0), 0) || 0;
+      // Calculate stats
+      const totalGoals = goalsData?.length || 0;
+      const completedGoals = goalsData?.filter(goal => goal.status === 'completed').length || 0;
+      const totalTargetAmount = goalsData?.reduce((sum, goal) => sum + goal.target_amount, 0) || 0;
+      const totalCurrentAmount = goalsData?.reduce((sum, goal) => sum + (goal.current_amount || 0), 0) || 0;
 
-        setStats({
-            totalGoals,
-            completedGoals,
-            totalTargetAmount,
-            totalCurrentAmount
-        });
-        setLoading(false);
+      setStats({
+        totalGoals,
+        completedGoals,
+        totalTargetAmount,
+        totalCurrentAmount
+      });
+      setLoading(false);
     }, 1000);
   };
 

@@ -74,14 +74,14 @@ const AIAssistant = ({ isOpen, onClose }: AIAssistantProps) => {
 
     // TODO: Replace with Bolt API
     setTimeout(() => {
-        const assistantMessage: Message = {
-            id: (Date.now() + 1).toString(),
-            role: 'assistant',
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
             content: "This is a mocked AI response. The real AI is currently offline.",
-            timestamp: new Date()
-        };
-        setMessages(prev => [...prev, assistantMessage]);
-        setIsLoading(false);
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+      setIsLoading(false);
     }, 1500);
   };
 

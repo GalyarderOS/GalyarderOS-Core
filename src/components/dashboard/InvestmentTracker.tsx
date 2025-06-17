@@ -40,7 +40,7 @@ const InvestmentTracker = () => {
     setLoading(true);
     setTimeout(() => {
         setPortfolios(mockPortfolios);
-        setLoading(false);
+      setLoading(false);
     }, 1000);
   };
 

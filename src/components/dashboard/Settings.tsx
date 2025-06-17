@@ -36,30 +36,30 @@ const Settings = () => {
   useEffect(() => {
     // TODO: Replace with Bolt API
     // Mock loading user settings
-    setSettings({
+        setSettings({
       gemini_api_key: 'mock_gemini_key_loaded',
       notion_token: 'mock_notion_token_loaded',
-      notifications_enabled: true,
+          notifications_enabled: true,
       dark_mode: theme === 'dark',
       language: language as 'en' | 'id'
-    });
+        });
   }, [user, theme, language]);
 
   const saveSettings = async () => {
     setLoading(true);
     // TODO: Replace with Bolt API
     console.log('Saving settings:', settings);
-    
-    // Update theme context
-    if (settings.dark_mode !== (theme === 'dark')) {
-      setTheme(settings.dark_mode ? 'dark' : 'light');
-    }
 
-    // Update language context
-    if (settings.language !== language) {
-      setLanguage(settings.language);
-    }
-    
+      // Update theme context
+      if (settings.dark_mode !== (theme === 'dark')) {
+        setTheme(settings.dark_mode ? 'dark' : 'light');
+      }
+
+      // Update language context
+      if (settings.language !== language) {
+        setLanguage(settings.language);
+      }
+
     setTimeout(() => {
       setLoading(false);
       toast({

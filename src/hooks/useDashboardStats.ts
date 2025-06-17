@@ -55,7 +55,7 @@ export const useDashboardStats = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
+      setLoading(true);
     // TODO: Replace with Bolt API
     const timer = setTimeout(() => {
       setStats(mockStats);

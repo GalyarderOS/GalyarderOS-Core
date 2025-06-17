@@ -34,7 +34,7 @@ export const useAuthState = () => {
 
   const reloadProfile = useCallback(async () => {
     if (user) {
-      setLoadingProfile(true);
+    setLoadingProfile(true);
       const profileData = await fetchProfile(user.id);
       setProfile(profileData);
       setLoadingProfile(false);
@@ -46,12 +46,12 @@ export const useAuthState = () => {
     setLoading(true);
     setLoadingProfile(true);
 
-    setTimeout(() => {
+          setTimeout(() => {
       setUser(mockUser);
       setSession(mockSession);
       fetchProfile(mockUser.id).then((profileData) => {
         setProfile(profileData);
-        setLoadingProfile(false);
+          setLoadingProfile(false);
       });
       setLoading(false);
     }, 500);

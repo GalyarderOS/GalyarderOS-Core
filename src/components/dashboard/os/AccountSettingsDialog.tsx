@@ -82,20 +82,20 @@ export const AccountSettingsDialog: React.FC<{ onOpenChange: (open: boolean) => 
         console.log("New avatar file:", avatarFile.name);
     }
     
-    setIsUploading(true);
+        setIsUploading(true);
     
     setTimeout(async () => {
         try {
-            toast.success('Profile updated successfully!');
+      toast.success('Profile updated successfully!');
             await reloadProfile(); // This will now use the mock service
-            setAvatarFile(null);
-            onOpenChange(false);
+      setAvatarFile(null);
+      onOpenChange(false);
         } catch (error) {
-            console.error('Profile update error:', error);
+      console.error('Profile update error:', error);
             toast.error('Failed to update profile.');
         } finally {
-            setIsUploading(false);
-        }
+      setIsUploading(false);
+    }
     }, 1000);
   };
 

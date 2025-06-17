@@ -54,26 +54,26 @@ const CashflowTracker = () => {
     setLoading(true);
     setTimeout(() => {
         const transactionsData = mockTransactions;
-        setTransactions(transactionsData || []);
+      setTransactions(transactionsData || []);
 
-        // Calculate summary
-        let totalIncome = 0;
-        let totalExpenses = 0;
+      // Calculate summary
+      let totalIncome = 0;
+      let totalExpenses = 0;
 
-        transactionsData?.forEach(transaction => {
-            if (transaction.type === 'income') {
-                totalIncome += transaction.amount;
-            } else {
-                totalExpenses += transaction.amount;
-            }
-        });
+      transactionsData?.forEach(transaction => {
+        if (transaction.type === 'income') {
+          totalIncome += transaction.amount;
+        } else {
+          totalExpenses += transaction.amount;
+        }
+      });
 
-        setSummary({
-            totalIncome,
-            totalExpenses,
-            netCashflow: totalIncome - totalExpenses
-        });
-        setLoading(false);
+      setSummary({
+        totalIncome,
+        totalExpenses,
+        netCashflow: totalIncome - totalExpenses
+      });
+      setLoading(false);
     }, 1000);
   };
 
