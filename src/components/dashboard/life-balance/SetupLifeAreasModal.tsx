@@ -41,10 +41,11 @@ export const SetupLifeAreasModal = ({ isOpen, onClose, onSave, existingAreas }: 
   
   const handleSave = () => {
     if (onSave) {
-    if (onSave) {
-      onSave(areas);
+      if (onSave) {
+        onSave(areas);
+      }
+      onClose();
     }
-    onClose();
   };
 
   return (
