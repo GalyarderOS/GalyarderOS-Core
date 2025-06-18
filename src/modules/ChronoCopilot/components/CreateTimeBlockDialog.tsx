@@ -26,6 +26,7 @@ const timeBlockSchema = z.object({
     label: z.string().min(1, { message: 'Label tidak boleh kosong.' }),
     start: z.string().refine((val) => val, { message: 'Waktu mulai harus diisi.' }),
     end: z.string().refine((val) => val, { message: 'Waktu selesai harus diisi.' }),
+    category: z.string().optional(),
 }).refine((data) => new Date(data.start) < new Date(data.end), {
   message: 'Waktu selesai harus setelah waktu mulai.',
   path: ['end'],
@@ -33,7 +34,7 @@ const timeBlockSchema = z.object({
 
 
 interface CreateTimeBlockDialogProps {
-  onAddBlock: (newBlock: Omit<TimeBlock, 'id'>) => void;
+  onAddBlock: (newBlock: Omit<TimeBlock, 'id' | 'completed'>) => void;
 }
 
 export const CreateTimeBlockDialog: React.FC<CreateTimeBlockDialogProps> = ({ onAddBlock }) => {
@@ -45,6 +46,7 @@ export const CreateTimeBlockDialog: React.FC<CreateTimeBlockDialogProps> = ({ on
       label: '',
       start: '',
       end: '',
+      category: 'General',
     },
   });
 
@@ -53,7 +55,8 @@ export const CreateTimeBlockDialog: React.FC<CreateTimeBlockDialogProps> = ({ on
       label: values.label,
       start: new Date(values.start).toISOString(),
       end: new Date(values.end).toISOString(),
-      completed: false,
+      category: values.category || 'General',
+      isCompleted: false,
     });
     form.reset();
     setOpen(false);
