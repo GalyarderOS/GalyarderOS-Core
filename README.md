@@ -1,4 +1,8 @@
-# GalyarderOS – Modular Sovereign Interface
+# GalyarderOS Interface
+
+[![GalyarderOS CI](https://github.com/galyarder/GalyarderOS/actions/workflows/ci.yml/badge.svg)](https://github.com/galyarder/GalyarderOS/actions/workflows/ci.yml)
+
+Welcome to the official repository for the GalyarderOS user interface. This project is a hyper-personalized, AI-integrated operating system designed to serve as a central hub for your digital life.
 
 **Authoritative. Tactical. Timeless.**  
 Build the future of _self-mastery_, _financial sovereignty_, and _digital legacy_.

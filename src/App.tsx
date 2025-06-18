@@ -1,5 +1,4 @@
-
-import { useEffect } from "react";
+import { useEffect, Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -24,6 +23,8 @@ const queryClient = new QueryClient({
   },
 });
 
+const ChronoCopilot = lazy(() => import('./modules/ChronoCopilot/components/TimeBlockMonitor'));
+
 const App = () => {
   useEffect(() => {
     applySecurityHeaders();
@@ -45,6 +46,11 @@ const App = () => {
                       <ProtectedRoute>
                         <Dashboard />
                       </ProtectedRoute>
+                    } />
+                    <Route path="/chrono" element={
+                      <Suspense fallback={<div>Loading ChronoCopilot...</div>}>
+                        <ChronoCopilot />
+                      </Suspense>
                     } />
                     <Route path="*" element={<LandingPage />} />
                   </Routes>
