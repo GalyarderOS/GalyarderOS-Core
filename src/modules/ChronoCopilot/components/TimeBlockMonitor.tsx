@@ -12,7 +12,7 @@ export function TimeBlockMonitor() {
     <div className="p-4 md:p-8">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Today's Time Blocks</h1>
-        <CreateTimeBlockDialog onSave={addTimeBlock} />
+        <CreateTimeBlockDialog onAddBlock={addTimeBlock} />
       </div>
       <Tabs defaultValue="list">
         <TabsList className="mb-4">

@@ -53,7 +53,7 @@ export const CreateTimeBlockDialog: React.FC<CreateTimeBlockDialogProps> = ({ on
       label: values.label,
       start: new Date(values.start).toISOString(),
       end: new Date(values.end).toISOString(),
-      isCompleted: false,
+      completed: false,
     });
     form.reset();
     setOpen(false);
