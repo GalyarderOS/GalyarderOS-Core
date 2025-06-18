@@ -32,7 +32,7 @@ export function ModuleCard({
   const cardContent = (
     <Card className={cn(
       "bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg transition-all duration-300",
-      moduleBorderColors[module],
+      moduleBorderColors[module] || '',
       className
     )}>
       <CardHeader className="flex flex-row items-center justify-between">

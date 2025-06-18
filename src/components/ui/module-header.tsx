@@ -39,14 +39,14 @@ export function ModuleHeader({
     >
       <div className={cn(
         "w-16 h-16 rounded-2xl flex items-center justify-center",
-        `bg-gradient-to-br ${moduleGradients[module]}`
+        `bg-gradient-to-br ${moduleGradients[module] || ''}`
       )}>
         {icon}
       </div>
       <div className="text-left">
         <h1 className={cn(
           "text-4xl font-bold font-playfair",
-          `bg-gradient-to-r ${moduleTextGradients[module]} bg-clip-text text-transparent`
+          `bg-gradient-to-r ${moduleTextGradients[module] || ''} bg-clip-text text-transparent`
         )}>
           {title}
         </h1>
