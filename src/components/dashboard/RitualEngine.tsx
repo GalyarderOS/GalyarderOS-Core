@@ -192,11 +192,11 @@ const RitualEngine = () => {
     // Ensure we're working with a string or return default
     const category = typeof categoryValue === 'string' ? categoryValue : '';
     
-    if (category === 'health') return 'bg-green-100 text-green-800 border-green-200';
-    if (category === 'productivity') return 'bg-blue-100 text-blue-800 border-blue-200';
-    if (category === 'personal') return 'bg-purple-100 text-purple-800 border-purple-200';
-    if (category === 'learning') return 'bg-orange-100 text-orange-800 border-orange-200';
-    if (category === 'social') return 'bg-pink-100 text-pink-800 border-pink-200';
+    if (category.indexOf('health') >= 0) return 'bg-green-100 text-green-800 border-green-200';
+    if (category.indexOf('productivity') >= 0) return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (category.indexOf('personal') >= 0) return 'bg-purple-100 text-purple-800 border-purple-200';
+    if (category.indexOf('learning') >= 0) return 'bg-orange-100 text-orange-800 border-orange-200';
+    if (category.indexOf('social') >= 0) return 'bg-pink-100 text-pink-800 border-pink-200';
     return 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
@@ -204,9 +204,9 @@ const RitualEngine = () => {
     // Ensure we're working with a string or return default
     const difficulty = typeof difficultyValue === 'string' ? difficultyValue : '';
     
-    if (difficulty === 'easy') return 'bg-green-100 text-green-700';
-    if (difficulty === 'medium') return 'bg-yellow-100 text-yellow-700';
-    if (difficulty === 'hard') return 'bg-red-100 text-red-700';
+    if (difficulty.indexOf('easy') >= 0) return 'bg-green-100 text-green-700';
+    if (difficulty.indexOf('medium') >= 0) return 'bg-yellow-100 text-yellow-700';
+    if (difficulty.indexOf('hard') >= 0) return 'bg-red-100 text-red-700';
     return 'bg-gray-100 text-gray-700';
   };
 

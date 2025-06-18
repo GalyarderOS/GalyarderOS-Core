@@ -31,8 +31,10 @@ export function useChronoLogic() {
       const now = new Date();
       
       timeBlocks.forEach(block => {
+        // Check if block is completed using either property
+        const isBlockCompleted = block.completed || block.isCompleted;
         // Hanya cek blok yang belum selesai dan belum dikirim reminder
-        if (!block.completed && !remindedBlocks.has(block.id)) {
+        if (!isBlockCompleted && !remindedBlocks.has(block.id)) {
           const startTime = new Date(block.start);
           const timeDifferenceMs = startTime.getTime() - now.getTime();
           const timeDifferenceMinutes = Math.floor(timeDifferenceMs / 1000 / 60);
@@ -81,6 +83,7 @@ export function useChronoLogic() {
       ...newBlock,
       id: Date.now().toString(),
       completed: false,
+      isCompleted: newBlock.isCompleted || false,
     }
     const updatedBlocks = [...timeBlocks, blockWithId]
     setTimeBlocks(updatedBlocks)
