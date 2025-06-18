@@ -184,11 +184,11 @@ const LifeBalance = () => {
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
               <Brain className="h-8 w-8 text-white" />
             </div>
-            <div>
+            <div className="text-left">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-playfair">
                 Life Balance
               </h1>
-              <p className="text-slate-600 dark:text-slate-400">Harmonize all dimensions of your life</p>
+              <p className="text-muted-foreground">Harmonize all dimensions of your life</p>
             </div>
           </div>
 
@@ -201,8 +201,8 @@ const LifeBalance = () => {
           >
             <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur border-0 shadow-xl">
               <CardContent className="p-8 text-center">
-                <div className="text-6xl font-bold text-blue-600 mb-2">{overallScore}</div>
-                <p className="text-slate-600 dark:text-slate-400 mb-4">Overall Life Balance Score</p>
+                <div className="text-6xl font-bold text-primary mb-2">{overallScore}</div>
+                <p className="text-muted-foreground mb-4">Overall Life Balance Score</p>
                 <Progress value={overallScore} className="h-3" />
               </CardContent>
             </Card>
@@ -236,6 +236,7 @@ const LifeBalance = () => {
                 <Button 
                   variant="outline" 
                   className="w-full"
+                  size="lg"
                   onClick={() => handleUpdateScore(area.id)}
                 >
                   Update Score

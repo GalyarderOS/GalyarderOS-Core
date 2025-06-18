@@ -281,11 +281,11 @@ const IdentityCore = () => {
             <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
               <User className="h-8 w-8 text-white" />
             </div>
-            <div>
+            <div className="text-left">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent font-playfair">
                 Identity Core
               </h1>
-              <p className="text-slate-600 dark:text-slate-400">Define and strengthen your authentic self</p>
+              <p className="text-muted-foreground">Define and strengthen your authentic self</p>
             </div>
           </div>
 
@@ -300,7 +300,7 @@ const IdentityCore = () => {
               <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
                 <CardContent className="p-6 text-center">
                   <div className="text-3xl font-bold text-purple-600 mb-2">{identityStrength}%</div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">Identity Clarity Score</p>
+                  <p className="text-sm text-muted-foreground mb-3">Identity Clarity Score</p>
                   <Progress value={identityStrength} className="h-2" />
                 </CardContent>
               </Card>
@@ -325,7 +325,7 @@ const IdentityCore = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Full Name
                     </label>
                     <Input
@@ -337,7 +337,7 @@ const IdentityCore = () => {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Professional Title
                     </label>
                     <Input
@@ -351,7 +351,7 @@ const IdentityCore = () => {
 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <label className="block text-sm font-medium text-foreground mb-2">
                       Life Mission
                     </label>
                     <Textarea
@@ -368,7 +368,7 @@ const IdentityCore = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Vision Statement
                   </label>
                   <Textarea
@@ -380,7 +380,7 @@ const IdentityCore = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  <label className="block text-sm font-medium text-foreground mb-2">
                     Life Purpose
                   </label>
                   <Textarea
@@ -393,8 +393,8 @@ const IdentityCore = () => {
               </div>
 
               <Button
-                onClick={saveIdentityData}
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                onClick={saveIdentityData} 
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
               >
                 Save Identity Core
               </Button>
