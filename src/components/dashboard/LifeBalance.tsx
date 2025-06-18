@@ -5,16 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  Brain, 
-  Activity,
-  Plus,
-  Slider
-} from "lucide-react";
-import EmptyState from "./home/EmptyState";
+import { Brain, Activity, Plus, Sliders as Slider } from "lucide-react"mptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Slider as SliderComponent } from "@/components/ui/slider";
 
 interface LifeArea {
   id: string;
@@ -40,8 +32,6 @@ const LifeBalance = () => {
   const [lifeAreas, setLifeAreas] = useState<LifeArea[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSetupModalOpen, setSetupModalOpen] = useState(false);
-  const [updatingAreaId, setUpdatingAreaId] = useState<string | null>(null);
-  const [updatedScore, setUpdatedScore] = useState<number>(50);
   const { toast } = useToast();
 
   // Load saved life balance data on component mount
@@ -89,37 +79,6 @@ const LifeBalance = () => {
     });
     
     setSetupModalOpen(false);
-  };
-
-  const handleUpdateScore = (areaId: string) => {
-    const area = lifeAreas.find(a => a.id === areaId);
-    if (area) {
-      setUpdatedScore(area.score);
-      setUpdatingAreaId(areaId);
-    }
-  };
-
-  const saveUpdatedScore = () => {
-    if (!updatingAreaId) return;
-    
-    const updatedAreas = lifeAreas.map(area => 
-      area.id === updatingAreaId ? { ...area, score: updatedScore } : area
-    );
-    
-    setLifeAreas(updatedAreas);
-    
-    // Save to localStorage
-    localStorage.setItem('life-balance-data', JSON.stringify({
-      lifeAreas: updatedAreas,
-      lastUpdated: new Date().toISOString()
-    }));
-    
-    toast({
-      title: "Score updated",
-      description: "Your life balance score has been updated.",
-    });
-    
-    setUpdatingAreaId(null);
   };
 
   // Helper function to generate random colors for life areas
@@ -238,9 +197,7 @@ const LifeBalance = () => {
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">{area.description}</p>
                 <Progress value={area.score} className="h-2" />
-                <Button variant="outline" className="w-full"
-                  onClick={() => handleUpdateScore(area.id)}
-                >
+                <Button variant="outline" className="w-full">
                   Update Score
                 </Button>
               </CardContent>
@@ -265,42 +222,6 @@ const LifeBalance = () => {
         onSave={handleSetupLifeAreas}
         existingAreas={lifeAreas.map(area => area.name)}
       />
-      
-      {/* Score Update Dialog */}
-      <Dialog open={updatingAreaId !== null} onOpenChange={(open) => !open && setUpdatingAreaId(null)}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>
-              Update Balance Score
-            </DialogTitle>
-          </DialogHeader>
-          <div className="py-4 space-y-4">
-            <div className="text-center mb-2">
-              <span className="text-4xl font-bold">{updatedScore}</span>
-            </div>
-            <SliderComponent
-              value={[updatedScore]}
-              onValueChange={(value) => setUpdatedScore(value[0])}
-              max={100}
-              step={1}
-              className="w-full"
-            />
-            <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Needs Attention</span>
-              <span>Balanced</span>
-              <span>Excellent</span>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setUpdatingAreaId(null)}>
-              Cancel
-            </Button>
-            <Button onClick={saveUpdatedScore}>
-              Save Score
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
