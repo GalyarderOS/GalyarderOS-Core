@@ -4,11 +4,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast"; 
-import { Brain, Activity, Plus, Sliders as Slider } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Brain, Activity, Plus, Sliders } from "lucide-react";
 import EmptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
 import { UpdateScoreModal } from "./life-balance/UpdateScoreModal";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { ModuleCard } from "@/components/ui/module-card";
 
 interface LifeArea {
   id: string;
@@ -173,24 +175,19 @@ const LifeBalance = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
       <div className="max-w-7xl mx-auto p-6 space-y-8">
-        
         {/* Header with Overall Score */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4"
         >
-          <div className="flex items-center justify-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
-              <Brain className="h-8 w-8 text-white" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent font-playfair">
-                Life Balance
-              </h1>
-              <p className="text-muted-foreground">Harmonize all dimensions of your life</p>
-            </div>
-          </div>
+          <ModuleHeader
+            title="Life Balance"
+            description="Harmonize all dimensions of your life"
+            icon={<Brain className="h-8 w-8 text-white" />}
+            module="balance"
+            className="justify-center"
+          />
 
           {/* Overall Score Card */}
           <motion.div
@@ -213,36 +210,35 @@ const LifeBalance = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.3 }} 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {lifeAreas.map((area, index) => (
-            <Card 
+            <ModuleCard
               key={area.id}
-              className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg overflow-hidden"
+              title={area.name}
+              module="balance"
+              animate={false}
+              className="overflow-hidden"
+              headerContent={
+                <Badge variant={area.score >= 70 ? "default" : "outline"}>
+                  {area.score}%
+                </Badge>
+              }
             >
               <div className={`h-2 w-full bg-gradient-to-r ${area.color}`}></div>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>{area.name}</span>
-                  <Badge variant={area.score >= 70 ? "default" : "outline"}>
-                    {area.score}%
-                  </Badge>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">{area.description}</p>
-                <Progress value={area.score} className="h-2" />
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  size="lg"
-                  onClick={() => handleUpdateScore(area.id)}
-                >
-                  Update Score
-                </Button>
-              </CardContent>
-            </Card>
+              <p className="text-sm text-muted-foreground mb-4">{area.description}</p>
+              <Progress value={area.score} className="h-2 mb-4" />
+              <Button 
+                variant="outline" 
+                className="w-full"
+                size="lg"
+                onClick={() => handleUpdateScore(area.id)}
+              >
+                <Sliders className="h-4 w-4 mr-2" />
+                Update Score
+              </Button>
+            </ModuleCard>
           ))}
           
           {/* Add New Area Card */}
@@ -259,7 +255,7 @@ const LifeBalance = () => {
       </div>
       <SetupLifeAreasModal 
         isOpen={isSetupModalOpen} 
-        onClose={() => setSetupModalOpen(false)} 
+        onClose={() => setSetupModalOpen(false)}
         onSave={handleSetupLifeAreas}
         existingAreas={lifeAreas.map(area => area.name)}
       />
