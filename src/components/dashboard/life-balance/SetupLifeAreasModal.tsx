@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 
 interface SetupLifeAreasModalProps {
   isOpen: boolean;

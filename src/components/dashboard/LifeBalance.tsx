@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Brain, 
-  Activity
+  Activity,
+  Plus
 } from "lucide-react";
 import EmptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
