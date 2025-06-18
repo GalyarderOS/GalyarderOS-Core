@@ -189,8 +189,6 @@ const RitualEngine = () => {
   };
 
   const getCategoryColor = (category: string | undefined) => {
-    const categoryString = category || '';
-    
     switch(category) {
       case 'health': return 'bg-green-100 text-green-800 border-green-200';
       case 'productivity': return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -202,8 +200,6 @@ const RitualEngine = () => {
   };
 
   const getDifficultyColor = (difficulty: string | undefined) => {
-    const difficultyString = difficulty || '';
-    
     switch(difficulty) {
       case 'easy': return 'bg-green-100 text-green-700';
       case 'medium': return 'bg-yellow-100 text-yellow-700';
@@ -390,7 +386,7 @@ const RitualEngine = () => {
                               <h3 className="font-semibold text-slate-800 dark:text-slate-200">
                                 {habit.name}
                               </h3>
-                              <Badge className={getCategoryColor(habit.category ?? '')}>
+                              <Badge className={getCategoryColor(habit.category)}>
                                 {habit.category}
                               </Badge>
                             </div>
@@ -398,7 +394,7 @@ const RitualEngine = () => {
                               {habit.description}
                             </p>
                             <div className="flex items-center space-x-3 text-xs text-slate-500">
-                              <Badge className={getDifficultyColor(habit.difficulty ?? '')}>
+                              <Badge className={getDifficultyColor(habit.difficulty)}>
                                 {habit.difficulty}
                               </Badge>
                               <span>{habit.frequency}</span>
