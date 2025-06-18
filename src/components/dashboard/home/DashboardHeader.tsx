@@ -1,10 +1,9 @@
-
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/useTheme';
 import InteractiveAIChatbot from './InteractiveAIChatbot';
 import { DashboardStats } from '@/types/dashboard';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useFirstTimeUser } from '@/hooks/useFirstTimeUser';

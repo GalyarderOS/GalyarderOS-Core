@@ -3,11 +3,22 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 // import { supabase } from '@/integrations/supabase/client';
 import { BarChart3, Plus, TrendingDown, Calendar, Target } from 'lucide-react';
 
-const mockExpenses = [
+interface Expense {
+  id: string;
+  description: string;
+  category: string;
+  amount: number;
+  expense_date: string;
+  is_recurring: boolean;
+}
+
+const mockExpenses: Expense[] = [
     {
         id: '1',
         description: 'Groceries',
@@ -36,7 +47,7 @@ const mockExpenses = [
 
 const ExpenseManager = () => {
   const { user } = useAuth();
-  const [expenses, setExpenses] = useState<any[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<{ [key: string]: number }>({});
   const [totalExpenses, setTotalExpenses] = useState(0);
   const [loading, setLoading] = useState(true);

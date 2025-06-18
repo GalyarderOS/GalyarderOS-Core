@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "@/contexts/useTheme";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, User, Calendar, Timer, BookOpen, Brain, FileText, Target, Activity } from "lucide-react";
 
@@ -10,7 +10,18 @@ interface PersonalModulesSectionProps {
   onOpenNotionAI: () => void;
 }
 
-const getInitialModules = (language: string) => [
+interface Module {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  value: string;
+  change: string;
+  path?: string;
+  action?: string;
+  gradient: string;
+}
+
+const getInitialModules = (language: string): Module[] => [
   {
     title: language === "id" ? "Profil & Etos" : "Profile & Ethos",
     description: language === "id" ? "Definisikan identitas dan nilai inti" : "Define your identity and core values",
@@ -145,7 +156,7 @@ const PersonalModulesSection = ({ onOpenAIAssistant, onOpenNotionAI }: PersonalM
     el.classList.add("animate-ripple-effect");
   };
 
-  const handleModuleClick = (module: any, idx: number, e: React.MouseEvent) => {
+  const handleModuleClick = (module: Module, idx: number, e: React.MouseEvent) => {
     triggerRipple(idx, e);
     setTimeout(() => {
       if (module.path) navigate(module.path);

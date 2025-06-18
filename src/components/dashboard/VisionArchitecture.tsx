@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 // import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/auth/useAuth";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,8 @@ import {
   Edit,
   Trash2
 } from "lucide-react";
+import { PlusCircle, ChevronDown, ChevronRight, Zap } from "lucide-react";
+import { CreateGoalModal } from "./vision/CreateGoalModal";
 
 interface Goal {
   id: string;
@@ -57,6 +59,16 @@ interface VisionBoard {
   priority: number;
 }
 
+interface GoalDB {
+  id: string;
+  title: string;
+  description: string | null;
+  priority: 'high' | 'medium' | 'low';
+  progress: number | null;
+  deadline: string | null;
+  status: string | null;
+}
+
 const mockGoals: Goal[] = [
     {
         id: '1',
@@ -82,7 +94,7 @@ const mockGoals: Goal[] = [
     },
 ];
 
-const mapGoalDBtoApp = (g: any): Goal => ({
+const mapGoalDBtoApp = (g: GoalDB): Goal => ({
   id: g.id,
   title: g.title,
   description: g.description,
@@ -175,7 +187,7 @@ const VisionArchitecture = () => {
       });
       toast({ title: "Goal created!" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to create goal", description: error.message, variant: "destructive" });
     }
   });
@@ -191,7 +203,7 @@ const VisionArchitecture = () => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast({ title: "Goal deleted" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Delete failed", description: error.message, variant: "destructive" });
     }
   });
@@ -207,7 +219,7 @@ const VisionArchitecture = () => {
       queryClient.invalidateQueries({ queryKey: ["goals"] });
       toast({ title: "Progress updated!" });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast({ title: "Failed to update progress", description: error.message, variant: "destructive" });
     }
   });

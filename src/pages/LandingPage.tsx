@@ -1,8 +1,7 @@
-
-import { useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useTheme } from '@/contexts/useTheme';
 import { coreModules, testimonials, inspirationalQuotes } from '@/data/landingData';
 import LandingNavigation from '@/components/landing/LandingNavigation';
 import LandingHero from '@/components/landing/LandingHero';

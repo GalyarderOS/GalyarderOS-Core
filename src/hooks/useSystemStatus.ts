@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 interface SystemStatus {
@@ -42,7 +41,7 @@ export const useSystemStatus = () => {
     // Battery API monitoring
     const initBattery = async () => {
       try {
-        // @ts-ignore - Battery API is experimental
+        // @ts-expect-error - Battery API is experimental
         const battery = await navigator.getBattery?.();
         if (battery) {
           const updateBatteryInfo = () => {
@@ -76,9 +75,9 @@ export const useSystemStatus = () => {
         ...prev,
         wifi: {
           online: navigator.onLine,
-          // @ts-ignore - Connection API is experimental
+          // @ts-expect-error - Connection API is experimental
           connectionType: navigator.connection?.effectiveType || 'wifi',
-          // @ts-ignore - Connection API is experimental
+          // @ts-expect-error - Connection API is experimental
           downlink: navigator.connection?.downlink,
         },
       }));
@@ -106,13 +105,13 @@ export const useSystemStatus = () => {
     window.addEventListener('online', updateNetworkStatus);
     window.addEventListener('offline', updateNetworkStatus);
 
-    // @ts-ignore - Connection API is experimental
+    // @ts-expect-error - Connection API is experimental
     navigator.connection?.addEventListener('change', updateNetworkStatus);
 
     return () => {
       window.removeEventListener('online', updateNetworkStatus);
       window.removeEventListener('offline', updateNetworkStatus);
-      // @ts-ignore
+      // @ts-expect-error - Connection API is experimental
       navigator.connection?.removeEventListener('change', updateNetworkStatus);
     };
   }, []);

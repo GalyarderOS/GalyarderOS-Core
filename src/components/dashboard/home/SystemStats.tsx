@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Award, Users, Zap, TrendingUp, Wifi, WifiOff } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -12,17 +11,12 @@ interface Stats {
   investments: number;
 }
 
-interface RealTimeData {
-  [key: string]: any;
-}
-
 interface SystemStatsProps {
   stats: Stats;
-  realTimeData: RealTimeData;
   isConnected: boolean;
 }
 
-const SystemStats = ({ stats, realTimeData, isConnected }: SystemStatsProps) => {
+const SystemStats = ({ stats, isConnected }: SystemStatsProps) => {
     const { language } = useTheme();
     const t = {
         en: {

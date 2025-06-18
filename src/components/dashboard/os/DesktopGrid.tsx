@@ -1,7 +1,20 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
+import { LucideIcon } from 'lucide-react';
+
+interface Module {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  color: string;
+}
+
+interface DesktopGridProps {
+  modules: Module[];
+  onModuleClick: (module: Module) => void;
+  onModuleOpen: (moduleId: string) => void;
+}
 
 // GalyarderOS "Digital Soul Layer" groups
 const CATEGORY_CONFIG = [
@@ -97,7 +110,7 @@ function normalizeId(id: string) {
 
 // You must preserve the dock's ability to open modules by id
 
-const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }) => {
+const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }: DesktopGridProps) => {
   const { data: realTimeData, isConnected } = useRealTimeData();
 
   // Build category lists with normalized ids (to future-proof new module names)
@@ -111,7 +124,7 @@ const DesktopGrid = ({ modules, onModuleClick, onModuleOpen }) => {
       })),
   }));
 
-  const ModuleCard = ({ module }: { module: any }) => {
+  const ModuleCard = ({ module }: { module: Module }) => {
     const Icon = module.icon;
     return (
       <div

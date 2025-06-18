@@ -1,21 +1,22 @@
 import { useCallback } from 'react';
-import { useNotifications } from '@/contexts/NotificationContext';
+import { useNotifications } from '@/contexts/useNotifications.ts';
 
-interface RealTimeData {
-  [key: string]: any;
+export interface RealTimeData {
+  habits?: number;
+  focus?: number;
 }
 
 // TODO: Replace with Bolt API
 export const useRealTimeData = () => {
   const { addNotification } = useNotifications();
 
-  const updateData = useCallback((key: string, value: any) => {
+  const updateData = useCallback((key: string, value: unknown) => {
     // Placeholder for data update
   }, []);
 
   return {
-    data: {},
-    isConnected: false,
+    data: { habits: 75, focus: 2.5 },
+    isConnected: true,
     updateData,
     addNotification
   };

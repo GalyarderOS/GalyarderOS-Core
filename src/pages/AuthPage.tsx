@@ -1,6 +1,6 @@
-
 import { motion } from 'framer-motion';
-import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { useAuth } from '@/contexts/auth/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useAuthForm } from '@/hooks/useAuthForm';
 import { AuthHeader } from '@/components/auth/AuthHeader';

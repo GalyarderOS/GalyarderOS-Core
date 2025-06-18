@@ -1,8 +1,7 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getDashboardModules } from '@/components/dashboard/os/modules';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/useTheme';
 
 interface Command {
   id: string;

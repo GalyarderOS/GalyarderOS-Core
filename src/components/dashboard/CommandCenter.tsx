@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
+import { Module } from './os/types';
 
 const SOUL_MODULES = [
   {
@@ -38,6 +39,7 @@ const SOUL_MODULES = [
     path: "/dashboard/identity",
     color: "from-purple-600 to-purple-800",
     description: "Define your core self",
+    category: "personal",
     stats: { usage: "82%", lastUsed: "Today" }
   },
   {
@@ -47,6 +49,7 @@ const SOUL_MODULES = [
     path: "/dashboard/vision",
     color: "from-emerald-600 to-emerald-800",
     description: "Build your future blueprint",
+    category: "personal",
     stats: { usage: "67%", lastUsed: "2 days ago" }
   },
   {
@@ -56,6 +59,7 @@ const SOUL_MODULES = [
     path: "/dashboard/balance", 
     color: "from-blue-600 to-blue-800",
     description: "Harmonize all life areas",
+    category: "personal",
     stats: { usage: "91%", lastUsed: "Today" }
   },
   {
@@ -65,6 +69,7 @@ const SOUL_MODULES = [
     path: "/dashboard/ritual",
     color: "from-orange-600 to-orange-800", 
     description: "Automate your habits",
+    category: "personal",
     stats: { usage: "78%", lastUsed: "Today" }
   },
   {
@@ -74,6 +79,7 @@ const SOUL_MODULES = [
     path: "/dashboard/flow",
     color: "from-cyan-600 to-cyan-800",
     description: "Enter deep focus mode",
+    category: "personal",
     stats: { usage: "89%", lastUsed: "3 hours ago" }
   },
   {
@@ -83,6 +89,7 @@ const SOUL_MODULES = [
     path: "/dashboard/knowledge",
     color: "from-indigo-600 to-indigo-800",
     description: "Capture and organize insights",
+    category: "personal",
     stats: { usage: "74%", lastUsed: "Yesterday" }
   },
   {
@@ -92,6 +99,7 @@ const SOUL_MODULES = [
     path: "/dashboard/reflection",
     color: "from-pink-600 to-pink-800",
     description: "Journal your journey",
+    category: "personal",
     stats: { usage: "85%", lastUsed: "Today" }
   },
   {
@@ -101,7 +109,21 @@ const SOUL_MODULES = [
     path: "/dashboard/analytics",
     color: "from-yellow-600 to-yellow-800",
     description: "Visualize your progress",
+    category: "personal",
     stats: { usage: "63%", lastUsed: "Yesterday" }
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    icon: Settings,
+    path: "/dashboard/settings",
+    color: "from-gray-400 to-slate-600",
+    description: "Customize your GalyarderOS experience.",
+    category: "system",
+    stats: {
+      usage: "Low",
+      lastUsed: "This week"
+    }
   }
 ];
 
@@ -134,8 +156,12 @@ const CommandCenter = () => {
     { type: "goal", message: "Monthly target 67% complete", time: "2 days ago" }
   ]);
 
-  const handleModuleClick = (module: any) => {
-    navigate(module.path);
+  const handleModuleClick = (module: Module) => {
+    if (module.path) {
+      navigate(module.path);
+    } else if (module.action) {
+      module.action();
+    }
   };
 
   const executeQuickAction = (action: string) => {

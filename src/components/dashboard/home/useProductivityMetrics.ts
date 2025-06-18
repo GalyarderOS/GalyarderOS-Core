@@ -1,7 +1,6 @@
-
 import { useMemo } from 'react';
 import { DashboardStats } from '@/types/dashboard';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/useTheme';
 import { productivityTranslations } from './productivity/translations';
 
 export const useProductivityMetrics = (stats: DashboardStats) => {
@@ -45,7 +44,7 @@ export const useProductivityMetrics = (stats: DashboardStats) => {
       scoreInfo, 
       focusData 
     };
-  }, [stats, t, language]);
+  }, [stats, t]);
 
   return { t, productivityScore, scoreInfo, focusData };
 };

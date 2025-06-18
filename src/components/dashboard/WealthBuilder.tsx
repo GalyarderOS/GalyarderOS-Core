@@ -4,11 +4,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 // import { supabase } from '@/integrations/supabase/client';
 import { Target, Plus, Trophy, TrendingUp, Calendar } from 'lucide-react';
 
-const mockGoals = [
+interface Goal {
+  id: string;
+  name: string;
+  description: string;
+  target_amount: number;
+  current_amount: number;
+  status: 'in_progress' | 'completed' | 'paused';
+  target_date: string;
+}
+
+const mockGoals: Goal[] = [
     {
         id: '1',
         title: 'Emergency Fund',
@@ -40,7 +52,7 @@ const mockGoals = [
 
 const WealthBuilder = () => {
   const { user } = useAuth();
-  const [goals, setGoals] = useState<any[]>([]);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [stats, setStats] = useState({
     totalGoals: 0,
     completedGoals: 0,

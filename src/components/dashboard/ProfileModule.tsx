@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { User, Edit, Save, Plus, X } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
 // import { supabase } from '@/integrations/supabase/client';
 // import { TablesUpdate } from '@/integrations/supabase/types';
 

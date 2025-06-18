@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "@/contexts/useTheme";
 import {
   User,
   Calendar,

@@ -1,10 +1,12 @@
-
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X, Check, CheckCheck, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useNotifications } from '@/contexts/NotificationContext';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { useNotifications } from '@/contexts/useNotifications';
+import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';
 
 const NotificationCenter = () => {

@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "@/contexts/useTheme";
 import { useNavigate } from "react-router-dom";
 import {
   User,
@@ -14,12 +13,35 @@ import {
   Settings
 } from "lucide-react";
 import { useInteractiveGrid } from "@/hooks/useInteractiveGrid";
-import { useRealTimeData } from "@/hooks/useRealTimeData";
+import { useRealTimeData, RealTimeData } from "@/hooks/useRealTimeData";
 import InteractiveCard from "./InteractiveCard";
 
 interface EnhancedPersonalModulesSectionProps {
   onOpenAIAssistant: () => void;
   onOpenNotionAI: () => void;
+}
+
+interface Module {
+  id: string;
+  path?: string;
+  action?: string;
+  title: string;
+  description: string;
+  value: string;
+  group: string;
+  gradient: string;
+}
+
+interface Transaction {
+  id: string;
+  description: string;
+  type: 'income' | 'expense';
+  amount: number;
+  transaction_date: string;
+  cashflow_categories: {
+    name: string;
+    color: string;
+  };
 }
 
 // Module group definitions for digital soul structure
@@ -122,7 +144,7 @@ const SOUL_MODULES = [
 
 const trans = {
   en: {
-    personalModules: "Personal System",
+    personalModules: "Personal Systems",
     description: "Master your development and soul layer with these powerful life modules",
     connected: "Live Data Connected",
     offline: "Offline Mode",
@@ -221,14 +243,14 @@ const EnhancedPersonalModulesSection = ({
     target.style.zIndex = '10';
   };
 
-  const handlePointerLeave = (index: number, e: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
     const target = e.currentTarget as HTMLDivElement;
     target.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1) translateZ(0px)`;
     target.style.boxShadow = '';
     target.style.zIndex = '1';
   };
 
-  const handleModuleClick = (module: any) => {
+  const handleModuleClick = (module: Module) => {
     if (module.path) navigate(module.path);
     else if (module.action === "ai-assistant") onOpenAIAssistant();
     else if (module.action === "notion-ai") onOpenNotionAI();
@@ -299,7 +321,7 @@ const EnhancedPersonalModulesSection = ({
                   item={module}
                   index={index}
                   onPointerMove={(e) => handlePointerMove(index, e)}
-                  onPointerLeave={(e) => handlePointerLeave(index, e)}
+                  onPointerLeave={(e) => handlePointerLeave(e)}
                   onClick={() => handleModuleClick(module)}
                   onDragStart={() => handleDragStart(module.id)}
                   onDragEnd={handleDragEnd}

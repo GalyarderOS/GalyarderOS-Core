@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -16,9 +15,10 @@ import {
   Sparkles,
   ArrowRight,
   Check,
+  ChevronRight,
   Play
 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/useTheme';
 
 interface WelcomeCenterProps {
   isOpen: boolean;

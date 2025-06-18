@@ -2,11 +2,23 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
 // import { supabase } from '@/integrations/supabase/client';
 import { TrendingUp, TrendingDown, Plus, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
-const mockTransactions = [
+interface Transaction {
+    id: string;
+    description: string;
+    type: 'income' | 'expense';
+    amount: number;
+    transaction_date: string;
+    cashflow_categories: {
+        name: string;
+        color: string;
+    };
+}
+
+const mockTransactions: Transaction[] = [
     {
         id: '1',
         description: 'Salary',
@@ -35,7 +47,7 @@ const mockTransactions = [
 
 const CashflowTracker = () => {
   const { user } = useAuth();
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [summary, setSummary] = useState({
     totalIncome: 0,
     totalExpenses: 0,

@@ -248,35 +248,37 @@ const RitualEngine = () => {
             <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
               <CardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-red-600">{Math.round(overallCompletionRate)}%</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Completion Rate</div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">Completion</div>
               </CardContent>
             </Card>
             <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-purple-600">{totalStreak}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Total Streaks</div>
+                <div className="flex items-center justify-center space-x-1 text-orange-600 mb-1">
+                  <Flame className="h-6 w-6" />
+                  <span className="text-2xl font-bold">{totalStreak}</span>
+                </div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">Total Streak</div>
               </CardContent>
             </Card>
             <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
               <CardContent className="p-4 text-center">
-                <div className="text-2xl font-bold text-blue-600">{Math.round(averageStreak)}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Avg Streak</div>
+                <div className="flex items-center justify-center space-x-1 text-purple-600 mb-1">
+                  <Award className="h-6 w-6" />
+                  <span className="text-2xl font-bold">{averageStreak.toFixed(1)}</span>
+                </div>
+                <div className="text-sm text-slate-600 dark:text-slate-400">Average Streak</div>
               </CardContent>
             </Card>
           </div>
         </div>
 
-        {/* Today's Progress */}
-        <ModuleCard
-          title="Today's Progress"
-          module="ritual"
-          delay={0.2}
-          headerContent={
-            <Badge className="bg-orange-100 text-orange-800">
-              {completedHabitsToday} of {totalActiveHabits} completed
-            </Badge>
-          }
+        {/* Habit Tracker */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
         >
+<<<<<<< HEAD
           <div className="space-y-4">
             <Progress value={overallCompletionRate} className="h-3" />
             <div className="text-center text-sm text-slate-600 dark:text-slate-400">
@@ -453,6 +455,90 @@ const RitualEngine = () => {
                       </div>
                     </CardContent>
                   </Card>
+=======
+          <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur border-0 shadow-lg">
+            <CardHeader className="flex flex-row justify-between items-center">
+              <CardTitle className="flex items-center space-x-2">
+                <Target className="h-5 w-5 text-orange-600" />
+                <span>Habit Tracker</span>
+              </CardTitle>
+              <Button onClick={() => setShowNewHabitForm(!showNewHabitForm)} variant="outline" size="sm">
+                {showNewHabitForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                <span className="ml-2 hidden md:inline">{showNewHabitForm ? 'Cancel' : 'New Habit'}</span>
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {/* New Habit Form */}
+              {showNewHabitForm && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="p-4 mb-4 border-b border-slate-200 dark:border-slate-700"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                      type="text"
+                      placeholder="Habit Name (e.g., 'Daily Journaling')"
+                      value={newHabit.name}
+                      onChange={(e) => setNewHabit({ ...newHabit, name: e.target.value })}
+                      className="md:col-span-2"
+                    />
+                    <Input
+                      type="text"
+                      placeholder="Description"
+                      value={newHabit.description}
+                      onChange={(e) => setNewHabit({ ...newHabit, description: e.target.value })}
+                      className="md:col-span-2"
+                    />
+                    <div>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Category</label>
+                      <select 
+                        value={newHabit.category}
+                        onChange={(e) => setNewHabit({ ...newHabit, category: e.target.value as Habit['category'] })}
+                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
+                      >
+                        <option value="health">Health & Wellness</option>
+                        <option value="productivity">Productivity</option>
+                        <option value="personal">Personal Growth</option>
+                        <option value="learning">Learning</option>
+                        <option value="social">Social</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Frequency</label>
+                      <select 
+                        value={newHabit.frequency}
+                        onChange={(e) => setNewHabit({ ...newHabit, frequency: e.target.value as Habit['frequency'] })}
+                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
+                      >
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Difficulty</label>
+                      <select 
+                        value={newHabit.difficulty}
+                        onChange={(e) => setNewHabit({ ...newHabit, difficulty: e.target.value as Habit['difficulty'] })}
+                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
+                      >
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2 mt-4">
+                    <Button onClick={addHabit} className="bg-orange-600 hover:bg-orange-700 text-white">
+                      Create Habit
+                    </Button>
+                    <Button variant="outline" onClick={() => setShowNewHabitForm(false)}>
+                      Cancel
+                    </Button>
+                  </div>
+>>>>>>> 714605d (fix(core): resolve persistent compiler errors and clear all lint issues)
                 </motion.div>
               ))}
             </div>

@@ -6,8 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useTheme } from '@/contexts/useTheme';
 // import { supabase } from '@/integrations/supabase/client';
 import { 
   Save, 
@@ -205,6 +205,23 @@ const Settings = () => {
       icon: <FileText className="h-6 w-6" />,
       content: (
         <div className="space-y-4">
+          {settings.notion_token ? (
+            <div className="flex items-center justify-between p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+              <div>
+                <p className="font-semibold text-green-700">Notion is connected</p>
+                <p className="text-sm text-muted-foreground">Your workspace is ready to be used.</p>
+              </div>
+              <Button variant="destructive" size="sm">Disconnect</Button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border">
+              <div>
+                <p className="font-semibold text-foreground">Connect to Notion</p>
+                <p className="text-sm text-muted-foreground">Link your workspace to unlock features.</p>
+              </div>
+              <Button>Connect</Button>
+            </div>
+          )}
         </div>
       )
     }

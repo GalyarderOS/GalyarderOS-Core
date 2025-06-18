@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -7,7 +6,7 @@ import {
   User, Target, Calendar, Timer, BookOpen, Brain,
   Activity, CheckCircle, TrendingUp, BookMarked, LayoutDashboard, FileText
 } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/useTheme';
 
 interface PersonalSystemsGridProps {
   activeRituals: number;

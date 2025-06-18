@@ -1,10 +1,9 @@
-
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useTheme } from '@/contexts/useTheme';
 import { getDashboardModules } from '@/components/dashboard/os/modules';
-import { Module } from './types';
+import { Module, WindowState } from './types';
 
 export const useOSLayout = (onOpenAIAssistant?: () => void, onOpenNotionAI?: () => void) => {
   const [openWindows, setOpenWindows] = useState<string[]>([]);

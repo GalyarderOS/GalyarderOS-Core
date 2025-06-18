@@ -3,11 +3,23 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 // import { supabase } from '@/integrations/supabase/client';
 import { TrendingUp, TrendingDown, Plus, DollarSign, Target, PieChart } from 'lucide-react';
 
-const mockPortfolios = [
+type Investment = object;
+
+interface Portfolio {
+  id: string;
+  name: string;
+  description: string;
+  total_value: number;
+  investments: Investment[];
+}
+
+const mockPortfolios: Portfolio[] = [
     {
         id: '1',
         name: 'Growth Portfolio',
@@ -26,7 +38,7 @@ const mockPortfolios = [
 
 const InvestmentTracker = () => {
   const { user } = useAuth();
-  const [portfolios, setPortfolios] = useState<any[]>([]);
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

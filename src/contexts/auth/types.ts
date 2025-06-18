@@ -5,6 +5,9 @@
 export type User = {
   id: string;
   email?: string;
+  user_metadata?: {
+    avatar_url?: string;
+  };
   // add other user properties as needed
 };
 
@@ -29,8 +32,8 @@ export interface AuthContextType {
   loading: boolean;
   loadingProfile: boolean;
   reloadProfile: () => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signInWithGoogle: () => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }

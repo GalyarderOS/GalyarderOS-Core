@@ -15,7 +15,7 @@ import { ModuleCard } from "@/components/shared/ModuleCard";
 interface LifeArea {
   id: string;
   name: string;
-  icon: any;
+  icon: React.ElementType;
   score: number;
   maxScore: number;
   color: string;

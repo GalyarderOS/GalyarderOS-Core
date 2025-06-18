@@ -23,6 +23,8 @@ import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
 import Reflection from "@/components/dashboard/Reflection";
 import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
 import CalendarModule from "@/components/dashboard/CalendarModule";
+import { TopBar } from "@/components/dashboard/TopBar";
+import { useRealTimeData } from "@/hooks/useRealTimeData";
 
 const Dashboard = () => {
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);

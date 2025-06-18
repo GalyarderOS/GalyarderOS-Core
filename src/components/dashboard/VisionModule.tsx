@@ -328,9 +328,8 @@ const VisionModule = () => {
                     </CardContent>
                   </Card>
                 ))}
-              </CardContent>
-            </Card>
-          </motion.div>
+            </div>
+          </ModuleCard>
         )}
       </div>
       <CreateGoalModal 

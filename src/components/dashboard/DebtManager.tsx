@@ -4,11 +4,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/auth/useAuth';
 // import { supabase } from '@/integrations/supabase/client';
 import { CreditCard, Plus, Target, TrendingDown, Calendar, AlertTriangle } from 'lucide-react';
 
-const mockDebts = [
+interface Debt {
+  id: string;
+  name: string;
+  debt_type: string;
+  total_amount: number;
+  remaining_amount: number;
+  interest_rate: number;
+  minimum_payment: number;
+  due_date: string;
+}
+
+const mockDebts: Debt[] = [
   {
     id: '1',
     name: 'Chase Sapphire Reserve',
@@ -33,7 +44,7 @@ const mockDebts = [
 
 const DebtManager = () => {
   const { user } = useAuth();
-  const [debts, setDebts] = useState<any[]>([]);
+  const [debts, setDebts] = useState<Debt[]>([]);
   const [stats, setStats] = useState({
     totalDebt: 0,
     monthlyPayments: 0,
@@ -58,8 +69,8 @@ const DebtManager = () => {
       // Calculate stats
       const totalDebt = debtsData?.reduce((sum, debt) => sum + debt.remaining_amount, 0) || 0;
       const monthlyPayments = debtsData?.reduce((sum, debt) => sum + (debt.minimum_payment || 0), 0) || 0;
-      const avgInterestRate = debtsData?.length > 0 
-        ? debtsData.reduce((sum, debt) => sum + (debt.interest_rate || 0), 0) / debtsData.length 
+      const avgInterestRate = debtsData?.length > 0
+        ? debtsData.reduce((sum, debt) => sum + (debt.interest_rate || 0), 0) / debtsData.length
         : 0;
 
       setStats({
@@ -216,12 +227,12 @@ const DebtManager = () => {
             ) : (
               <div className="space-y-6">
                 {debts.map((debt, index) => {
-                  const payoffProgress = debt.total_amount > 0 
-                    ? ((debt.total_amount - debt.remaining_amount) / debt.total_amount) * 100 
+                  const payoffProgress = debt.total_amount > 0
+                    ? ((debt.total_amount - debt.remaining_amount) / debt.total_amount) * 100
                     : 0;
-                  
+
                   const isHighInterest = (debt.interest_rate || 0) > 15;
-                  
+
                   return (
                     <motion.div
                       key={debt.id}
@@ -234,7 +245,7 @@ const DebtManager = () => {
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
                             <h4 className="text-lg font-semibold text-foreground font-playfair">{debt.name}</h4>
-                            <Badge 
+                            <Badge
                               variant="secondary"
                               className="font-playfair capitalize"
                             >
@@ -247,43 +258,47 @@ const DebtManager = () => {
                               </Badge>
                             )}
                           </div>
-                          
-                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground font-playfair">
-                            <span>Balance: ${debt.remaining_amount.toLocaleString()}</span>
-                            <span>Rate: {debt.interest_rate?.toFixed(1) || 0}%</span>
-                            <span>Min Payment: ${debt.minimum_payment?.toLocaleString() || 0}</span>
-                            {debt.due_date && (
-                              <span>Due: {new Date(debt.due_date).toLocaleDateString()}</span>
-                            )}
-                          </div>
+                          <p className="text-sm text-muted-foreground font-playfair">
+                            Due on {new Date(debt.due_date).toLocaleDateString()}
+                          </p>
                         </div>
-                        
+                      </div>
+
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground font-playfair">
+                        <div>
+                          <p>Remaining</p>
+                          <p className="text-foreground font-semibold">${debt.remaining_amount.toLocaleString()}</p>
+                        </div>
+                        <div>
+                          <p>Interest Rate</p>
+                          <p className="text-foreground font-semibold">{debt.interest_rate}%</p>
+                        </div>
+                        <div>
+                          <p>Min. Payment</p>
+                          <p className="text-foreground font-semibold">${debt.minimum_payment.toLocaleString()}</p>
+                        </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-foreground font-playfair mb-1">
-                            {payoffProgress.toFixed(1)}%
+                            {payoffProgress.toFixed(0)}%
                           </div>
                           <div className="text-sm text-muted-foreground font-playfair">Paid Off</div>
                         </div>
                       </div>
-                      
-                      <div className="space-y-2">
-                        <Progress value={payoffProgress} className="h-3" />
+
+                      <div className="space-y-2 mt-4">
                         <div className="flex justify-between text-xs text-muted-foreground font-playfair">
                           <span>${(debt.total_amount - debt.remaining_amount).toLocaleString()} paid</span>
-                          <span>${debt.remaining_amount.toLocaleString()} remaining</span>
+                          <span>${debt.total_amount.toLocaleString()} total</span>
                         </div>
+                        <Progress value={payoffProgress} className="h-2" />
                       </div>
-                      
+
                       <div className="mt-4 flex justify-end space-x-2">
-                        <Button variant="outline" size="sm" className="font-playfair">
-                          View Strategy
-                        </Button>
-                        <Button size="sm" className="font-playfair">
-                          Make Payment
-                        </Button>
+                        <Button variant="outline" size="sm" className="font-playfair">Make Payment</Button>
+                        <Button variant="ghost" size="sm" className="font-playfair">Details</Button>
                       </div>
                     </motion.div>
-                  );
+                  )
                 })}
               </div>
             )}

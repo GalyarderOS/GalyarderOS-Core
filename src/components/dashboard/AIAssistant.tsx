@@ -4,8 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAuth } from '@/contexts/AuthContext';
-// import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/auth/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { 
   Send, 
@@ -15,6 +14,9 @@ import {
   Loader2,
   AlertCircle
 } from 'lucide-react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
+// import { supabase } from '@/integrations/supabase/client';
 
 interface AIAssistantProps {
   isOpen: boolean;

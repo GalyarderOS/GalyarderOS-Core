@@ -31,7 +31,7 @@ interface CoreValue {
   name: string;
   description: string;
   strength: number;
-  icon: any;
+  icon: React.ElementType;
 }
 
 interface CharacterTrait {
@@ -92,7 +92,7 @@ const IdentityCore = () => {
     }
     
     setLoading(false);
-  }, []);
+  }, [identity]);
 
   const handleIdentityChange = (field: string, value: string) => {
     setIdentity(prev => ({ ...prev, [field]: value }));

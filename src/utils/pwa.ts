@@ -1,4 +1,3 @@
-
 export const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
@@ -34,13 +33,22 @@ export const unregisterServiceWorker = async () => {
   }
 };
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 // PWA install prompt
 export const installPWA = () => {
-  let deferredPrompt: any;
+  let deferredPrompt: BeforeInstallPromptEvent | null = null;
   
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    deferredPrompt = e;
+    deferredPrompt = e as BeforeInstallPromptEvent;
     
     // Show install button or trigger install
     return deferredPrompt;

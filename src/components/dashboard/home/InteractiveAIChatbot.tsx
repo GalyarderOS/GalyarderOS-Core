@@ -40,12 +40,13 @@ const InteractiveAIChatbot = () => {
       const aiReply = await getAIAssistantReply(input);
       setMessages(msgs => [...msgs, {
         role: "ai",
-        content: aiReply
+        content: aiReply as string
       }]);
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as Error;
       setMessages(msgs => [...msgs, {
         role: "ai",
-        content: err?.message || "Sorry, something went wrong."
+        content: error?.message || "Sorry, something went wrong."
       }]);
     } finally {
       setSending(false);

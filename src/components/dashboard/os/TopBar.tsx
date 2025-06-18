@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { useCommandPalette } from '@/hooks/useCommandPalette';
+import { useCommandPalette, Command } from '@/hooks/useCommandPalette';
 import NotificationCenter from './NotificationCenter';
 import SystemStatusIndicator from './SystemStatusIndicator';
 import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { AccountSettingsDialog } from './AccountSettingsDialog';
-import { Profile } from '@/contexts/AuthContext';
+import { Profile, User } from '@/contexts/auth/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface TopBarProps {
-  user: any;
+  user: User | null;
   profile: Profile | null;
   theme: string;
   setTheme: (theme: string) => void;
@@ -78,7 +78,7 @@ const TopBar = ({
     }, 200);
   };
 
-  const handleCommandClick = (command: any) => {
+  const handleCommandClick = (command: Command) => {
     executeCommand(command);
     setIsSearchExpanded(false);
     setLocalSearch('');
@@ -148,7 +148,7 @@ const TopBar = ({
                             if (!acc[command.category]) acc[command.category] = [];
                             acc[command.category].push(command);
                             return acc;
-                          }, {} as Record<string, any[]>)
+                          }, {} as Record<string, Command[]>)
                         ).map(([category, categoryCommands]) => (
                           <div key={category} className="mb-2">
                             <div className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wide">
