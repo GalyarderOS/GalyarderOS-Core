@@ -392,7 +392,7 @@ const RitualEngine = () => {
                               <h3 className="font-semibold text-slate-800 dark:text-slate-200">
                                 {habit.name}
                               </h3>
-                              <Badge className={getCategoryColor(habit.category)}>
+                              <Badge className={getCategoryColor(habit.category ?? '')}>
                                 {habit.category}
                               </Badge>
                             </div>
@@ -400,7 +400,7 @@ const RitualEngine = () => {
                               {habit.description}
                             </p>
                             <div className="flex items-center space-x-3 text-xs text-slate-500">
-                              <Badge className={getDifficultyColor(habit.difficulty)}>
+                              <Badge className={getDifficultyColor(habit.difficulty ?? '')}>
                                 {habit.difficulty}
                               </Badge>
                               <span>{habit.frequency}</span>
