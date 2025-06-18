@@ -184,15 +184,15 @@ const VisionModule = () => {
             <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center">
               <Target className="h-8 w-8 text-white" />
             </div>
-            <div>
+            <div className="text-left">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-playfair">
                 Vision & Roadmap
               </h1>
-              <p className="text-slate-600 dark:text-slate-400">Track your long-term goals and milestones</p>
+              <p className="text-muted-foreground">Track your long-term goals and milestones</p>
             </div>
           </div>
           <Button 
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={() => setCreateModalOpen(true)}
           >
             <Plus className="h-4 w-4 mr-2" />
@@ -216,12 +216,12 @@ const VisionModule = () => {
             <CardContent>
               <Textarea
                 value={visionStatement}
-                onChange={(e) => setVisionStatement(e.target.value)}
-                className="bg-white/50 dark:bg-slate-700/50 min-h-[100px] text-lg leading-relaxed"
+                onChange={(e) => setVisionStatement(e.target.value)} 
+                className="bg-background/50 min-h-[100px] text-lg leading-relaxed"
                 placeholder="Describe your long-term vision..."
               />
               <Button 
-                className="mt-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
                 onClick={saveVisionData}
               >
                 Save Vision

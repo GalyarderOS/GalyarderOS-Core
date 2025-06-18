@@ -71,12 +71,15 @@ export const SetupLifeAreasModal = ({ isOpen, onClose, onSave, existingAreas }: 
                     placeholder="Add a new area (e.g., Spirituality)"
                     onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddArea(); } }}
                 />
-                <Button onClick={handleAddArea}>Add</Button>
+                <Button onClick={handleAddArea} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add
+                </Button>
             </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save Areas</Button>
+          <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-primary-foreground">Save Areas</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

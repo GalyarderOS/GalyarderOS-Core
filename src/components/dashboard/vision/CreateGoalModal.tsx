@@ -105,7 +105,7 @@ export const CreateGoalModal = ({ isOpen, onClose, onCreateGoal }: CreateGoalMod
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleCreateGoal}>Create Goal</Button>
+          <Button onClick={handleCreateGoal} className="bg-primary hover:bg-primary/90 text-primary-foreground">Create Goal</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

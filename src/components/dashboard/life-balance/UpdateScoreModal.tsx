@@ -88,7 +88,7 @@ export const UpdateScoreModal = ({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save Score</Button>
+          <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-primary-foreground">Save Score</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
