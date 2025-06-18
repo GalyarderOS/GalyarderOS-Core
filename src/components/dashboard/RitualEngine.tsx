@@ -189,9 +189,8 @@ const RitualEngine = () => {
   };
 
   const getCategoryColor = (category: string | undefined) => {
-    if (!category || typeof category !== 'string') {
-      return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+    const categoryString = category || '';
+    
     switch(category) {
       case 'health': return 'bg-green-100 text-green-800 border-green-200';
       case 'productivity': return 'bg-blue-100 text-blue-800 border-blue-200';
@@ -203,9 +202,8 @@ const RitualEngine = () => {
   };
 
   const getDifficultyColor = (difficulty: string | undefined) => {
-    if (!difficulty || typeof difficulty !== 'string') {
-      return 'bg-gray-100 text-gray-700';
-    }
+    const difficultyString = difficulty || '';
+    
     switch(difficulty) {
       case 'easy': return 'bg-green-100 text-green-700';
       case 'medium': return 'bg-yellow-100 text-yellow-700';
