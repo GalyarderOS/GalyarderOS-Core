@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast"; 
 import { Brain, Activity, Plus, Sliders as Slider } from "lucide-react";
 import EmptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
+import { UpdateScoreModal } from "./life-balance/UpdateScoreModal";
 
 interface LifeArea {
   id: string;
@@ -33,6 +34,8 @@ const LifeBalance = () => {
   const [lifeAreas, setLifeAreas] = useState<LifeArea[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSetupModalOpen, setSetupModalOpen] = useState(false);
+  const [isUpdateScoreModalOpen, setUpdateScoreModalOpen] = useState(false);
+  const [selectedArea, setSelectedArea] = useState<LifeArea | null>(null);
   const { toast } = useToast();
 
   // Load saved life balance data on component mount
@@ -80,6 +83,38 @@ const LifeBalance = () => {
     });
     
     setSetupModalOpen(false);
+  };
+
+  const handleUpdateScore = (areaId: string) => {
+    const area = lifeAreas.find(a => a.id === areaId);
+    if (area) {
+      setSelectedArea(area);
+      setUpdateScoreModalOpen(true);
+    }
+  };
+
+  const saveUpdatedScore = (newScore: number) => {
+    if (!selectedArea) return;
+    
+    const updatedAreas = lifeAreas.map(area => 
+      area.id === selectedArea.id ? { ...area, score: newScore } : area
+    );
+    
+    setLifeAreas(updatedAreas);
+    
+    // Save to localStorage
+    localStorage.setItem('life-balance-data', JSON.stringify({
+      lifeAreas: updatedAreas,
+      lastUpdated: new Date().toISOString()
+    }));
+    
+    // Recalculate overall score
+    const newOverallScore = Math.round(updatedAreas.reduce((sum, area) => sum + area.score, 0) / updatedAreas.length);
+    
+    toast({
+      title: "Score updated",
+      description: `${selectedArea.name} score updated to ${newScore}%.`,
+    });
   };
 
   // Helper function to generate random colors for life areas
@@ -198,7 +233,11 @@ const LifeBalance = () => {
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">{area.description}</p>
                 <Progress value={area.score} className="h-2" />
-                <Button variant="outline" className="w-full">
+                <Button 
+                  variant="outline" 
+                  className="w-full"
+                  onClick={() => handleUpdateScore(area.id)}
+                >
                   Update Score
                 </Button>
               </CardContent>
@@ -222,6 +261,14 @@ const LifeBalance = () => {
         onClose={() => setSetupModalOpen(false)} 
         onSave={handleSetupLifeAreas}
         existingAreas={lifeAreas.map(area => area.name)}
+      />
+      
+      <UpdateScoreModal
+        isOpen={isUpdateScoreModalOpen}
+        onClose={() => setUpdateScoreModalOpen(false)}
+        onSave={saveUpdatedScore}
+        areaName={selectedArea?.name || ""}
+        currentScore={selectedArea?.score || 50}
       />
     </div>
   );

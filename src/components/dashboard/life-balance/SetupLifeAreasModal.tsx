@@ -18,8 +18,6 @@ interface SetupLifeAreasModalProps {
   onClose: () => void; 
   onSave?: (areas: string[]) => void;
   existingAreas?: string[];
-  onSave?: (areas: string[]) => void;
-  existingAreas?: string[];
 }
 
 const defaultAreas = ['Career', 'Health', 'Relationships', 'Personal Growth', 'Finance'];
@@ -41,9 +39,7 @@ export const SetupLifeAreasModal = ({ isOpen, onClose, onSave, existingAreas }: 
   
   const handleSave = () => {
     if (onSave) {
-      if (onSave) {
-        onSave(areas);
-      }
+      onSave(areas);
       onClose();
     }
   };
