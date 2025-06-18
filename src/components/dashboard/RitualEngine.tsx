@@ -188,24 +188,26 @@ const RitualEngine = () => {
     setShowNewHabitForm(false);
   };
 
-  const getCategoryColor = (category: string | undefined) => {
-    switch(category) {
-      case 'health': return 'bg-green-100 text-green-800 border-green-200';
-      case 'productivity': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'personal': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'learning': return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'social': return 'bg-pink-100 text-pink-800 border-pink-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+  const getCategoryColor = (categoryValue: string | undefined) => {
+    // Ensure we're working with a string or return default
+    const category = typeof categoryValue === 'string' ? categoryValue : '';
+    
+    if (category === 'health') return 'bg-green-100 text-green-800 border-green-200';
+    if (category === 'productivity') return 'bg-blue-100 text-blue-800 border-blue-200';
+    if (category === 'personal') return 'bg-purple-100 text-purple-800 border-purple-200';
+    if (category === 'learning') return 'bg-orange-100 text-orange-800 border-orange-200';
+    if (category === 'social') return 'bg-pink-100 text-pink-800 border-pink-200';
+    return 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
-  const getDifficultyColor = (difficulty: string | undefined) => {
-    switch(difficulty) {
-      case 'easy': return 'bg-green-100 text-green-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-700';
-      case 'hard': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
+  const getDifficultyColor = (difficultyValue: string | undefined) => {
+    // Ensure we're working with a string or return default
+    const difficulty = typeof difficultyValue === 'string' ? difficultyValue : '';
+    
+    if (difficulty === 'easy') return 'bg-green-100 text-green-700';
+    if (difficulty === 'medium') return 'bg-yellow-100 text-yellow-700';
+    if (difficulty === 'hard') return 'bg-red-100 text-red-700';
+    return 'bg-gray-100 text-gray-700';
   };
 
   const getTimeOfDayIcon = (timeOfDay: string) => {
@@ -386,7 +388,7 @@ const RitualEngine = () => {
                               <h3 className="font-semibold text-slate-800 dark:text-slate-200">
                                 {habit.name}
                               </h3>
-                              <Badge className={getCategoryColor(habit.category)}>
+                              <Badge className={getCategoryColor(typeof habit.category === 'string' ? habit.category : undefined)}>
                                 {habit.category}
                               </Badge>
                             </div>
@@ -394,7 +396,7 @@ const RitualEngine = () => {
                               {habit.description}
                             </p>
                             <div className="flex items-center space-x-3 text-xs text-slate-500">
-                              <Badge className={getDifficultyColor(habit.difficulty)}>
+                              <Badge className={getDifficultyColor(typeof habit.difficulty === 'string' ? habit.difficulty : undefined)}>
                                 {habit.difficulty}
                               </Badge>
                               <span>{habit.frequency}</span>
