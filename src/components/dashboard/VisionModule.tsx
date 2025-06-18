@@ -8,6 +8,8 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Target, Edit, Trash2, Calendar } from 'lucide-react'; 
+import { ModuleHeader } from '@/components/ui/module-header';
+import { ModuleCard } from '@/components/ui/module-card';
 import EmptyState from './home/EmptyState';
 import { CreateGoalModal } from './vision/CreateGoalModal';
 import { Label } from '@/components/ui/label';
@@ -175,22 +177,13 @@ const VisionModule = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20">
       <div className="max-w-6xl mx-auto p-6 space-y-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between"
-        >
-          <div className="flex items-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center">
-              <Target className="h-8 w-8 text-white" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-playfair">
-                Vision & Roadmap
-              </h1>
-              <p className="text-muted-foreground">Track your long-term goals and milestones</p>
-            </div>
-          </div>
+        <div className="flex items-center justify-between">
+          <ModuleHeader
+            title="Vision & Roadmap"
+            description="Track your long-term goals and milestones"
+            icon={<Target className="h-8 w-8 text-white" />}
+            module="vision"
+          />
           <Button 
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
             onClick={() => setCreateModalOpen(true)}
@@ -198,57 +191,41 @@ const VisionModule = () => {
             <Plus className="h-4 w-4 mr-2" />
             Add Goal
           </Button>
-        </motion.div>
+        </div>
 
         {/* Vision Statement */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+        <ModuleCard
+          title="Vision Statement"
+          module="vision"
+          delay={0.2}
+          headerContent={<Target className="h-5 w-5 text-blue-600" />}
         >
-          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Target className="h-5 w-5 text-blue-600" />
-                <span>Vision Statement</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                value={visionStatement}
-                onChange={(e) => setVisionStatement(e.target.value)} 
-                className="bg-background/50 min-h-[100px] text-lg leading-relaxed"
-                placeholder="Describe your long-term vision..."
-              />
-              <Button 
-                className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
-                onClick={saveVisionData}
-              >
-                Save Vision
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <Textarea
+            value={visionStatement}
+            onChange={(e) => setVisionStatement(e.target.value)} 
+            className="bg-background/50 min-h-[100px] text-lg leading-relaxed"
+            placeholder="Describe your long-term vision..."
+          />
+          <Button 
+            className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground"
+            onClick={saveVisionData}
+          >
+            Save Vision
+          </Button>
+        </ModuleCard>
 
         {/* Goals List */}
         {goals.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+          <ModuleCard
+            title="Your Goals"
+            module="vision"
+            delay={0.3}
+            headerContent={<Target className="h-5 w-5 text-purple-600" />}
           >
-            <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Target className="h-5 w-5 text-purple-600" />
-                  <span>Your Goals</span>
-                </CardTitle>
-                <CardDescription>Track progress toward your vision</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {goals.map((goal) => (
-                  <Card key={goal.id} className="bg-white/50 dark:bg-slate-700/50 border-0"> 
-                    <CardContent className="p-4"> 
+            <div className="space-y-4">
+              {goals.map((goal) => (
+                <Card key={goal.id} className="bg-white/50 dark:bg-slate-700/50 border-0"> 
+                  <CardContent className="p-4">
                       {editingGoalId === goal.id ? (
                         <div className="space-y-3">
                           <Input

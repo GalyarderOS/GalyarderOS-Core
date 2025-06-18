@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,10 +19,12 @@ import {
   Shield,
   Award, 
   Edit,
-  Trash2,
+  Trash2, 
   Plus
 } from "lucide-react";
 import EmptyState from "./home/EmptyState";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { ModuleCard } from "@/components/ui/module-card";
 
 interface CoreValue {
   id: string;
@@ -210,7 +211,7 @@ const IdentityCore = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
-      <AnimatePresence>
+      <AnimatePresence> 
         {showSetup && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -276,18 +277,14 @@ const IdentityCore = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4"
-        >
-          <div className="flex items-center justify-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
-              <User className="h-8 w-8 text-white" />
-            </div>
-            <div className="text-left">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent font-playfair">
-                Identity Core
-              </h1>
-              <p className="text-muted-foreground">Define and strengthen your authentic self</p>
-            </div>
-          </div>
+        > 
+          <ModuleHeader
+            title="Identity Core"
+            description="Define and strengthen your authentic self"
+            icon={<User className="h-8 w-8 text-white" />}
+            module="identity"
+            className="justify-center"
+          />
 
           {/* Identity Strength Score */}
           {identityStrength > 0 && (
@@ -312,16 +309,15 @@ const IdentityCore = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.3 }} 
         >
-          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
-                <span>Core Identity</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
+          <ModuleCard
+            title="Core Identity"
+            module="identity"
+            delay={0.3}
+            headerContent={<Sparkles className="h-5 w-5 text-purple-600" />}
+          >
+            <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -408,106 +404,102 @@ const IdentityCore = () => {
                   <Badge className="bg-green-100 text-green-800">Identity Saved Successfully!</Badge>
                 </motion.div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </ModuleCard>
         </motion.div>
 
         {/* Core Values System */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.4 }} 
         >
-          <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur border-0 shadow-lg">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center space-x-2">
-                  <Heart className="h-5 w-5 text-red-500" />
-                  <span>Core Values</span> 
-                </CardTitle>
-                <Button onClick={addCoreValue} size="sm" variant="outline">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Value
-                </Button>
+          <ModuleCard
+            title="Core Values"
+            module="identity"
+            delay={0.4}
+            headerContent={
+              <Button onClick={addCoreValue} size="sm" variant="outline">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Value
+              </Button>
+            }
+          >
+            {coreValues.length === 0 ? (
+              <div className="text-center py-8">
+                <Heart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">No core values defined yet</p>
+                <p className="text-sm text-muted-foreground">Add your first core value to get started</p>
               </div>
-            </CardHeader>
-            <CardContent>
-              {coreValues.length === 0 ? (
-                <div className="text-center py-8">
-                  <Heart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">No core values defined yet</p>
-                  <p className="text-sm text-muted-foreground">Add your first core value to get started</p>
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 gap-6">
-                  {coreValues.map((value) => (
-                    <Card key={value.id} className="bg-white/50 dark:bg-slate-700/50 border-0">
-                      <CardContent className="p-4">
-                        {editingValueId === value.id ? (
-                          <div className="space-y-3">
-                            <Input
-                              value={value.name}
-                              onChange={(e) => updateCoreValue(value.id, { name: e.target.value })}
-                              placeholder="Value name"
-                              className="mb-2"
+            ) : (
+              <div className="grid md:grid-cols-2 gap-6">
+                {coreValues.map((value) => (
+                  <Card key={value.id} className="bg-white/50 dark:bg-slate-700/50 border-0">
+                    <CardContent className="p-4">
+                      {editingValueId === value.id ? (
+                        <div className="space-y-3">
+                          <Input
+                            value={value.name}
+                            onChange={(e) => updateCoreValue(value.id, { name: e.target.value })}
+                            placeholder="Value name"
+                            className="mb-2"
+                          />
+                          <Textarea
+                            value={value.description}
+                            onChange={(e) => updateCoreValue(value.id, { description: e.target.value })}
+                            placeholder="Value description"
+                            className="mb-2"
+                          />
+                          <div className="space-y-1">
+                            <label className="text-xs">Strength: {value.strength}%</label>
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              value={value.strength}
+                              onChange={(e) => updateCoreValue(value.id, { strength: parseInt(e.target.value) })}
+                              className="w-full"
                             />
-                            <Textarea
-                              value={value.description}
-                              onChange={(e) => updateCoreValue(value.id, { description: e.target.value })}
-                              placeholder="Value description"
-                              className="mb-2"
-                            />
-                            <div className="space-y-1">
-                              <label className="text-xs">Strength: {value.strength}%</label>
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={value.strength}
-                                onChange={(e) => updateCoreValue(value.id, { strength: parseInt(e.target.value) })}
-                                className="w-full"
-                              />
-                            </div>
-                            <div className="flex justify-end space-x-2 mt-2">
-                              <Button 
-                                variant="outline" 
-                                size="sm" 
-                                onClick={() => setEditingValueId(null)}
-                              >
-                                Cancel
+                          </div>
+                          <div className="flex justify-end space-x-2 mt-2">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => setEditingValueId(null)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              onClick={() => setEditingValueId(null)}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-semibold text-lg">{value.name}</h3>
+                            <div className="flex space-x-1">
+                              <Button variant="ghost" size="sm" onClick={() => setEditingValueId(value.id)}>
+                                <Edit className="h-4 w-4" />
                               </Button>
-                              <Button 
-                                size="sm" 
-                                onClick={() => setEditingValueId(null)}
-                              >
-                                Save
+                              <Button variant="ghost" size="sm" onClick={() => deleteCoreValue(value.id)}>
+                                <Trash2 className="h-4 w-4 text-red-500" />
                               </Button>
                             </div>
                           </div>
-                        ) : (
-                          <>
-                            <div className="flex justify-between items-start mb-2">
-                              <h3 className="font-semibold text-lg">{value.name}</h3>
-                              <div className="flex space-x-1">
-                                <Button variant="ghost" size="sm" onClick={() => setEditingValueId(value.id)}>
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => deleteCoreValue(value.id)}>
-                                  <Trash2 className="h-4 w-4 text-red-500" />
-                                </Button>
-                              </div>
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-3">{value.description}</p>
-                            <Progress value={value.strength} className="h-2" />
-                          </>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
+                          <p className="text-sm text-muted-foreground mb-3">{value.description}</p>
+                          <Progress value={value.strength} className="h-2" />
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </ModuleCard>
         </motion.div>
 
         {/* Character Traits Matrix */}

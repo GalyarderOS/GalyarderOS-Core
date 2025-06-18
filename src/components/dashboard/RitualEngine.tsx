@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { 
   Calendar, 
-  Target, 
+  Target,
   Flame, 
   Clock, 
   Plus, 
@@ -22,8 +22,10 @@ import {
   Star,
   ChevronRight,
   Play,
-  Pause
+  Pause 
 } from "lucide-react";
+import { ModuleHeader } from "@/components/ui/module-header";
+import { ModuleCard } from "@/components/ui/module-card";
 
 interface Habit {
   id: string;
@@ -226,24 +228,15 @@ const RitualEngine = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20">
       <div className="max-w-7xl mx-auto p-6 space-y-8">
-        
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-4"
-        >
-          <div className="flex items-center justify-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-br from-orange-600 to-red-600 rounded-2xl flex items-center justify-center">
-              <Calendar className="h-8 w-8 text-white" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-                Ritual Engine
-              </h1>
-              <p className="text-slate-600 dark:text-slate-400">Automate excellence through consistent habits</p>
-            </div>
-          </div>
+        <div className="text-center space-y-4">
+          <ModuleHeader
+            title="Ritual Engine"
+            description="Automate excellence through consistent habits"
+            icon={<Calendar className="h-8 w-8 text-white" />}
+            module="ritual"
+            className="justify-center"
+          />
 
           {/* Stats Overview */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
@@ -272,60 +265,43 @@ const RitualEngine = () => {
               </CardContent>
             </Card>
           </div>
-        </motion.div>
+        </div>
 
         {/* Today's Progress */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+        <ModuleCard
+          title="Today's Progress"
+          module="ritual"
+          delay={0.2}
+          headerContent={
+            <Badge className="bg-orange-100 text-orange-800">
+              {completedHabitsToday} of {totalActiveHabits} completed
+            </Badge>
+          }
         >
-          <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Target className="h-5 w-5 text-orange-600" />
-                  <span>Today's Progress</span>
-                </div>
-                <Badge className="bg-orange-100 text-orange-800">
-                  {completedHabitsToday} of {totalActiveHabits} completed
-                </Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Progress value={overallCompletionRate} className="h-3" />
-                <div className="text-center text-sm text-slate-600 dark:text-slate-400">
-                  {Math.round(overallCompletionRate)}% of today's habits completed
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+          <div className="space-y-4">
+            <Progress value={overallCompletionRate} className="h-3" />
+            <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+              {Math.round(overallCompletionRate)}% of today's habits completed
+            </div>
+          </div>
+        </ModuleCard>
 
         {/* Habits Management */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+        <ModuleCard
+          title="Active Habits"
+          module="ritual"
+          delay={0.3}
+          headerContent={
+            <Button
+              onClick={() => setShowNewHabitForm(!showNewHabitForm)}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Add Habit
+            </Button>
+          }
         >
-          <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur border-0 shadow-lg">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center space-x-2">
-                  <Zap className="h-5 w-5 text-blue-600" />
-                  <span>Active Habits</span>
-                </CardTitle>
-                <Button
-                  onClick={() => setShowNewHabitForm(!showNewHabitForm)}
-                  className="bg-orange-600 hover:bg-orange-700 text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Habit
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
+          <div className="space-y-6">
               
               {/* New Habit Form */}
               {showNewHabitForm && (

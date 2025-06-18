@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { useCommandPalette } from '@/hooks/useCommandPalette';
@@ -190,13 +191,7 @@ const TopBar = ({
           <NotificationCenter />
 
           {/* Theme Toggle */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          >
-            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-          </Button>
+          <ThemeToggle />
 
           {/* User Menu */}
           {user && (
