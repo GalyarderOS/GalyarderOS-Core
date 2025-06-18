@@ -23,8 +23,8 @@ import {
   Play,
   Pause 
 } from "lucide-react";
-import { ModuleHeader } from "@/components/ui/module-header";
-import { ModuleCard } from "@/components/ui/module-card";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { ModuleCard } from "@/components/shared/ModuleCard";
 
 interface Habit {
   id: string;

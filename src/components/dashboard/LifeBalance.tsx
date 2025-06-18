@@ -9,8 +9,8 @@ import { Brain, Activity, Plus, Sliders } from "lucide-react";
 import EmptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
 import { UpdateScoreModal } from "./life-balance/UpdateScoreModal";
-import { ModuleHeader } from "@/components/ui/module-header";
-import { ModuleCard } from "@/components/ui/module-card";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { ModuleCard } from "@/components/shared/ModuleCard";
 
 interface LifeArea {
   id: string;
