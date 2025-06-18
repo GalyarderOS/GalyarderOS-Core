@@ -1,4 +1,3 @@
-
 import {
   Dialog,
   DialogContent,
@@ -48,6 +47,9 @@ export const CreateGoalModal = ({ isOpen, onClose, onCreateGoal }: CreateGoalMod
     setDescription('');
     setDeadline('');
     setPriority('medium');
+    
+    // Close the modal
+    onClose();
   };
 
   return (
