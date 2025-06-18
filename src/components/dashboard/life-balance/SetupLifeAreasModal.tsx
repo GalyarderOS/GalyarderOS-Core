@@ -16,12 +16,14 @@ import { X } from 'lucide-react';
 interface SetupLifeAreasModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave?: (areas: string[]) => void;
+  existingAreas?: string[];
 }
 
 const defaultAreas = ['Career', 'Health', 'Relationships', 'Personal Growth', 'Finance'];
 
-export const SetupLifeAreasModal = ({ isOpen, onClose }: SetupLifeAreasModalProps) => {
-  const [areas, setAreas] = useState<string[]>(defaultAreas);
+export const SetupLifeAreasModal = ({ isOpen, onClose, onSave, existingAreas }: SetupLifeAreasModalProps) => {
+  const [areas, setAreas] = useState<string[]>(existingAreas?.length ? existingAreas : defaultAreas);
   const [newArea, setNewArea] = useState('');
 
   const handleAddArea = () => {
@@ -36,8 +38,9 @@ export const SetupLifeAreasModal = ({ isOpen, onClose }: SetupLifeAreasModalProp
   };
   
   const handleSave = () => {
-    console.log('Saving life areas:', areas);
-    // This is where you would save the areas to the database
+    if (onSave) {
+      onSave(areas);
+    }
     onClose();
   };
 

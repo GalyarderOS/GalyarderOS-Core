@@ -11,21 +11,43 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
 
 interface CreateGoalModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onCreateGoal?: (goal: {
+    title: string;
+    description: string;
+    deadline: string;
+    priority: 'low' | 'medium' | 'high';
+  }) => void;
 }
 
-export const CreateGoalModal = ({ isOpen, onClose }: CreateGoalModalProps) => {
+export const CreateGoalModal = ({ isOpen, onClose, onCreateGoal }: CreateGoalModalProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [priority, setPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
   const handleCreateGoal = () => {
-    console.log('Creating goal:', { title, description });
-    // This is where you would typically call a function to save the goal
-    onClose();
+    if (!title.trim()) return;
+    
+    if (onCreateGoal) {
+      onCreateGoal({
+        title,
+        description,
+        deadline,
+        priority
+      });
+    }
+    
+    // Reset form
+    setTitle('');
+    setDescription('');
+    setDeadline('');
+    setPriority('medium');
   };
 
   return (
@@ -55,6 +77,28 @@ export const CreateGoalModal = ({ isOpen, onClose }: CreateGoalModalProps) => {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Why is this goal important to you?"
             />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="deadline">Target Date</Label>
+            <Input
+              id="deadline"
+              type="date"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="priority">Priority</Label>
+            <Select value={priority} onValueChange={(value: 'low' | 'medium' | 'high') => setPriority(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <DialogFooter>
