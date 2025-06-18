@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Brain, Activity, Plus, Sliders as Slider } from "lucide-react"mptyState from "./home/EmptyState";
+import { Brain, Activity, Plus, Sliders as Slider } from "lucide-react";
+import EmptyState from "./home/EmptyState";
 import { SetupLifeAreasModal } from "./life-balance/SetupLifeAreasModal";
 
 interface LifeArea {
