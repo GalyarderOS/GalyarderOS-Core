@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { 
+import {
   User, 
   Heart, 
   Target, 
@@ -18,7 +18,9 @@ import {
   Crown,
   Zap,
   Shield,
-  Award,
+  Award, 
+  Edit,
+  Trash2,
   Plus
 } from "lucide-react";
 import EmptyState from "./home/EmptyState";
@@ -60,6 +62,13 @@ const IdentityCore = () => {
   const [coreValues, setCoreValues] = useState<CoreValue[]>([]);
   const [characterTraits, setCharacterTraits] = useState<CharacterTrait[]>([]);
   const [saved, setSaved] = useState(false);
+  const [editingValueId, setEditingValueId] = useState<string | null>(null);
+  const [editingTraitId, setEditingTraitId] = useState<string | null>(null);
+  const [newValueName, setNewValueName] = useState("");
+  const [newValueDescription, setNewValueDescription] = useState("");
+  const [newTraitName, setNewTraitName] = useState("");
+  const [newTraitDescription, setNewTraitDescription] = useState("");
+  const [newTraitCategory, setNewTraitCategory] = useState<CharacterTrait['category']>('growth');
 
   const hasData = identity.fullName || coreValues.length > 0 || characterTraits.length > 0;
 
@@ -91,24 +100,56 @@ const IdentityCore = () => {
 
   const addCoreValue = () => {
     const newValue: CoreValue = {
-      id: Date.now().toString(),
-      name: "New Value",
-      description: "Describe this core value",
-      strength: 0,
+      id: Date.now().toString(), 
+      name: newValueName || "New Value",
+      description: newValueDescription || "Describe this core value",
+      strength: 50,
       icon: Heart
     };
-    setCoreValues([...coreValues, newValue]);
+    setCoreValues(prev => [...prev, newValue]);
+    setNewValueName("");
+    setNewValueDescription("");
+    setSaved(false);
+  };
+
+  const updateCoreValue = (id: string, updates: Partial<CoreValue>) => {
+    setCoreValues(prev => 
+      prev.map(value => value.id === id ? { ...value, ...updates } : value)
+    );
+    setEditingValueId(null);
+    setSaved(false);
+  };
+
+  const deleteCoreValue = (id: string) => {
+    setCoreValues(prev => prev.filter(value => value.id !== id));
+    setSaved(false);
   };
 
   const addCharacterTrait = () => {
     const newTrait: CharacterTrait = {
       id: Date.now().toString(),
-      name: "New Trait",
-      level: 0,
-      description: "Describe this character trait",
-      category: 'growth'
+      name: newTraitName || "New Trait",
+      level: 50,
+      description: newTraitDescription || "Describe this character trait",
+      category: newTraitCategory
     };
-    setCharacterTraits([...characterTraits, newTrait]);
+    setCharacterTraits(prev => [...prev, newTrait]);
+    setNewTraitName("");
+    setNewTraitDescription("");
+    setSaved(false);
+  };
+
+  const updateCharacterTrait = (id: string, updates: Partial<CharacterTrait>) => {
+    setCharacterTraits(prev => 
+      prev.map(trait => trait.id === id ? { ...trait, ...updates } : trait)
+    );
+    setEditingTraitId(null);
+    setSaved(false);
+  };
+
+  const deleteCharacterTrait = (id: string) => {
+    setCharacterTraits(prev => prev.filter(trait => trait.id !== id));
+    setSaved(false);
   };
 
   const saveIdentityData = () => {
@@ -382,7 +423,7 @@ const IdentityCore = () => {
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center space-x-2">
                   <Heart className="h-5 w-5 text-red-500" />
-                  <span>Core Values</span>
+                  <span>Core Values</span> 
                 </CardTitle>
                 <Button onClick={addCoreValue} size="sm" variant="outline">
                   <Plus className="h-4 w-4 mr-2" />
@@ -399,7 +440,70 @@ const IdentityCore = () => {
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
-                  {/* Core values would be rendered here */}
+                  {coreValues.map((value) => (
+                    <Card key={value.id} className="bg-white/50 dark:bg-slate-700/50 border-0">
+                      <CardContent className="p-4">
+                        {editingValueId === value.id ? (
+                          <div className="space-y-3">
+                            <Input
+                              value={value.name}
+                              onChange={(e) => updateCoreValue(value.id, { name: e.target.value })}
+                              placeholder="Value name"
+                              className="mb-2"
+                            />
+                            <Textarea
+                              value={value.description}
+                              onChange={(e) => updateCoreValue(value.id, { description: e.target.value })}
+                              placeholder="Value description"
+                              className="mb-2"
+                            />
+                            <div className="space-y-1">
+                              <label className="text-xs">Strength: {value.strength}%</label>
+                              <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={value.strength}
+                                onChange={(e) => updateCoreValue(value.id, { strength: parseInt(e.target.value) })}
+                                className="w-full"
+                              />
+                            </div>
+                            <div className="flex justify-end space-x-2 mt-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => setEditingValueId(null)}
+                              >
+                                Cancel
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                onClick={() => setEditingValueId(null)}
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex justify-between items-start mb-2">
+                              <h3 className="font-semibold text-lg">{value.name}</h3>
+                              <div className="flex space-x-1">
+                                <Button variant="ghost" size="sm" onClick={() => setEditingValueId(value.id)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteCoreValue(value.id)}>
+                                  <Trash2 className="h-4 w-4 text-red-500" />
+                                </Button>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3">{value.description}</p>
+                            <Progress value={value.strength} className="h-2" />
+                          </>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               )}
             </CardContent>
@@ -434,7 +538,73 @@ const IdentityCore = () => {
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {/* Character traits would be rendered here */}
+                  {characterTraits.map((trait) => (
+                    <Card key={trait.id} className="bg-white/50 dark:bg-slate-700/50 border-0">
+                      <CardContent className="p-4">
+                        {editingTraitId === trait.id ? (
+                          <div className="space-y-3">
+                            <Input
+                              value={trait.name}
+                              onChange={(e) => updateCharacterTrait(trait.id, { name: e.target.value })}
+                              placeholder="Trait name"
+                              className="mb-2"
+                            />
+                            <Textarea
+                              value={trait.description}
+                              onChange={(e) => updateCharacterTrait(trait.id, { description: e.target.value })}
+                              placeholder="Trait description"
+                              className="mb-2"
+                            />
+                            <div className="space-y-1">
+                              <label className="text-xs">Level: {trait.level}%</label>
+                              <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={trait.level}
+                                onChange={(e) => updateCharacterTrait(trait.id, { level: parseInt(e.target.value) })}
+                                className="w-full"
+                              />
+                            </div>
+                            <div className="flex justify-end space-x-2 mt-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                onClick={() => setEditingTraitId(null)}
+                              >
+                                Cancel
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                onClick={() => setEditingTraitId(null)}
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <h3 className="font-semibold text-lg">{trait.name}</h3>
+                                <Badge>{trait.category}</Badge>
+                              </div>
+                              <div className="flex space-x-1">
+                                <Button variant="ghost" size="sm" onClick={() => setEditingTraitId(trait.id)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteCharacterTrait(trait.id)}>
+                                  <Trash2 className="h-4 w-4 text-red-500" />
+                                </Button>
+                              </div>
+                            </div>
+                            <p className="text-sm text-muted-foreground mb-3">{trait.description}</p>
+                            <Progress value={trait.level} className="h-2" />
+                          </>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               )}
             </CardContent>

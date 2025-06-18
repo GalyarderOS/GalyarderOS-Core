@@ -15,7 +15,9 @@ import { X, Plus } from 'lucide-react';
 
 interface SetupLifeAreasModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: () => void; 
+  onSave?: (areas: string[]) => void;
+  existingAreas?: string[];
   onSave?: (areas: string[]) => void;
   existingAreas?: string[];
 }
@@ -38,6 +40,7 @@ export const SetupLifeAreasModal = ({ isOpen, onClose, onSave, existingAreas }: 
   };
   
   const handleSave = () => {
+    if (onSave) {
     if (onSave) {
       onSave(areas);
     }

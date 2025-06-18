@@ -2,14 +2,15 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/components/ui/input'; 
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Target } from 'lucide-react';
+import { Plus, Target, Edit, Trash2, Calendar } from 'lucide-react'; 
 import EmptyState from './home/EmptyState';
 import { CreateGoalModal } from './vision/CreateGoalModal';
+import { Label } from '@/components/ui/label';
 
 interface Goal {
   id: string;
@@ -26,6 +27,7 @@ const VisionModule = () => {
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [visionStatement, setVisionStatement] = useState('');
+  const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Load saved vision data on component mount
@@ -68,6 +70,44 @@ const VisionModule = () => {
         variant: "destructive"
       });
     }
+  };
+
+  const updateGoalProgress = (goalId: string, newProgress: number) => {
+    const updatedGoals = goals.map(goal => 
+      goal.id === goalId ? { ...goal, progress: newProgress } : goal
+    );
+    
+    setGoals(updatedGoals);
+    
+    // Save to localStorage
+    localStorage.setItem('vision-module-data', JSON.stringify({
+      goals: updatedGoals,
+      visionStatement,
+      lastUpdated: new Date().toISOString()
+    }));
+    
+    toast({
+      title: "Progress updated",
+      description: "Your goal progress has been updated.",
+    });
+  };
+
+  const deleteGoal = (goalId: string) => {
+    const updatedGoals = goals.filter(goal => goal.id !== goalId);
+    
+    setGoals(updatedGoals);
+    
+    // Save to localStorage
+    localStorage.setItem('vision-module-data', JSON.stringify({
+      goals: updatedGoals,
+      visionStatement,
+      lastUpdated: new Date().toISOString()
+    }));
+    
+    toast({
+      title: "Goal deleted",
+      description: "Your goal has been removed.",
+    });
   };
 
   const handleCreateGoal = (newGoal: Omit<Goal, 'id' | 'progress' | 'status'>) => {
@@ -207,22 +247,107 @@ const VisionModule = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {goals.map((goal) => (
-                  <Card key={goal.id} className="bg-white/50 dark:bg-slate-700/50 border-0">
-                    <CardContent className="p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 className="font-semibold text-lg">{goal.title}</h3>
-                          <p className="text-sm text-muted-foreground">{goal.description}</p>
+                  <Card key={goal.id} className="bg-white/50 dark:bg-slate-700/50 border-0"> 
+                    <CardContent className="p-4"> 
+                      {editingGoalId === goal.id ? (
+                        <div className="space-y-3">
+                          <Input
+                            value={goal.title}
+                            onChange={(e) => {
+                              const updatedGoals = goals.map(g => 
+                                g.id === goal.id ? { ...g, title: e.target.value } : g
+                              );
+                              setGoals(updatedGoals);
+                            }}
+                            placeholder="Goal title"
+                            className="mb-2"
+                          />
+                          <Textarea
+                            value={goal.description}
+                            onChange={(e) => {
+                              const updatedGoals = goals.map(g => 
+                                g.id === goal.id ? { ...g, description: e.target.value } : g
+                              );
+                              setGoals(updatedGoals);
+                            }}
+                            placeholder="Goal description"
+                            className="mb-2"
+                          />
+                          <div className="flex items-center space-x-2">
+                            <Label htmlFor={`deadline-${goal.id}`}>Deadline:</Label>
+                            <Input
+                              id={`deadline-${goal.id}`}
+                              type="date"
+                              value={goal.deadline}
+                              onChange={(e) => {
+                                const updatedGoals = goals.map(g => 
+                                  g.id === goal.id ? { ...g, deadline: e.target.value } : g
+                                );
+                                setGoals(updatedGoals);
+                              }}
+                            />
+                          </div>
+                          <div className="flex justify-end space-x-2 mt-4">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              onClick={() => setEditingGoalId(null)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              onClick={() => {
+                                saveVisionData();
+                                setEditingGoalId(null);
+                              }}
+                            >
+                              Save Changes
+                            </Button>
+                          </div>
                         </div>
-                        <Badge>{goal.priority}</Badge>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Progress</span>
-                          <span>{goal.progress}%</span>
-                        </div>
-                        <Progress value={goal.progress} className="h-2" />
-                      </div>
+                      ) : (
+                        <>
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <h3 className="font-semibold text-lg">{goal.title}</h3>
+                              <p className="text-sm text-muted-foreground">{goal.description}</p>
+                              {goal.deadline && (
+                                <div className="flex items-center text-xs text-muted-foreground mt-1">
+                                  <Calendar className="h-3 w-3 mr-1" />
+                                  <span>Due: {new Date(goal.deadline).toLocaleDateString()}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex flex-col items-end space-y-2">
+                              <Badge>{goal.priority}</Badge>
+                              <div className="flex space-x-1">
+                                <Button variant="ghost" size="sm" onClick={() => setEditingGoalId(goal.id)}>
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" onClick={() => deleteGoal(goal.id)}>
+                                  <Trash2 className="h-4 w-4 text-red-500" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="space-y-2 mt-4">
+                            <div className="flex justify-between text-sm">
+                              <span>Progress</span>
+                              <span>{goal.progress}%</span>
+                            </div>
+                            <Progress value={goal.progress} className="h-2" />
+                            <input
+                              type="range"
+                              min="0"
+                              max="100"
+                              value={goal.progress}
+                              onChange={(e) => updateGoalProgress(goal.id, parseInt(e.target.value))}
+                              className="w-full mt-2"
+                            />
+                          </div>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 ))}
