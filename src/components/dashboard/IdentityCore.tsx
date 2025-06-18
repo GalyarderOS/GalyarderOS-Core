@@ -1,6 +1,6 @@
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { 
   User, 
   Heart, 
@@ -39,7 +40,16 @@ interface CharacterTrait {
 }
 
 const IdentityCore = () => {
-  const [identity, setIdentity] = useState({
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [showSetup, setShowSetup] = useState(false);
+  const [identity, setIdentity] = useState<{
+    fullName: string;
+    title: string;
+    mission: string;
+    vision: string;
+    purpose: string;
+  }>({
     fullName: "",
     title: "", 
     mission: "",
@@ -50,9 +60,29 @@ const IdentityCore = () => {
   const [coreValues, setCoreValues] = useState<CoreValue[]>([]);
   const [characterTraits, setCharacterTraits] = useState<CharacterTrait[]>([]);
   const [saved, setSaved] = useState(false);
-  const [showSetup, setShowSetup] = useState(false);
 
   const hasData = identity.fullName || coreValues.length > 0 || characterTraits.length > 0;
+
+  // Load saved identity data on component mount
+  useEffect(() => {
+    setLoading(true);
+    
+    // Load identity data from localStorage
+    const savedIdentity = localStorage.getItem('identity-core-data');
+    if (savedIdentity) {
+      try {
+        const parsedData = JSON.parse(savedIdentity);
+        setIdentity(parsedData.identity || identity);
+        setCoreValues(parsedData.coreValues || []);
+        setCharacterTraits(parsedData.characterTraits || []);
+        setSaved(true);
+      } catch (error) {
+        console.error('Error parsing saved identity data:', error);
+      }
+    }
+    
+    setLoading(false);
+  }, []);
 
   const handleIdentityChange = (field: string, value: string) => {
     setIdentity(prev => ({ ...prev, [field]: value }));
@@ -81,9 +111,46 @@ const IdentityCore = () => {
     setCharacterTraits([...characterTraits, newTrait]);
   };
 
+  const saveIdentityData = () => {
+    try {
+      const dataToSave = {
+        identity,
+        coreValues,
+        characterTraits,
+        lastUpdated: new Date().toISOString()
+      };
+      
+      localStorage.setItem('identity-core-data', JSON.stringify(dataToSave));
+      setSaved(true);
+      toast({
+        title: "Identity saved",
+        description: "Your identity core has been saved successfully.",
+      });
+    } catch (error) {
+      console.error('Error saving identity data:', error);
+      toast({
+        title: "Error saving",
+        description: "There was a problem saving your identity data.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const identityStrength = identity.fullName && identity.mission ? 85 : 0;
 
-  if (!hasData && !showSetup) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+        <div className="max-w-6xl mx-auto p-6">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="w-8 h-8 border-4 border-muted border-t-foreground rounded-full animate-spin"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasData && !showSetup && !loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
         <div className="max-w-6xl mx-auto p-6">
@@ -102,6 +169,65 @@ const IdentityCore = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20">
+      <AnimatePresence>
+        {showSetup && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          >
+            <Card className="max-w-2xl w-full">
+              <CardHeader>
+                <CardTitle>Identity Setup</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Full Name</label>
+                  <Input 
+                    value={identity.fullName}
+                    onChange={(e) => handleIdentityChange('fullName', e.target.value)}
+                    placeholder="Your full name"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Professional Title</label>
+                  <Input 
+                    value={identity.title}
+                    onChange={(e) => handleIdentityChange('title', e.target.value)}
+                    placeholder="e.g., Digital Architect, Life Designer"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Life Mission</label>
+                  <Textarea 
+                    value={identity.mission}
+                    onChange={(e) => handleIdentityChange('mission', e.target.value)}
+                    placeholder="What is your life's mission?"
+                  />
+                </div>
+                
+                <div className="flex justify-end space-x-2">
+                  <Button variant="outline" onClick={() => setShowSetup(false)}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      saveIdentityData();
+                      setShowSetup(false);
+                    }}
+                  >
+                    Save & Continue
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         
         {/* Header */}
@@ -225,8 +351,8 @@ const IdentityCore = () => {
                 </div>
               </div>
 
-              <Button 
-                onClick={() => setSaved(true)} 
+              <Button
+                onClick={saveIdentityData}
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
               >
                 Save Identity Core
