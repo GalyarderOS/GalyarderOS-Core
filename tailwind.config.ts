@@ -20,8 +20,20 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'serif': ['Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
-				'playfair': ['Playfair Display', 'serif'],
+				'sans': ['var(--font-sans)', 'ui-sans-serif', 'system-ui'],
+				'serif': ['var(--font-serif)', 'Playfair Display', 'Georgia', 'serif'],
+				'mono': ['var(--font-mono)', 'ui-monospace', 'SFMono-Regular'],
+			},
+			fontSize: {
+				'xs': '0.75rem',
+				'sm': '0.875rem',
+				'base': '1rem',
+				'lg': '1.125rem',
+				'xl': '1.25rem',
+				'2xl': '1.5rem',
+				'3xl': '1.875rem',
+				'4xl': '2.25rem',
+				'5xl': '3rem',
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -73,7 +85,30 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Module Colors
+				identity: {
+					primary: 'hsl(262 83% 58%)',
+					secondary: 'hsl(271 91% 65%)',
+				},
+				vision: {
+					primary: 'hsl(221 83% 53%)',
+					secondary: 'hsl(217 91% 60%)',
+				},
+				balance: {
+					primary: 'hsl(199 89% 48%)',
+					secondary: 'hsl(188 86% 53%)',
+				},
+				ritual: {
+					primary: 'hsl(142 76% 36%)',
+					secondary: 'hsl(160 84% 39%)',
 				}
+			},
+			backgroundImage: {
+				'gradient-identity': 'linear-gradient(to right, hsl(262 83% 58%), hsl(271 91% 65%))',
+				'gradient-vision': 'linear-gradient(to right, hsl(221 83% 53%), hsl(217 91% 60%))',
+				'gradient-balance': 'linear-gradient(to right, hsl(199 89% 48%), hsl(188 86% 53%))',
+				'gradient-ritual': 'linear-gradient(to right, hsl(142 76% 36%), hsl(160 84% 39%))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

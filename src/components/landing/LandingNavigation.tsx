@@ -74,7 +74,7 @@ const LandingNavigation = ({ theme, setTheme, onSignIn, onGetStarted }: LandingN
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           {logo}
-          <span className="text-xl font-bold font-playfair text-foreground">GalyarderOS</span>
+          <span className="text-xl font-bold font-serif text-foreground">GalyarderOS</span>
         </div>
         {actions}
       </div>

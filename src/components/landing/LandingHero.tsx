@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,14 +24,14 @@ const LandingHero = ({ onGetStarted, onLearnMore }: LandingHeroProps) => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <Badge variant="outline" className="mb-6 font-playfair border-primary/20 text-lg px-4 py-2 text-primary">
+            <Badge variant="outline" className="mb-6 font-serif border-primary/20 text-lg px-4 py-2 text-primary">
               <Sparkles className="h-4 w-4 mr-2" />
               The Operating System for Your Life
             </Badge>
           </motion.div>
           
           <motion.h1 
-            className="text-6xl md:text-8xl font-bold mb-8 font-playfair text-foreground"
+            className="text-6xl md:text-8xl font-bold mb-8 font-serif text-foreground"
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8, type: "spring" }}

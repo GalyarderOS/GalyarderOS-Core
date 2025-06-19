@@ -1,7 +1,7 @@
-
 import { Badge } from '@/components/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Crown, Sparkles, Award, TrendingUp, Calendar, Target, Brain, Activity } from 'lucide-react';
+import { useIdentityStore } from '@/stores/useIdentityStore';
 
 interface HeroSectionProps {
   stats: {
@@ -26,9 +26,10 @@ interface HeroSectionProps {
 
 const HeroSection = ({ stats }: HeroSectionProps) => {
     const { language } = useTheme();
+    const { identity } = useIdentityStore();
     const t = {
         en: {
-          welcomeTitle: "Your Personal OS",
+          welcomeTitle: identity.title || "Your Personal OS",
           welcomeSubtitle: "Master life by design",
           welcomeDescription: "Your complete life system dashboard with real-time insights.",
           activeModules: "Active Modules",
@@ -37,7 +38,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
           focusToday: "Focus Today"
         },
         id: {
-          welcomeTitle: "OS Pribadi Anda",
+          welcomeTitle: identity.title || "OS Pribadi Anda",
           welcomeSubtitle: "Hidup terancang, dikuasai!",
           welcomeDescription: "Dashboard sistem hidup lengkap dengan wawasan real-time.",
           activeModules: "Modul Aktif",
@@ -85,11 +86,11 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
                     <Badge variant="outline" className="font-playfair text-xs border-muted-foreground/20">
                       Personal OS
                     </Badge>
-                    <div className="text-muted-foreground font-playfair text-sm">Welcome back</div>
+                    <div className="text-muted-foreground font-playfair text-sm">Welcome back, {identity.fullName}</div>
                   </div>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-extrabold font-playfair leading-tight text-foreground">{t.welcomeTitle}</h1>
-                <h2 className="text-xl font-medium text-muted-foreground font-playfair">{t.welcomeSubtitle}</h2>
+                <h2 className="text-xl font-medium text-muted-foreground font-playfair">{identity.mission || t.welcomeSubtitle}</h2>
                 <p className="text-base md:text-lg text-muted-foreground max-w-2xl font-playfair">{t.welcomeDescription}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
                   {heroStats.map((stat, idx) => (
