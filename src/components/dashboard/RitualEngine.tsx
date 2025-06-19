@@ -14,17 +14,12 @@ import {
   Plus, 
   Check, 
   X,
-  RotateCcw,
-  Zap,
   Award,
-  TrendingUp,
-  Star,
   ChevronRight,
-  Play,
-  Pause 
+  Play
 } from "lucide-react";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
-import { ModuleCard } from "@/components/shared/ModuleCard";
+import { ModuleCard } from '@/components/shared/ModuleCard';
 
 interface Habit {
   id: string;
@@ -272,13 +267,10 @@ const RitualEngine = () => {
           </div>
         </div>
 
-        {/* Habit Tracker */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+        <ModuleCard
+          title="Today's Progress"
+          module="ritual"
         >
-<<<<<<< HEAD
           <div className="space-y-4">
             <Progress value={overallCompletionRate} className="h-3" />
             <div className="text-center text-sm text-slate-600 dark:text-slate-400">
@@ -287,261 +279,64 @@ const RitualEngine = () => {
           </div>
         </ModuleCard>
 
-        {/* Habits Management */}
         <ModuleCard
           title="Active Habits"
           module="ritual"
-          delay={0.3}
           headerContent={
-            <Button
-              onClick={() => setShowNewHabitForm(!showNewHabitForm)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
               <Plus className="h-4 w-4 mr-2" />
               Add Habit
             </Button>
           }
         >
-          <div className="space-y-6">
-              
-            {/* New Habit Form */}
-            {showNewHabitForm && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="border rounded-lg p-4 bg-slate-50 dark:bg-slate-700/50"
-              >
-                <h4 className="font-semibold mb-4">Create New Habit</h4>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <Input
-                      placeholder="Habit name"
-                      value={newHabit.name}
-                      onChange={(e) => setNewHabit({...newHabit, name: e.target.value})}
-                    />
-                    <Input
-                      placeholder="Description"
-                      value={newHabit.description}
-                      onChange={(e) => setNewHabit({...newHabit, description: e.target.value})}
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <select
-                      value={newHabit.category}
-                      onChange={(e) => setNewHabit({...newHabit, category: e.target.value as Habit['category']})}
-                      className="w-full p-2 border rounded-lg bg-white dark:bg-slate-800"
-                    >
-                      <option value="personal">Personal</option>
-                      <option value="health">Health</option>
-                      <option value="productivity">Productivity</option>
-                      <option value="learning">Learning</option>
-                      <option value="social">Social</option>
-                    </select>
-                    <select
-                      value={newHabit.frequency}
-                      onChange={(e) => setNewHabit({...newHabit, frequency: e.target.value as Habit['frequency']})}
-                      className="w-full p-2 border rounded-lg bg-white dark:bg-slate-800"
-                    >
-                      <option value="daily">Daily</option>
-                      <option value="weekly">Weekly</option>
-                    </select>
-                    <select
-                      value={newHabit.difficulty}
-                      onChange={(e) => setNewHabit({...newHabit, difficulty: e.target.value as Habit['difficulty']})}
-                      className="w-full p-2 border rounded-lg bg-white dark:bg-slate-800"
-                    >
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="flex space-x-2 mt-4">
-                  <Button onClick={addHabit} className="bg-orange-600 hover:bg-orange-700 text-white">
-                    Create Habit
-                  </Button>
-                  <Button variant="outline" onClick={() => setShowNewHabitForm(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-
-            {/* Habits List */}
-            <div className="grid md:grid-cols-2 gap-4">
-              {habits.map((habit, index) => (
-                <motion.div
-                  key={habit.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                >
-                  <Card className={`border-2 transition-all ${
-                    habit.completedToday 
-                      ? 'border-green-200 bg-green-50 dark:bg-green-900/20' 
-                      : 'border-slate-200 bg-slate-50 dark:bg-slate-700/50'
-                  }`}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-2 mb-2">
-                            <h3 className="font-semibold text-slate-800 dark:text-slate-200">
-                              {habit.name}
-                            </h3>
-                            <Badge className={getCategoryColor(habit.category)}>
-                              {habit.category}
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
-                            {habit.description}
-                          </p>
-                          <div className="flex items-center space-x-3 text-xs text-slate-500">
-                            <Badge className={getDifficultyColor(habit.difficulty)}>
-                              {habit.difficulty}
-                            </Badge>
-                            <span>{habit.frequency}</span>
-                          </div>
-                        </div>
-                        
-                        <Button
-                          variant={habit.completedToday ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => toggleHabit(habit.id)}
-                          className={habit.completedToday ? 
-                            "bg-green-600 hover:bg-green-700 text-white" : 
-                            "border-2 hover:border-green-600"
-                          }
-                        >
-                          {habit.completedToday ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                        </Button>
+          <div className="grid md:grid-cols-2 gap-4">
+            {habits.map((habit, index) => (
+              <Card key={habit.id} className={`border-2 transition-all ${habit.completedToday ? 'border-green-200 bg-green-50 dark:bg-green-900/20' : 'border-slate-200 bg-slate-50 dark:bg-slate-700/50'}`}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-2 mb-2">
+                        <h3 className="font-semibold text-slate-800 dark:text-slate-200">{habit.name}</h3>
+                        <Badge className={getCategoryColor(habit.category)}>{habit.category}</Badge>
                       </div>
-
-                      <Separator className="my-3" />
-
-                      {/* Habit Stats */}
-                      <div className="grid grid-cols-3 gap-3 text-center">
-                        <div>
-                          <div className="flex items-center justify-center space-x-1 text-orange-600 mb-1">
-                            <Flame className="h-4 w-4" />
-                            <span className="font-bold">{habit.streak}</span>
-                          </div>
-                          <p className="text-xs text-slate-500">Current Streak</p>
-                        </div>
-                        <div>
-                          <div className="flex items-center justify-center space-x-1 text-purple-600 mb-1">
-                            <Award className="h-4 w-4" />
-                            <span className="font-bold">{habit.longestStreak}</span>
-                          </div>
-                          <p className="text-xs text-slate-500">Best Streak</p>
-                        </div>
-                        <div>
-                          <div className="flex items-center justify-center space-x-1 text-blue-600 mb-1">
-                            <Target className="h-4 w-4" />
-                            <span className="font-bold">{habit.totalCompletions}</span>
-                          </div>
-                          <p className="text-xs text-slate-500">Total Done</p>
-                        </div>
-                      </div>
-
-                      {/* Progress towards target */}
-                      <div className="mt-3">
-                        <div className="flex items-center justify-between text-xs mb-1">
-                          <span className="text-slate-600 dark:text-slate-400">Progress</span>
-                          <span className="font-medium">
-                            {Math.round((habit.totalCompletions / habit.targetDays) * 100)}%
-                          </span>
-                        </div>
-                        <Progress value={(habit.totalCompletions / habit.targetDays) * 100} className="h-1.5" />
-                      </div>
-                    </CardContent>
-                  </Card>
-=======
-          <Card className="bg-white/80 dark:bg-slate-800/80 backdrop-blur border-0 shadow-lg">
-            <CardHeader className="flex flex-row justify-between items-center">
-              <CardTitle className="flex items-center space-x-2">
-                <Target className="h-5 w-5 text-orange-600" />
-                <span>Habit Tracker</span>
-              </CardTitle>
-              <Button onClick={() => setShowNewHabitForm(!showNewHabitForm)} variant="outline" size="sm">
-                {showNewHabitForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                <span className="ml-2 hidden md:inline">{showNewHabitForm ? 'Cancel' : 'New Habit'}</span>
-              </Button>
-            </CardHeader>
-            <CardContent>
-              {/* New Habit Form */}
-              {showNewHabitForm && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="p-4 mb-4 border-b border-slate-200 dark:border-slate-700"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input
-                      type="text"
-                      placeholder="Habit Name (e.g., 'Daily Journaling')"
-                      value={newHabit.name}
-                      onChange={(e) => setNewHabit({ ...newHabit, name: e.target.value })}
-                      className="md:col-span-2"
-                    />
-                    <Input
-                      type="text"
-                      placeholder="Description"
-                      value={newHabit.description}
-                      onChange={(e) => setNewHabit({ ...newHabit, description: e.target.value })}
-                      className="md:col-span-2"
-                    />
-                    <div>
-                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Category</label>
-                      <select 
-                        value={newHabit.category}
-                        onChange={(e) => setNewHabit({ ...newHabit, category: e.target.value as Habit['category'] })}
-                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
-                      >
-                        <option value="health">Health & Wellness</option>
-                        <option value="productivity">Productivity</option>
-                        <option value="personal">Personal Growth</option>
-                        <option value="learning">Learning</option>
-                        <option value="social">Social</option>
-                      </select>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{habit.description}</p>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Frequency</label>
-                      <select 
-                        value={newHabit.frequency}
-                        onChange={(e) => setNewHabit({ ...newHabit, frequency: e.target.value as Habit['frequency'] })}
-                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
-                      >
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="custom">Custom</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-slate-600 dark:text-slate-400">Difficulty</label>
-                      <select 
-                        value={newHabit.difficulty}
-                        onChange={(e) => setNewHabit({ ...newHabit, difficulty: e.target.value as Habit['difficulty'] })}
-                        className="w-full mt-1 p-2 border rounded-md bg-slate-50 dark:bg-slate-700"
-                      >
-                        <option value="easy">Easy</option>
-                        <option value="medium">Medium</option>
-                        <option value="hard">Hard</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2 mt-4">
-                    <Button onClick={addHabit} className="bg-orange-600 hover:bg-orange-700 text-white">
-                      Create Habit
-                    </Button>
-                    <Button variant="outline" onClick={() => setShowNewHabitForm(false)}>
-                      Cancel
+                    <Button
+                      variant={habit.completedToday ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => toggleHabit(habit.id)}
+                      className={habit.completedToday ? "bg-green-600 hover:bg-green-700 text-white" : "border-2 hover:border-green-600"}
+                    >
+                      <Check className="h-4 w-4" />
                     </Button>
                   </div>
->>>>>>> 714605d (fix(core): resolve persistent compiler errors and clear all lint issues)
-                </motion.div>
-              ))}
-            </div>
+                  <Separator className="my-3" />
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <div className="flex items-center justify-center space-x-1 text-orange-600 mb-1">
+                        <Flame className="h-4 w-4" />
+                        <span className="font-bold">{habit.streak}</span>
+                      </div>
+                      <p className="text-xs text-slate-500">Current Streak</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-center space-x-1 text-purple-600 mb-1">
+                        <Award className="h-4 w-4" />
+                        <span className="font-bold">{habit.longestStreak}</span>
+                      </div>
+                      <p className="text-xs text-slate-500">Best Streak</p>
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-center space-x-1 text-blue-600 mb-1">
+                        <Target className="h-4 w-4" />
+                        <span className="font-bold">{habit.totalCompletions}</span>
+                      </div>
+                      <p className="text-xs text-slate-500">Total Done</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </ModuleCard>
 
@@ -631,4 +426,4 @@ const RitualEngine = () => {
   );
 };
 
-export default RitualEngine;
+export default RitualEngine; 
