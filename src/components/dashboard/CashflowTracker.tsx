@@ -1,261 +1,236 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/auth/useAuth';
-// import { supabase } from '@/integrations/supabase/client';
-import { TrendingUp, TrendingDown, Plus, DollarSign, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Plus, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, DollarSign, Edit, Trash2 } from 'lucide-react';
+import useFinanceStore, { Transaction } from '@/stores/useFinanceStore';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Transaction {
-    id: string;
-    description: string;
-    type: 'income' | 'expense';
-    amount: number;
-    transaction_date: string;
-    cashflow_categories: {
-        name: string;
-        color: string;
-    };
-}
-
-const mockTransactions: Transaction[] = [
-    {
-        id: '1',
-        description: 'Salary',
-        type: 'income',
-        amount: 5000,
-        transaction_date: '2024-07-25',
-        cashflow_categories: { name: 'Salary', color: '#10B981' }
-    },
-    {
-        id: '2',
-        description: 'Rent',
-        type: 'expense',
-        amount: 2000,
-        transaction_date: '2024-07-25',
-        cashflow_categories: { name: 'Housing', color: '#EF4444' }
-    },
-    {
-        id: '3',
-        description: 'Groceries',
-        type: 'expense',
-        amount: 300,
-        transaction_date: '2024-07-20',
-        cashflow_categories: { name: 'Food', color: '#F59E0B' }
-    },
-];
-
-const CashflowTracker = () => {
-  const { user } = useAuth();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [summary, setSummary] = useState({
-    totalIncome: 0,
-    totalExpenses: 0,
-    netCashflow: 0
+// Transaction Form Modal
+const TransactionModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  transaction,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (data: Omit<Transaction, 'id'>) => void;
+  transaction?: Transaction;
+}) => {
+  const { categories } = useFinanceStore();
+  const [data, setData] = useState<Omit<Transaction, 'id'>>({
+    description: '',
+    amount: 0,
+    date: new Date().toISOString().split('T')[0],
+    type: 'expense',
+    categoryId: '',
   });
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (user) {
-      loadCashflowData();
+  useState(() => {
+    if (isOpen) {
+      if (transaction) {
+        setData({
+          ...transaction,
+          date: new Date(transaction.date).toISOString().split('T')[0],
+        });
+      } else {
+        setData({
+          description: '',
+          amount: 0,
+          date: new Date().toISOString().split('T')[0],
+          type: 'expense',
+          categoryId: '',
+        });
+      }
     }
-  }, [user]);
+  });
 
-  const loadCashflowData = async () => {
-    // TODO: Replace with Bolt API
-    setLoading(true);
-    setTimeout(() => {
-        const transactionsData = mockTransactions;
-      setTransactions(transactionsData || []);
-
-      // Calculate summary
-      let totalIncome = 0;
-      let totalExpenses = 0;
-
-      transactionsData?.forEach(transaction => {
-        if (transaction.type === 'income') {
-          totalIncome += transaction.amount;
-        } else {
-          totalExpenses += transaction.amount;
-        }
-      });
-
-      setSummary({
-        totalIncome,
-        totalExpenses,
-        netCashflow: totalIncome - totalExpenses
-      });
-      setLoading(false);
-    }, 1000);
+  const handleSave = () => {
+    onSave({ ...data, amount: Number(data.amount) });
+    onClose();
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="w-8 h-8 border-4 border-muted border-t-foreground rounded-full animate-spin"></div>
-      </div>
-    );
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{transaction ? 'Edit' : 'Add'} Transaction</DialogTitle>
+          <DialogDescription>Fill in the details of your transaction.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+            <Input 
+                placeholder="Description"
+                value={data.description}
+                onChange={(e) => setData({...data, description: e.target.value})}
+            />
+            <Input 
+                type="number"
+                placeholder="Amount"
+                value={data.amount}
+                onChange={(e) => setData({...data, amount: parseFloat(e.target.value) || 0})}
+            />
+            <Input 
+                type="date"
+                value={data.date}
+                onChange={(e) => setData({...data, date: e.target.value})}
+            />
+            <Select value={data.type} onValueChange={(type: 'income' | 'expense') => setData({...data, type, categoryId: ''})}>
+                <SelectTrigger><SelectValue placeholder="Type" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="income">Income</SelectItem>
+                    <SelectItem value="expense">Expense</SelectItem>
+                </SelectContent>
+            </Select>
+            <Select value={data.categoryId} onValueChange={(categoryId) => setData({...data, categoryId})}>
+                <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
+                <SelectContent>
+                    {categories.filter(c => c.type === data.type).map(cat => (
+                        <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                    ))}
+                </SelectContent>
+            </Select>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+
+// Main Component
+const CashflowTracker = () => {
+  const { transactions, categories, addTransaction, updateTransaction, deleteTransaction } = useFinanceStore();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | undefined>(undefined);
+
+  const summary = useMemo(() => {
+    return transactions.reduce((acc, tx) => {
+      if (tx.type === 'income') {
+        acc.totalIncome += tx.amount;
+      } else {
+        acc.totalExpenses += tx.amount;
+      }
+      acc.netCashflow = acc.totalIncome - acc.totalExpenses;
+      return acc;
+    }, { totalIncome: 0, totalExpenses: 0, netCashflow: 0 });
+  }, [transactions]);
+  
+  const handleSaveTransaction = (data: Omit<Transaction, 'id'>) => {
+      if (editingTransaction) {
+          updateTransaction(editingTransaction.id, data);
+      } else {
+          addTransaction(data);
+      }
+  };
+
+  const handleOpenModal = (tx?: Transaction) => {
+      setEditingTransaction(tx);
+      setModalOpen(true);
   }
 
+  const getCategory = (id: string) => categories.find(c => c.id === id);
+  
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
-      >
+    <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-6">
+       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold font-playfair text-foreground">Cashflow Tracker</h1>
-          <p className="text-muted-foreground font-playfair">Monitor your income and expenses with precision</p>
+          <h1 className="text-3xl font-bold text-foreground">Cashflow Tracker</h1>
+          <p className="text-muted-foreground">Monitor your income and expenses with precision.</p>
         </div>
-        <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
+        <Button onClick={() => handleOpenModal()}>
           <Plus className="h-4 w-4 mr-2" />
           Add Transaction
         </Button>
-      </motion.div>
+      </div>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="border-2 border-border hover:border-green-500/30 transition-all duration-300 soft-shadow">
+          <Card className="border-2 border-border hover:border-green-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Total Income</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Income</CardTitle>
               <ArrowUpRight className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600 font-playfair">
-                ${summary.totalIncome.toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                This month
-              </p>
+              <div className="text-2xl font-bold text-green-600">${summary.totalIncome.toLocaleString()}</div>
             </CardContent>
           </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="border-2 border-border hover:border-red-500/30 transition-all duration-300 soft-shadow">
+          <Card className="border-2 border-border hover:border-red-500/30">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Total Expenses</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
               <ArrowDownRight className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-600 font-playfair">
-                ${summary.totalExpenses.toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                This month
-              </p>
+              <div className="text-2xl font-bold text-red-600">${summary.totalExpenses.toLocaleString()}</div>
             </CardContent>
           </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
+           <Card className="border-2 border-border">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Net Cashflow</CardTitle>
-              {summary.netCashflow >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-500" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-500" />
-              )}
+              <CardTitle className="text-sm font-medium">Net Cashflow</CardTitle>
+              <TrendingUp className={`h-4 w-4 ${summary.netCashflow >= 0 ? 'text-green-500' : 'text-red-500'}`} />
             </CardHeader>
             <CardContent>
-              <div className={`text-2xl font-bold font-playfair ${
-                summary.netCashflow >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
+               <div className={`text-2xl font-bold ${summary.netCashflow >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                 ${summary.netCashflow.toLocaleString()}
               </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                {summary.netCashflow >= 0 ? 'Positive' : 'Negative'} flow
-              </p>
             </CardContent>
           </Card>
-        </motion.div>
       </div>
 
-      {/* Recent Transactions */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <Card className="border-2 border-border soft-shadow">
+      <Card className="border-2 border-border">
           <CardHeader>
-            <CardTitle className="text-xl font-bold font-playfair">Recent Transactions</CardTitle>
-            <CardDescription className="font-playfair">
-              Your latest income and expense transactions
-            </CardDescription>
+            <CardTitle className="text-xl font-bold">Recent Transactions</CardTitle>
+            <CardDescription>Your latest income and expense activities.</CardDescription>
           </CardHeader>
           <CardContent>
-            {transactions.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 font-playfair">No Transactions Yet</h3>
-                <p className="text-muted-foreground mb-6 font-playfair">
-                  Start tracking your cashflow by adding your first transaction
-                </p>
-                <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Transaction
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {transactions.slice(0, 10).map((transaction, index) => (
-                  <motion.div
-                    key={transaction.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border hover:bg-muted/30 transition-colors"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                        transaction.type === 'income' 
-                          ? 'bg-green-500/20 text-green-600' 
-                          : 'bg-red-500/20 text-red-600'
-                      }`}>
-                        {transaction.type === 'income' ? (
-                          <ArrowUpRight className="h-6 w-6" />
-                        ) : (
-                          <ArrowDownRight className="h-6 w-6" />
-                        )}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground font-playfair">{transaction.description}</h4>
-                        <p className="text-sm text-muted-foreground font-playfair">
-                          {transaction.cashflow_categories?.name || 'Uncategorized'} • {new Date(transaction.transaction_date).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <div className={`text-lg font-bold font-playfair ${
-                      transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                    }`}>
-                      {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString()}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
+            <div className="space-y-4">
+                {transactions.slice().sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map(tx => {
+                    const category = getCategory(tx.categoryId);
+                    return (
+                        <div key={tx.id} className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border group">
+                            <div className="flex items-center space-x-4">
+                               <div className={`w-12 h-12 rounded-xl flex items-center justify-center`} style={{ backgroundColor: `${category?.color}20`, color: category?.color }}>
+                                    {tx.type === 'income' ? <ArrowUpRight className="h-6 w-6" /> : <ArrowDownRight className="h-6 w-6" />}
+                                </div>
+                                <div>
+                                    <h4 className="font-semibold text-foreground">{tx.description}</h4>
+                                    <p className="text-sm text-muted-foreground">{category?.name || 'Uncategorized'} • {new Date(tx.date).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className={`text-lg font-bold ${tx.type === 'income' ? 'text-green-600' : 'text-red-600'}`}>
+                                    {tx.type === 'income' ? '+' : '-'}${tx.amount.toLocaleString()}
+                                </span>
+                                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                                    <Button variant="ghost" size="icon" onClick={() => handleOpenModal(tx)}><Edit className="h-4 w-4" /></Button>
+                                    <Button variant="ghost" size="icon" onClick={() => deleteTransaction(tx.id)}><Trash2 className="h-4 w-4" /></Button>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
           </CardContent>
-        </Card>
-      </motion.div>
+      </Card>
+      
+      <TransactionModal 
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleSaveTransaction}
+        transaction={editingTransaction}
+      />
     </div>
   );
 };

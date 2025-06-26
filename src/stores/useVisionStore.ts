@@ -12,10 +12,13 @@ export interface Milestone {
 // Main Data Interfaces
 export interface Goal {
   id: string;
-  name: string;
+  title: string;
   description: string;
   status: 'not-started' | 'in-progress' | 'completed';
   milestones: Milestone[];
+  category: 'career' | 'health' | 'relationships' | 'personal' | 'financial';
+  timeframe: 'short' | 'medium' | 'long';
+  deadline: string;
 }
 
 export interface VisionBoardItem {
@@ -61,10 +64,47 @@ const useVisionStore = create<VisionState>()(
     (set, get) => ({
       visionStatement: {
         title: 'My Ultimate Vision',
-        description: 'Describe the ultimate future you are working towards...',
+        description: 'To become a leading force in life optimization technology, creating systems that help millions of people design and live their ideal lives while maintaining deep connections and contributing meaningfully to society.',
       },
-      goals: [],
-      visionBoardItems: [],
+      goals: [
+        {
+            id: '1',
+            title: 'Launch Galyarder OS',
+            description: 'Successfully launch the first version of the operating system.',
+            category: 'career',
+            timeframe: 'medium',
+            deadline: '2024-12-31',
+            milestones: [
+                { id: 'm1', name: 'Finalize core features', completed: true },
+                { id: 'm2', name: 'Complete beta testing', completed: false },
+            ],
+            status: 'in-progress',
+        },
+        {
+            id: '2',
+            title: 'Achieve Financial Independence',
+            description: 'Build a sustainable business that generates passive income.',
+            category: 'financial',
+            timeframe: 'long',
+            deadline: '2030-01-01',
+            milestones: [],
+            status: 'not-started',
+        },
+      ],
+      visionBoardItems: [
+        {
+          id: "1",
+          title: "Financial Freedom",
+          imageUrl: "/placeholder.svg",
+          priority: 1
+        },
+        {
+          id: "2", 
+          title: "Health & Wellness",
+          imageUrl: "/placeholder.svg",
+          priority: 2
+        },
+      ],
 
       // Vision Statement Actions
       updateVisionStatement: (statementUpdate) => set((state) => ({
@@ -77,7 +117,12 @@ const useVisionStore = create<VisionState>()(
       })),
 
       updateGoal: (id, goalUpdate) => set((state) => ({
-        goals: state.goals.map(g => g.id === id ? { ...g, ...goalUpdate } : g)
+        goals: state.goals.map(g => g.id === id 
+            ? { ...g, 
+                ...goalUpdate, 
+                title: goalUpdate.title || g.title
+              } 
+            : g)
       })),
 
       deleteGoal: (id) => set((state) => ({

@@ -1,310 +1,186 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/auth/useAuth';
-// import { supabase } from '@/integrations/supabase/client';
-import { CreditCard, Plus, Target, TrendingDown, Calendar, AlertTriangle } from 'lucide-react';
+import useFinanceStore, { Debt } from '@/stores/useFinanceStore';
+import { CreditCard, Plus, Target, TrendingDown, Calendar, AlertTriangle, Edit, Trash2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface Debt {
-  id: string;
-  name: string;
-  debt_type: string;
-  total_amount: number;
-  remaining_amount: number;
-  interest_rate: number;
-  minimum_payment: number;
-  due_date: string;
-}
+// Debt Form Modal
+const DebtModal = ({
+  isOpen,
+  onClose,
+  onSave,
+  debt,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (data: Omit<Debt, 'id'>) => void;
+  debt?: Debt;
+}) => {
+    const [data, setData] = useState<Omit<Debt, 'id'>>({
+        name: '',
+        type: 'personal_loan',
+        totalAmount: 0,
+        remainingAmount: 0,
+        interestRate: 0,
+        minimumPayment: 0,
+        dueDate: new Date().toISOString().split('T')[0],
+    });
 
-const mockDebts: Debt[] = [
-  {
-    id: '1',
-    name: 'Chase Sapphire Reserve',
-    debt_type: 'credit_card',
-    total_amount: 15000,
-    remaining_amount: 8500,
-    interest_rate: 22.5,
-    minimum_payment: 250,
-    due_date: '2024-08-15',
-  },
-  {
-    id: '2',
-    name: 'Student Loan - Navient',
-    debt_type: 'student_loan',
-    total_amount: 40000,
-    remaining_amount: 35000,
-    interest_rate: 5.8,
-    minimum_payment: 400,
-    due_date: '2024-08-01',
-  },
-];
+    useState(() => {
+      if(isOpen) {
+        if(debt) {
+            setData(debt)
+        } else {
+             setData({
+                name: '',
+                type: 'personal_loan',
+                totalAmount: 0,
+                remainingAmount: 0,
+                interestRate: 0,
+                minimumPayment: 0,
+                dueDate: new Date().toISOString().split('T')[0],
+            });
+        }
+      }
+    });
 
-const DebtManager = () => {
-  const { user } = useAuth();
-  const [debts, setDebts] = useState<Debt[]>([]);
-  const [stats, setStats] = useState({
-    totalDebt: 0,
-    monthlyPayments: 0,
-    averageInterestRate: 0,
-    payoffTimeframe: 0
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      loadDebts();
-    }
-  }, [user]);
-
-  const loadDebts = async () => {
-    // TODO: Replace with Bolt API
-    setLoading(true);
-    setTimeout(() => {
-      const debtsData = mockDebts;
-      setDebts(debtsData || []);
-
-      // Calculate stats
-      const totalDebt = debtsData?.reduce((sum, debt) => sum + debt.remaining_amount, 0) || 0;
-      const monthlyPayments = debtsData?.reduce((sum, debt) => sum + (debt.minimum_payment || 0), 0) || 0;
-      const avgInterestRate = debtsData?.length > 0
-        ? debtsData.reduce((sum, debt) => sum + (debt.interest_rate || 0), 0) / debtsData.length
-        : 0;
-
-      setStats({
-        totalDebt,
-        monthlyPayments,
-        averageInterestRate: avgInterestRate,
-        payoffTimeframe: monthlyPayments > 0 ? Math.ceil(totalDebt / (monthlyPayments * 12)) : 0
-      });
-      setLoading(false);
-    }, 1000);
+  const handleSave = () => {
+    onSave(data);
+    onClose();
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="w-8 h-8 border-4 border-muted border-t-foreground rounded-full animate-spin"></div>
-      </div>
-    );
+  
+  const handleChange = (field: keyof Omit<Debt, 'id'>, value: string | number) => {
+      setData(prev => ({...prev, [field]: value}));
   }
 
   return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
-      >
-        <div>
-          <h1 className="text-3xl font-bold font-playfair text-foreground">Debt Manager</h1>
-          <p className="text-muted-foreground font-playfair">Eliminate debt efficiently with intelligent strategies</p>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{debt ? 'Edit' : 'Add'} Debt</DialogTitle>
+          <DialogDescription>Enter the details of your debt.</DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-2 gap-4 py-4">
+            <Input className="col-span-2" placeholder="Debt Name (e.g., Car Loan)" value={data.name} onChange={(e) => handleChange('name', e.target.value)} />
+            <Input type="number" placeholder="Total Amount" value={data.totalAmount} onChange={(e) => handleChange('totalAmount', parseFloat(e.target.value))} />
+            <Input type="number" placeholder="Remaining Amount" value={data.remainingAmount} onChange={(e) => handleChange('remainingAmount', parseFloat(e.target.value))} />
+            <Input type="number" placeholder="Interest Rate (%)" value={data.interestRate} onChange={(e) => handleChange('interestRate', parseFloat(e.target.value))} />
+            <Input type="number" placeholder="Minimum Payment" value={data.minimumPayment} onChange={(e) => handleChange('minimumPayment', parseFloat(e.target.value))} />
+            <Input type="date" value={data.dueDate} onChange={(e) => handleChange('dueDate', e.target.value)} />
+            <Select value={data.type} onValueChange={(v: Debt['type']) => handleChange('type', v)}>
+                <SelectTrigger><SelectValue placeholder="Debt Type" /></SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="credit_card">Credit Card</SelectItem>
+                    <SelectItem value="student_loan">Student Loan</SelectItem>
+                    <SelectItem value="mortgage">Mortgage</SelectItem>
+                    <SelectItem value="personal_loan">Personal Loan</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+            </Select>
         </div>
-        <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+
+// Main Component
+const DebtManager = () => {
+  const { debts, addDebt, updateDebt, deleteDebt } = useFinanceStore();
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [editingDebt, setEditingDebt] = useState<Debt | undefined>(undefined);
+
+  const stats = useMemo(() => {
+    const totalDebt = debts.reduce((sum, debt) => sum + debt.remainingAmount, 0);
+    const monthlyPayments = debts.reduce((sum, debt) => sum + debt.minimumPayment, 0);
+    const averageInterestRate = debts.length > 0 ? debts.reduce((sum, debt) => sum + debt.interestRate, 0) / debts.length : 0;
+    return { totalDebt, monthlyPayments, averageInterestRate };
+  }, [debts]);
+  
+  const handleSaveDebt = (data: Omit<Debt, 'id'>) => {
+      if (editingDebt) {
+          updateDebt(editingDebt.id, data);
+      } else {
+          addDebt(data);
+      }
+  };
+
+  const handleOpenModal = (debt?: Debt) => {
+      setEditingDebt(debt);
+      setModalOpen(true);
+  };
+  
+  return (
+    <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Debt Manager</h1>
+          <p className="text-muted-foreground">Eliminate debt efficiently with intelligent strategies.</p>
+        </div>
+        <Button onClick={() => handleOpenModal()}>
           <Plus className="h-4 w-4 mr-2" />
           Add Debt
         </Button>
-      </motion.div>
-
-      {/* Debt Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="border-2 border-border hover:border-red-500/30 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Total Debt</CardTitle>
-              <CreditCard className="h-4 w-4 text-red-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600 font-playfair">
-                ${stats.totalDebt.toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                Outstanding balance
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Monthly Payments</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">
-                ${stats.monthlyPayments.toLocaleString()}
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                Required minimums
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Avg Interest</CardTitle>
-              <TrendingDown className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">
-                {stats.averageInterestRate.toFixed(1)}%
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                Weighted average
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Payoff Time</CardTitle>
-              <Target className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">
-                {stats.payoffTimeframe} yrs
-              </div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                At current rate
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
       </div>
 
-      {/* Debt List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <Card className="border-2 border-border soft-shadow">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card><CardHeader><CardTitle>Total Debt</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold text-red-600">${stats.totalDebt.toLocaleString()}</div></CardContent></Card>
+          <Card><CardHeader><CardTitle>Monthly Payments</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold">${stats.monthlyPayments.toLocaleString()}</div></CardContent></Card>
+          <Card><CardHeader><CardTitle>Avg Interest</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold">{stats.averageInterestRate.toFixed(1)}%</div></CardContent></Card>
+      </div>
+
+      <Card>
           <CardHeader>
-            <CardTitle className="text-xl font-bold font-playfair">Your Debts</CardTitle>
-            <CardDescription className="font-playfair">
-              Strategic debt elimination prioritized by impact
-            </CardDescription>
+            <CardTitle>Your Debts</CardTitle>
+            <CardDescription>Strategic debt elimination prioritized by impact.</CardDescription>
           </CardHeader>
           <CardContent>
-            {debts.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 font-playfair">No Debts Tracked</h3>
-                <p className="text-muted-foreground mb-6 font-playfair">
-                  Add your debts to create an elimination strategy
-                </p>
-                <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add First Debt
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {debts.map((debt, index) => {
-                  const payoffProgress = debt.total_amount > 0
-                    ? ((debt.total_amount - debt.remaining_amount) / debt.total_amount) * 100
-                    : 0;
-
-                  const isHighInterest = (debt.interest_rate || 0) > 15;
-
+            <div className="space-y-6">
+                {debts.map((debt) => {
+                  const payoffProgress = (debt.totalAmount - debt.remainingAmount) / debt.totalAmount * 100;
                   return (
-                    <motion.div
-                      key={debt.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="p-6 bg-muted/20 rounded-xl border border-border hover:bg-muted/30 transition-colors"
-                    >
+                    <div key={debt.id} className="p-6 bg-muted/20 rounded-xl border border-border group">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="text-lg font-semibold text-foreground font-playfair">{debt.name}</h4>
-                            <Badge
-                              variant="secondary"
-                              className="font-playfair capitalize"
-                            >
-                              {debt.debt_type.replace('_', ' ')}
-                            </Badge>
-                            {isHighInterest && (
-                              <Badge variant="destructive" className="font-playfair">
-                                <AlertTriangle className="h-3 w-3 mr-1" />
-                                High Interest
-                              </Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground font-playfair">
-                            Due on {new Date(debt.due_date).toLocaleDateString()}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-muted-foreground font-playfair">
                         <div>
-                          <p>Remaining</p>
-                          <p className="text-foreground font-semibold">${debt.remaining_amount.toLocaleString()}</p>
+                          <h4 className="text-lg font-semibold">{debt.name}</h4>
+                          <Badge variant="secondary" className="capitalize">{debt.type.replace('_', ' ')}</Badge>
                         </div>
-                        <div>
-                          <p>Interest Rate</p>
-                          <p className="text-foreground font-semibold">{debt.interest_rate}%</p>
-                        </div>
-                        <div>
-                          <p>Min. Payment</p>
-                          <p className="text-foreground font-semibold">${debt.minimum_payment.toLocaleString()}</p>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-foreground font-playfair mb-1">
-                            {payoffProgress.toFixed(0)}%
-                          </div>
-                          <div className="text-sm text-muted-foreground font-playfair">Paid Off</div>
+                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                            <Button variant="ghost" size="icon" onClick={() => handleOpenModal(debt)}><Edit className="h-4 w-4" /></Button>
+                            <Button variant="ghost" size="icon" onClick={() => deleteDebt(debt.id)}><Trash2 className="h-4 w-4" /></Button>
                         </div>
                       </div>
-
-                      <div className="space-y-2 mt-4">
-                        <div className="flex justify-between text-xs text-muted-foreground font-playfair">
-                          <span>${(debt.total_amount - debt.remaining_amount).toLocaleString()} paid</span>
-                          <span>${debt.total_amount.toLocaleString()} total</span>
-                        </div>
-                        <Progress value={payoffProgress} className="h-2" />
+                      <Progress value={payoffProgress} className="mb-2 h-2" />
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                        <div><span className="font-semibold">${debt.remainingAmount.toLocaleString()}</span><p className="text-xs text-muted-foreground">Remaining</p></div>
+                        <div><span className="font-semibold">{debt.interestRate}%</span><p className="text-xs text-muted-foreground">Interest</p></div>
+                        <div><span className="font-semibold">${debt.minimumPayment.toLocaleString()}</span><p className="text-xs text-muted-foreground">Min. Payment</p></div>
+                        <div><span className="font-semibold">{new Date(debt.dueDate).toLocaleDateString()}</span><p className="text-xs text-muted-foreground">Due Date</p></div>
                       </div>
-
-                      <div className="mt-4 flex justify-end space-x-2">
-                        <Button variant="outline" size="sm" className="font-playfair">Make Payment</Button>
-                        <Button variant="ghost" size="sm" className="font-playfair">Details</Button>
-                      </div>
-                    </motion.div>
-                  )
+                    </div>
+                  );
                 })}
-              </div>
-            )}
+            </div>
           </CardContent>
-        </Card>
-      </motion.div>
+      </Card>
+
+      <DebtModal 
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleSaveDebt}
+        debt={editingDebt}
+      />
     </div>
   );
 };

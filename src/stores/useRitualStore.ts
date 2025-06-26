@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { v4 as uuidv4 } from 'uuid';
+import { useToast } from '@/components/ui/use-toast';
 
 export interface Habit {
   id: string;
@@ -25,11 +26,16 @@ export interface Ritual {
   habits: string[]; // An array of habit IDs
   isActive: boolean;
   completedToday: boolean;
+  duration?: number;
 }
+
+type ToastFunc = ReturnType<typeof useToast>['toast'];
 
 interface RitualState {
   rituals: Ritual[];
   habits: Habit[];
+  toast: ToastFunc;
+  setToast: (toastFn: ToastFunc) => void;
   toggleHabit: (habitId: string) => void;
   addHabit: (habit: Omit<Habit, 'id' | 'streak' | 'longestStreak' | 'completedToday' | 'totalCompletions' | 'createdAt'>) => void;
   deleteHabit: (habitId: string) => void;
@@ -45,6 +51,8 @@ const useRitualStore = create<RitualState>()(
     (set, get) => ({
       rituals: [],
       habits: [],
+      toast: () => {},
+      setToast: (toastFn) => set({ toast: toastFn }),
       
       addHabit: (habit) => set((state) => ({
         habits: [...state.habits, {
@@ -58,11 +66,29 @@ const useRitualStore = create<RitualState>()(
         }]
       })),
       
-      deleteHabit: (habitId) => set((state) => ({
-        habits: state.habits.filter(h => h.id !== habitId),
-        // Also remove from any rituals
-        rituals: state.rituals.map(r => ({ ...r, habits: r.habits.filter(hId => hId !== habitId) }))
-      })),
+      deleteHabit: (habitId) => {
+        const { rituals, habits, toast } = get();
+        const habitInUse = rituals.some(r => r.habits.includes(habitId));
+
+        if (habitInUse) {
+          const habitName = habits.find(h => h.id === habitId)?.name || 'The habit';
+          toast({
+            title: "Deletion Failed",
+            description: `${habitName} is part of an active ritual and cannot be deleted.`,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        set((state) => ({
+          habits: state.habits.filter(h => h.id !== habitId),
+        }));
+        
+        toast({
+          title: "Habit Deleted",
+          description: `The habit has been successfully deleted.`,
+        });
+      },
       
       updateHabit: (habitId, habitUpdate) => set((state) => ({
         habits: state.habits.map(h => h.id === habitId ? { ...h, ...habitUpdate } : h)

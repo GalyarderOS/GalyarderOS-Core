@@ -1,211 +1,126 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useAuth } from '@/contexts/auth/useAuth';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
-// import { supabase } from '@/integrations/supabase/client';
-import { TrendingUp, TrendingDown, Plus, DollarSign, Target, PieChart } from 'lucide-react';
+import useFinanceStore from '@/stores/useFinanceStore';
+import type { Portfolio, Investment } from '@/stores/useFinanceStore';
+import { TrendingUp, Plus, DollarSign, PieChart, Edit, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
-type Investment = object;
 
-interface Portfolio {
-  id: string;
-  name: string;
-  description: string;
-  total_value: number;
-  investments: Investment[];
+interface InvestmentModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (data: Partial<Investment>) => void;
+    investment?: Investment;
+    portfolioId: string;
 }
 
-const mockPortfolios: Portfolio[] = [
-    {
-        id: '1',
-        name: 'Growth Portfolio',
-        description: 'High-risk, high-reward investments.',
-        total_value: 50000,
-        investments: [{}, {}, {}],
-    },
-    {
-        id: '2',
-        name: 'Retirement Fund',
-        description: 'Long-term, stable investments.',
-        total_value: 150000,
-        investments: [{}, {}, {}, {}],
-    },
-];
+const InvestmentModal = ({ isOpen, onClose, onSave, investment, portfolioId }: InvestmentModalProps) => {
+    // ... modal logic for adding/editing an individual investment
+    // This can be implemented similarly to other modals
+    return null; // Placeholder
+}
+
+interface PortfolioModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSave: (data: { name: string; description: string }) => void;
+    portfolio?: Portfolio;
+}
+
+const PortfolioModal = ({ isOpen, onClose, onSave, portfolio }: PortfolioModalProps) => {
+    const [data, setData] = useState({ name: '', description: '' });
+    useState(() => {
+        if(isOpen) setData(portfolio ? { name: portfolio.name, description: portfolio.description } : { name: '', description: '' });
+    });
+    return (
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent>
+                <DialogHeader><DialogTitle>{portfolio ? 'Edit' : 'Create'} Portfolio</DialogTitle></DialogHeader>
+                <Input placeholder="Portfolio Name" value={data.name} onChange={(e) => setData({...data, name: e.target.value})} />
+                <Textarea placeholder="Description" value={data.description} onChange={(e) => setData({...data, description: e.target.value})} />
+                <DialogFooter><Button onClick={() => onSave(data)}>Save</Button></DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 const InvestmentTracker = () => {
-  const { user } = useAuth();
-  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
-  const [loading, setLoading] = useState(true);
+    const { portfolios, addPortfolio, updatePortfolio, deletePortfolio } = useFinanceStore();
+    const [isPortfolioModalOpen, setPortfolioModalOpen] = useState(false);
+    const [editingPortfolio, setEditingPortfolio] = useState<Portfolio | undefined>();
 
-  useEffect(() => {
-    if (user) {
-      loadPortfolios();
-    }
-  }, [user]);
+    const stats = useMemo(() => {
+        const totalValue = portfolios.flatMap(p => p.investments).reduce((sum, i) => sum + (i.quantity * i.currentPrice), 0);
+        return { totalValue };
+    }, [portfolios]);
 
-  const loadPortfolios = async () => {
-    // TODO: Replace with Bolt API
-    setLoading(true);
-    setTimeout(() => {
-        setPortfolios(mockPortfolios);
-      setLoading(false);
-    }, 1000);
-  };
+    const handleSavePortfolio = (data: { name: string; description: string }) => {
+        if (editingPortfolio) {
+            updatePortfolio(editingPortfolio.id, data);
+        } else {
+            addPortfolio(data);
+        }
+        setPortfolioModalOpen(false);
+    };
 
-  if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="w-8 h-8 border-4 border-muted border-t-foreground rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-8 max-w-7xl mx-auto">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
-      >
-        <div>
-          <h1 className="text-3xl font-bold font-playfair text-foreground">Investment Tracker</h1>
-          <p className="text-muted-foreground font-playfair">Monitor your portfolio performance with precision</p>
-        </div>
-        <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Investment
-        </Button>
-      </motion.div>
-
-      {/* Portfolio Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Total Portfolio Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">$0</div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                <span className="text-green-500">+0%</span> from last month
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Active Portfolios</CardTitle>
-              <PieChart className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">{portfolios.length}</div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                Diversified across markets
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="border-2 border-border hover:border-muted-foreground/20 transition-all duration-300 soft-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium font-playfair">Monthly Return</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold font-playfair">+0%</div>
-              <p className="text-xs text-muted-foreground font-playfair">
-                Outperforming market average
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-      </div>
-
-      {/* Portfolios List */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <Card className="border-2 border-border soft-shadow">
-          <CardHeader>
-            <CardTitle className="text-xl font-bold font-playfair">Your Portfolios</CardTitle>
-            <CardDescription className="font-playfair">
-              Manage and monitor your investment portfolios
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {portfolios.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Target className="h-8 w-8 text-muted-foreground" />
+        <div className="space-y-8 max-w-7xl mx-auto p-4">
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold">Investment Tracker</h1>
+                    <p className="text-muted-foreground">Monitor your portfolio performance.</p>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2 font-playfair">No Portfolios Yet</h3>
-                <p className="text-muted-foreground mb-6 font-playfair">
-                  Start building your investment portfolio today
-                </p>
-                <Button className="bg-foreground hover:bg-foreground/90 text-background font-playfair">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Portfolio
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {portfolios.map((portfolio, index) => (
-                  <motion.div
-                    key={portfolio.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-center justify-between p-4 bg-muted/20 rounded-xl border border-border hover:bg-muted/30 transition-colors"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl flex items-center justify-center">
-                        <TrendingUp className="h-6 w-6 text-foreground" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground font-playfair">{portfolio.name}</h4>
-                        <p className="text-sm text-muted-foreground font-playfair">{portfolio.description}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-foreground font-playfair">
-                        ${portfolio.total_value?.toLocaleString() || '0'}
-                      </div>
-                      <Badge variant="secondary" className="font-playfair">
-                        {portfolio.investments?.length || 0} investments
-                      </Badge>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-    </div>
-  );
+                <Button onClick={() => { setEditingPortfolio(undefined); setPortfolioModalOpen(true); }}><Plus className="mr-2 h-4 w-4" />Create Portfolio</Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card><CardHeader><CardTitle>Total Value</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold">${stats.totalValue.toLocaleString(undefined, {minimumFractionDigits: 2})}</div></CardContent></Card>
+                <Card><CardHeader><CardTitle>Portfolios</CardTitle></CardHeader><CardContent><div className="text-2xl font-bold">{portfolios.length}</div></CardContent></Card>
+            </div>
+
+            <div className="space-y-4">
+                {portfolios.map(p => {
+                    const portfolioValue = p.investments.reduce((sum, i) => sum + i.quantity * i.currentPrice, 0);
+                    return (
+                        <Collapsible key={p.id} className="border rounded-lg">
+                            <CollapsibleTrigger className="w-full p-4 flex justify-between items-center">
+                                <div>
+                                    <h4 className="font-semibold">{p.name}</h4>
+                                    <p className="text-sm text-muted-foreground">{p.description}</p>
+                                </div>
+                                <div className="flex items-center gap-4">
+                                    <span className="font-bold">${portfolioValue.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                                    <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); setEditingPortfolio(p); setPortfolioModalOpen(true); }}><Edit className="h-4 w-4" /></Button>
+                                    <Button variant="ghost" size="icon" onClick={(e) => { e.stopPropagation(); deletePortfolio(p.id); }}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                                    <ChevronDown className="h-5 w-5 transition-transform" />
+                                </div>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="p-4 pt-0">
+                                <div className="space-y-2">
+                                    {p.investments.map(i => (
+                                        <div key={i.id} className="flex justify-between items-center p-2 rounded-md bg-muted/50">
+                                            <div>{i.name} ({i.quantity} @ ${i.currentPrice})</div>
+                                            <div>${(i.quantity * i.currentPrice).toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                                        </div>
+                                    ))}
+                                    <Button variant="secondary" className="w-full mt-2"><Plus className="mr-2 h-4 w-4" /> Add Investment</Button>
+                                </div>
+                            </CollapsibleContent>
+                        </Collapsible>
+                    )
+                })}
+            </div>
+
+            <PortfolioModal isOpen={isPortfolioModalOpen} onClose={() => setPortfolioModalOpen(false)} onSave={handleSavePortfolio} portfolio={editingPortfolio} />
+        </div>
+    );
 };
 
 export default InvestmentTracker;

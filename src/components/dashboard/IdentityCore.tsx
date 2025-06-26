@@ -1,201 +1,143 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
-import { User, Shield, Zap, Edit, Trash2, Plus, Save } from 'lucide-react';
-import { ModuleHeader } from '@/components/shared/ModuleHeader';
-import { ModuleCard } from '@/components/shared/ModuleCard';
-import useIdentityStore from '@/stores/useIdentityStore';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Trash2, Edit, Plus, Save, X } from "lucide-react";
+import { useIdentityStore } from "@/modules/IdentityCore/useIdentityStore";
+import type { IdentityItem } from "@/modules/IdentityCore/useIdentityStore";
 
-const IdentityCore = () => {
-  const { toast } = useToast();
-  const {
-    identity,
-    coreValues,
-    characterStrengths,
-    updateIdentity,
-    addCoreValue,
-    updateCoreValue,
-    deleteCoreValue,
-    addCharacterStrength,
-    updateCharacterStrength,
-    deleteCharacterStrength,
-  } = useIdentityStore();
+type IdentitySectionType = 'coreBeliefs' | 'values' | 'principles';
 
-  const [isEditingIdentity, setIsEditingIdentity] = useState(false);
-  const [localIdentity, setLocalIdentity] = useState(identity);
+const IdentitySection = ({
+  title,
+  items,
+  type,
+}: {
+  title: string;
+  items: IdentityItem[];
+  type: IdentitySectionType;
+}) => {
+  const { addItem, updateItem, deleteItem } = useIdentityStore();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
+  const [newItemText, setNewItemText] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
-  const [isAddValueOpen, setAddValueOpen] = useState(false);
-  const [isAddTraitOpen, setAddTraitOpen] = useState(false);
-
-  const [newValue, setNewValue] = useState({ value: "", description: "" });
-  const [newTrait, setNewTrait] = useState({ trait: "", description: "" });
-  
-  const [editingValue, setEditingValue] = useState<{ id: string; value: string; description: string } | null>(null);
-  const [editingTrait, setEditingTrait] = useState<{ id: string; trait: string; description: string; score: number; } | null>(null);
-
-
-  const handleIdentitySave = () => {
-    updateIdentity(localIdentity);
-    setIsEditingIdentity(false);
-    toast({ title: "Identity Updated", description: "Your personal mission has been saved." });
+  const handleEdit = (item: IdentityItem) => {
+    setEditingId(item.id);
+    setEditText(item.text);
   };
-  
-  const handleAddCoreValue = () => {
-    if (!newValue.value.trim()) {
-      toast({ title: "Value name cannot be empty.", variant: "destructive" });
-      return;
-    }
-    addCoreValue(newValue);
-    setNewValue({ value: "", description: "" });
-    setAddValueOpen(false);
-    toast({ title: "Core Value Added" });
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
   };
-  
-  const handleUpdateCoreValue = () => {
-    if (editingValue) {
-        updateCoreValue(editingValue.id, { value: editingValue.value, description: editingValue.description });
-        setEditingValue(null);
-        toast({ title: "Core Value Updated" });
+
+  const handleSaveEdit = (id: string) => {
+    if (editText.trim()) {
+      updateItem(type, id, editText.trim());
+      handleCancelEdit();
     }
   };
 
-  const handleAddCharacterStrength = () => {
-    if (!newTrait.trait.trim()) {
-      toast({ title: "Trait name cannot be empty.", variant: "destructive" });
-      return;
+  const handleAddNew = () => {
+    if (newItemText.trim()) {
+      addItem(type, newItemText.trim());
+      setNewItemText("");
+      setIsAdding(false);
     }
-    addCharacterStrength(newTrait);
-    setNewTrait({ trait: "", description: "" });
-    setAddTraitOpen(false);
-    toast({ title: "Character Trait Added" });
   };
   
-  const handleUpdateCharacterStrength = () => {
-    if (editingTrait) {
-        updateCharacterStrength(editingTrait.id, editingTrait.score);
-        setEditingTrait(null);
-        toast({ title: "Character Trait Updated" });
-    }
-  };
+  const handleCancelAdd = () => {
+      setIsAdding(false);
+      setNewItemText("");
+  }
 
   return (
-    <ModuleCard title="Identity Core" module="identity">
-        <div className="grid md:grid-cols-2 gap-8">
-            {/* Core Values Section */}
-                <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold flex items-center"><Shield className="mr-2 h-5 w-5"/> Core Values</h3>
-                    <Dialog open={isAddValueOpen} onOpenChange={setAddValueOpen}>
-                        <DialogTrigger asChild><Button size="sm"><Plus className="mr-2 h-4 w-4"/>Add</Button></DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader><DialogTitle>Add a New Core Value</DialogTitle></DialogHeader>
-                            <Input value={newValue.value} onChange={e => setNewValue({...newValue, value: e.target.value})} placeholder="Value Name (e.g., Integrity)" />
-                            <Textarea value={newValue.description} onChange={e => setNewValue({...newValue, description: e.target.value})} placeholder="What does this value mean to you?" />
-                            <DialogFooter>
-                                <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
-                                <Button onClick={handleAddCoreValue}>Add Value</Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+    <Card className="flex-1 bg-background/80 backdrop-blur-sm border-white/20">
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center text-lg font-semibold text-foreground">
+          {title}
+          <Button size="sm" variant="ghost" onClick={() => setIsAdding(true)}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {items.map((item) => (
+          <div key={item.id} className="flex items-center space-x-2 group">
+            {editingId === item.id ? (
+              <>
+                <Input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSaveEdit(item.id)}
+                  className="flex-grow bg-transparent"
+                  autoFocus
+                />
+                <Button size="icon" variant="ghost" onClick={() => handleSaveEdit(item.id)}>
+                  <Save className="h-4 w-4 text-green-500" />
+                </Button>
+                <Button size="icon" variant="ghost" onClick={handleCancelEdit}>
+                  <X className="h-4 w-4 text-red-500" />
+                </Button>
+              </>
+            ) : (
+              <>
+                <p className="flex-grow text-sm text-muted-foreground">{item.text}</p>
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button size="icon" variant="ghost" onClick={() => handleEdit(item)}>
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button size="icon" variant="ghost" onClick={() => deleteItem(type, item.id)}>
+                    <Trash2 className="h-4 w-4 text-red-500/80" />
+                  </Button>
                 </div>
-                <AnimatePresence>
-                {coreValues.map(value => (
-                        <motion.div key={value.id} layout initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }} className="p-3 border rounded-md bg-background hover:bg-muted/50">
-                        <div className="flex justify-between items-start">
-                  <div>
-                                <p className="font-semibold">{value.value}</p>
-                                <p className="text-sm text-muted-foreground">{value.description}</p>
-                  </div>
-                            <div className="flex items-center">
-                                <Dialog open={editingValue?.id === value.id} onOpenChange={(isOpen) => !isOpen && setEditingValue(null)}>
-                                    <DialogTrigger asChild><Button variant="ghost" size="icon" onClick={() => setEditingValue(value)}><Edit className="h-4 w-4"/></Button></DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader><DialogTitle>Edit Core Value</DialogTitle></DialogHeader>
-                                        <Input value={editingValue?.value} onChange={e => editingValue && setEditingValue({...editingValue, value: e.target.value})} />
-                                        <Textarea value={editingValue?.description} onChange={e => editingValue && setEditingValue({...editingValue, description: e.target.value})} />
-                                        <DialogFooter><Button variant="outline" onClick={() => setEditingValue(null)}>Cancel</Button><Button onClick={handleUpdateCoreValue}>Save</Button></DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600"><Trash2 className="h-4 w-4"/></Button></AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader><AlertDialogTitle>Delete "{value.value}"?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
-                                        <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => deleteCoreValue(value.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction></AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </div>
-                          </div>
-                        </motion.div>
-                ))}
-                </AnimatePresence>
-              </div>
+              </>
+            )}
+          </div>
+        ))}
+        {isAdding && (
+          <div className="flex items-center space-x-2 pt-2">
+            <Input
+              placeholder={`New ${title.slice(0, -1)}...`}
+              value={newItemText}
+              onChange={(e) => setNewItemText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleAddNew()}
+              className="flex-grow bg-transparent"
+              autoFocus
+            />
+            <Button size="icon" variant="ghost" onClick={handleAddNew}>
+              <Save className="h-4 w-4 text-green-500" />
+            </Button>
+            <Button size="icon" variant="ghost" onClick={handleCancelAdd}>
+              <X className="h-4 w-4 text-red-500" />
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
 
-            {/* Character Traits Section */}
-            <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold flex items-center"><Zap className="mr-2 h-5 w-5"/> Character Traits</h3>
-                        <Dialog open={isAddTraitOpen} onOpenChange={setAddTraitOpen}>
-                        <DialogTrigger asChild><Button size="sm"><Plus className="mr-2 h-4 w-4"/>Add</Button></DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader><DialogTitle>Add a New Character Trait</DialogTitle></DialogHeader>
-                            <Input value={newTrait.trait} onChange={e => setNewTrait({...newTrait, trait: e.target.value})} placeholder="Trait Name (e.g., Discipline)" />
-                            <Textarea value={newTrait.description} onChange={e => setNewTrait({...newTrait, description: e.target.value})} placeholder="How do you embody this trait?" />
-                            <DialogFooter>
-                                <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
-                                <Button onClick={handleAddCharacterStrength}>Add Trait</Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-                    <AnimatePresence>
-                {characterStrengths.map(trait => (
-                    <motion.div key={trait.id} layout initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, x: -20 }} className="p-3 border rounded-md bg-background hover:bg-muted/50">
-                            <div className="flex justify-between items-start">
-                            <div>
-                                <p className="font-semibold">{trait.trait}</p>
-                                <p className="text-sm text-muted-foreground">{trait.description}</p>
-                            </div>
-                            <div className="flex items-center">
-                                <Dialog open={editingTrait?.id === trait.id} onOpenChange={(isOpen) => !isOpen && setEditingTrait(null)}>
-                                    <DialogTrigger asChild><Button variant="ghost" size="icon" onClick={() => setEditingTrait(trait)}><Edit className="h-4 w-4"/></Button></DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader><DialogTitle>Edit Character Trait</DialogTitle></DialogHeader>
-                                        <Input value={editingTrait?.trait} onChange={e => editingTrait && setEditingTrait({...editingTrait, trait: e.target.value})} />
-                                        <Textarea value={editingTrait?.description} onChange={e => editingTrait && setEditingTrait({...editingTrait, description: e.target.value})} />
-                                        <DialogFooter><Button variant="outline" onClick={() => setEditingTrait(null)}>Cancel</Button><Button onClick={handleUpdateCharacterStrength}>Save</Button></DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild><Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600"><Trash2 className="h-4 w-4"/></Button></AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader><AlertDialogTitle>Delete "{trait.trait}"?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
-                                        <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => deleteCharacterStrength(trait.id)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction></AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            </div>
-                          </div>
-                    </motion.div>
-                ))}
-                </AnimatePresence>
-                  </div>
-                </div>
-    </ModuleCard>
+
+const IdentityCore = () => {
+  const { coreBeliefs, values, principles } = useIdentityStore();
+
+  return (
+    <div className="p-4 md:p-6 space-y-6 h-full">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Identity Core</h1>
+        <p className="text-muted-foreground">
+          Define and manage the fundamental beliefs, values, and principles that guide you.
+        </p>
+      </div>
+      <div className="flex flex-col md:flex-row gap-6">
+        <IdentitySection title="Core Beliefs" items={coreBeliefs} type="coreBeliefs" />
+        <IdentitySection title="Values" items={values} type="values" />
+        <IdentitySection title="Principles" items={principles} type="principles" />
+      </div>
+    </div>
   );
 };
 

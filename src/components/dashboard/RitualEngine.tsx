@@ -1,31 +1,22 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Calendar, 
-  Target,
-  Flame, 
-  Clock, 
-  Plus, 
-  Check, 
-  X,
-  Award,
-  ChevronRight,
-  Play,
+import {
+  Flame,
+  Plus,
+  Check,
   Edit,
   Trash2,
-  Zap,
   Sunrise,
   Sun,
   Sunset,
-  Moon
+  Moon,
+  ChevronRight
 } from "lucide-react";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { ModuleCard } from '@/components/shared/ModuleCard';
 import { useToast } from "@/components/ui/use-toast";
 import useRitualStore, {Habit, Ritual } from "@/stores/useRitualStore";
@@ -36,7 +27,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -45,7 +35,12 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import type { Goal } from '@/stores/useVisionStore';
 
+type EditableHabit = Omit<Habit, 'id' | 'streak' | 'longestStreak' | 'completedToday' | 'totalCompletions' | 'createdAt'>;
+type HabitState = Habit | EditableHabit;
+type EditableRitual = Omit<Ritual, 'id' | 'isActive' | 'completedToday' | 'duration'>;
+type RitualState = Ritual | EditableRitual;
 
 const RitualEngine = () => {
   const { toast } = useToast();
@@ -60,7 +55,7 @@ const RitualEngine = () => {
     addRitual,
     deleteRitual,
     updateRitual,
-    toggleRitual,
+    setToast,
   } = useRitualStore();
 
   const [newHabit, setNewHabit] = useState<Omit<Habit, 'id' | 'streak' | 'longestStreak' | 'completedToday' | 'totalCompletions' | 'createdAt'>>({
@@ -68,7 +63,7 @@ const RitualEngine = () => {
     description: '',
     category: 'personal',
     frequency: 'daily',
-    targetDays: 365,
+    targetDays: 30,
     difficulty: 'medium'
   });
   
@@ -79,12 +74,10 @@ const RitualEngine = () => {
     habits: [],
   });
   
-
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   const [editingRitual, setEditingRitual] = useState<Ritual | null>(null);
   const [isAddHabitOpen, setAddHabitOpen] = useState(false);
   const [isAddRitualOpen, setAddRitualOpen] = useState(false);
-
 
   const handleAddHabit = () => {
     if (!newHabit.name.trim()) {
@@ -92,66 +85,31 @@ const RitualEngine = () => {
       return;
     }
     addHabit(newHabit);
-    setNewHabit({ name: '', description: '', category: 'personal', frequency: 'daily', targetDays: 365, difficulty: 'medium' });
+    setNewHabit({ name: '', description: '', category: 'personal', frequency: 'daily', targetDays: 30, difficulty: 'medium' });
     setAddHabitOpen(false);
-    toast({ title: "Habit Added successfully!", description: `You've added "${newHabit.name}".`});
+  };
+
+  const handleAddRitual = () => {
+    if (!newRitual.name.trim()) {
+       toast({ title: "Ritual name cannot be empty.", variant: "destructive" });
+      return;
+    }
+    addRitual(newRitual);
+    setNewRitual({ name: "", description: "", timeOfDay: "morning", habits: [] });
+    setAddRitualOpen(false);
   };
 
   const handleUpdateHabit = () => {
     if (editingHabit) {
       updateHabit(editingHabit.id, editingHabit);
       setEditingHabit(null);
-      toast({ title: "Habit updated!", description: `Changes to "${editingHabit.name}" have been saved.`});
     }
   };
   
-  const handleAddRitual = () => {
-    if (!newRitual.name.trim() || newRitual.habits.length === 0) {
-      toast({
-        title: "Validation Error",
-        description: "Ritual name and at least one habit are required.",
-        variant: "destructive",
-      });
-      return;
-    }
-    addRitual(newRitual);
-    setNewRitual({ name: "", description: "", timeOfDay: "morning", habits: [] });
-    setAddRitualOpen(false);
-    toast({ title: "Ritual Added!", description: `Your new ritual "${newRitual.name}" is ready.`});
-  };
-
   const handleUpdateRitual = () => {
     if (editingRitual) {
-       const ritualToUpdate = {
-        name: editingRitual.name,
-        description: editingRitual.description,
-        timeOfDay: editingRitual.timeOfDay,
-        habits: editingRitual.habits,
-      };
-      updateRitual(editingRitual.id, ritualToUpdate);
+      updateRitual(editingRitual.id, editingRitual);
       setEditingRitual(null);
-      toast({ title: "Ritual updated!", description: `Changes to "${editingRitual.name}" have been saved.`});
-    }
-  };
-
-  const getCategoryColor = (category: Habit['category']) => {
-    switch (category) {
-      case 'health': return 'bg-green-100 text-green-800 border-green-200';
-      case 'productivity': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'learning': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'social': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'personal':
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getDifficultyColor = (difficulty: Habit['difficulty']) => {
-    switch (difficulty) {
-      case 'easy': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'hard': return 'text-red-500';
-      default: return 'text-gray-500';
     }
   };
 
@@ -168,12 +126,12 @@ const RitualEngine = () => {
   const getHabitById = (id: string) => habits.find(h => h.id === id);
 
   const renderHabitForm = (
-    habitState: typeof newHabit | Habit, 
-    setState: (habit: any) => void
-) => (
+    habitState: HabitState, 
+    setState: (habit: HabitState) => void
+  ) => (
     <div className="space-y-4 py-4">
-        <Input placeholder="Habit Name (e.g., 'Morning Meditation')" value={habitState.name} onChange={(e) => setState({ ...habitState, name: e.target.value })} />
-        <Textarea placeholder="Description" value={habitState.description} onChange={(e) => setState({ ...habitState, description: e.target.value })}/>
+        <Input placeholder="Habit Name" value={habitState.name} onChange={(e) => setState({ ...habitState, name: e.target.value })} />
+        <Textarea placeholder="Description" value={habitState.description || ''} onChange={(e) => setState({ ...habitState, description: e.target.value })}/>
         <div className="grid grid-cols-2 gap-4">
             <Select value={habitState.category} onValueChange={(value: Habit['category']) => setState({...habitState, category: value})}>
                 <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
@@ -193,9 +151,8 @@ const RitualEngine = () => {
                 </SelectContent>
             </Select>
         </div>
-        <div>
-            <Label>Difficulty</Label>
-            <Select value={habitState.difficulty} onValueChange={(value: Habit['difficulty']) => setState({...habitState, difficulty: value})}>
+        <div className="grid grid-cols-2 gap-4">
+            <Select value={'difficulty' in habitState ? habitState.difficulty : 'medium'} onValueChange={(value: Habit['difficulty']) => setState({...habitState, difficulty: value})}>
                 <SelectTrigger><SelectValue placeholder="Difficulty" /></SelectTrigger>
                 <SelectContent>
                     <SelectItem value="easy">Easy</SelectItem>
@@ -203,282 +160,187 @@ const RitualEngine = () => {
                     <SelectItem value="hard">Hard</SelectItem>
                 </SelectContent>
             </Select>
+             <div>
+                <Input type="number" placeholder="e.g., 30" value={'targetDays' in habitState ? habitState.targetDays : 30} onChange={(e) => setState({ ...habitState, targetDays: parseInt(e.target.value, 10) || 0 })} />
+            </div>
         </div>
     </div>
-);
+  );
 
-const renderRitualForm = (
-    ritualState: typeof newRitual | Ritual, 
-    setState: (ritual: any) => void
-) => (
-    <div className="space-y-4 py-4">
-        <Input placeholder="Ritual Name (e.g., 'Morning Power Up')" value={ritualState.name} onChange={(e) => setState({ ...ritualState, name: e.target.value })} />
-        <Textarea placeholder="Description" value={ritualState.description} onChange={(e) => setState({ ...ritualState, description: e.target.value })}/>
-        <Select value={ritualState.timeOfDay} onValueChange={(value: Ritual['timeOfDay']) => setState({...ritualState, timeOfDay: value})}>
-            <SelectTrigger><SelectValue placeholder="Time of Day" /></SelectTrigger>
-            <SelectContent>
-                <SelectItem value="morning">Morning</SelectItem>
-                <SelectItem value="afternoon">Afternoon</SelectItem>
-                <SelectItem value="evening">Evening</SelectItem>
-                <SelectItem value="night">Night</SelectItem>
-            </SelectContent>
-        </Select>
-        <div className="space-y-2">
-            <Label>Select Habits</Label>
-            <div className="max-h-40 overflow-y-auto rounded-md border p-2 space-y-2">
+  const renderRitualForm = (
+      ritualState: RitualState, 
+      setState: (ritual: RitualState) => void
+  ) => (
+      <div className="space-y-4 py-4">
+          <Input placeholder="Ritual Name" value={ritualState.name} onChange={(e) => setState({ ...ritualState, name: e.target.value })} />
+          <Textarea placeholder="Description" value={ritualState.description || ''} onChange={(e) => setState({ ...ritualState, description: e.target.value })}/>
+          <Select value={ritualState.timeOfDay} onValueChange={(value: Ritual['timeOfDay']) => setState({...ritualState, timeOfDay: value})}>
+              <SelectTrigger><SelectValue placeholder="Time of Day" /></SelectTrigger>
+              <SelectContent>
+                  <SelectItem value="morning">Morning</SelectItem>
+                  <SelectItem value="afternoon">Afternoon</SelectItem>
+                  <SelectItem value="evening">Evening</SelectItem>
+                  <SelectItem value="night">Night</SelectItem>
+              </SelectContent>
+          </Select>
+          <div className="space-y-2">
+              <Label>Select Habits</Label>
+              <div className="max-h-40 overflow-y-auto rounded-md border p-2 space-y-2">
+                  {habits.map(habit => (
+                      <div key={habit.id} className="flex items-center space-x-2">
+                          <Checkbox 
+                              id={`ritual-habit-${habit.id}`}
+                              checked={(ritualState.habits || []).includes(habit.id)}
+                              onCheckedChange={(checked) => {
+                                  const currentHabits = ritualState.habits || [];
+                                  const newHabitIds = checked 
+                                      ? [...currentHabits, habit.id]
+                                      : currentHabits.filter(id => id !== habit.id);
+                                  setState({ ...ritualState, habits: newHabitIds });
+                              }}
+                          />
+                          <Label htmlFor={`ritual-habit-${habit.id}`}>{habit.name}</Label>
+                      </div>
+                  ))}
+              </div>
+          </div>
+      </div>
+  );
+
+  return (
+    <ModuleCard 
+        module="ritual"
+        title="Ritual Engine" 
+        subtitle="Forge the habits that define your success." 
+        icon={<Flame className="w-5 h-5" />}
+        headerContent={
+          <div className="flex items-center gap-2">
+            <Dialog open={isAddHabitOpen} onOpenChange={setAddHabitOpen}>
+              <DialogTrigger asChild><Button size="sm" variant="outline"><Plus className="mr-2 h-4 w-4" /> New Habit</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Create a New Habit</DialogTitle></DialogHeader>
+                {renderHabitForm(newHabit, setNewHabit)}
+                <DialogFooter><Button onClick={handleAddHabit}>Add Habit</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Dialog open={isAddRitualOpen} onOpenChange={setAddRitualOpen}>
+              <DialogTrigger asChild><Button size="sm"><Plus className="mr-2 h-4 w-4" /> New Ritual</Button></DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Create a New Ritual</DialogTitle></DialogHeader>
+                {renderRitualForm(newRitual, setNewRitual)}
+                <DialogFooter><Button onClick={handleAddRitual}>Add Ritual</Button></DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        }
+    >
+      <div className="p-1 space-y-6">
+        <div className="space-y-4">
+          <h3 className="font-semibold px-2">Your Rituals</h3>
+          {rituals.length === 0 ? (
+             <p className="text-muted-foreground text-sm text-center py-4">No rituals defined yet.</p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {rituals.map(ritual => {
+                  const habitDetails = (ritual.habits || []).map(getHabitById).filter(Boolean) as Habit[];
+                  const completedHabits = habitDetails.filter(h => h.completedToday).length;
+                  const totalHabits = habitDetails.length;
+                  const progress = totalHabits > 0 ? (completedHabits / totalHabits) * 100 : 0;
+                
+                  return (
+                    <Collapsible key={ritual.id} className="group">
+                      <div className="bg-card/50 p-4 rounded-lg border border-border/60">
+                          <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                  {getTimeOfDayIcon(ritual.timeOfDay)}
+                                  <h4 className="font-semibold">{ritual.name}</h4>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                  <Dialog onOpenChange={(open) => !open && setEditingRitual(null)}>
+                                      <DialogTrigger asChild><Button variant="ghost" size="icon" onClick={() => setEditingRitual(JSON.parse(JSON.stringify(ritual)))}><Edit className="h-4 w-4"/></Button></DialogTrigger>
+                                      <DialogContent>
+                                          <DialogHeader><DialogTitle>Edit Ritual</DialogTitle></DialogHeader>
+                                          {editingRitual && renderRitualForm(editingRitual, setEditingRitual)}
+                                          <DialogFooter><DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose><Button onClick={handleUpdateRitual}>Save Changes</Button></DialogFooter>
+                                      </DialogContent>
+                                  </Dialog>
+                                   <AlertDialog>
+                                    <AlertDialogTrigger asChild><Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-red-500/80"/></Button></AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader><AlertDialogTitle>Delete {ritual.name}?</AlertDialogTitle><AlertDialogDescription>This action is permanent.</AlertDialogDescription></AlertDialogHeader>
+                                      <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => deleteRitual(ritual.id)}>Continue</AlertDialogAction></AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                  <CollapsibleTrigger asChild><Button variant="ghost" size="icon"><ChevronRight className="h-5 w-5 transition-transform duration-200 group-data-[state=open]:rotate-90" /></Button></CollapsibleTrigger>
+                              </div>
+                          </div>
+                          <div className="mt-3">
+                              <div className="flex justify-between items-center mb-1"><span className="text-xs font-semibold text-muted-foreground">PROGRESS</span><span className="text-xs font-bold">{completedHabits} / {totalHabits}</span></div>
+                              <Progress value={progress} className="h-2"/>
+                          </div>
+                      </div>
+                      <CollapsibleContent className="p-4 bg-muted/40 rounded-b-lg border border-t-0 border-border/60">
+                         <div className="space-y-3">
+                          {habitDetails.map(habit => (
+                            <div key={habit.id} className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <motion.button whileTap={{ scale: 0.9 }}>
+                                  <Check className={`w-6 h-6 p-1 rounded-full cursor-pointer transition-all ${habit.completedToday ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`} onClick={() => toggleHabit(habit.id)}/>
+                                </motion.button>
+                                <span className="text-sm">{habit.name}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  )
+              })}
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
+        <div className="space-y-4">
+           <h3 className="font-semibold px-2">Habit Library</h3>
+           {habits.length === 0 ? (
+             <p className="text-muted-foreground text-sm text-center py-4">No habits defined yet.</p>
+           ) : (
+            <div className="space-y-2">
                 {habits.map(habit => (
-                    <div key={habit.id} className="flex items-center space-x-2">
-                        <Checkbox 
-                            id={`habit-${habit.id}`} 
-                            checked={ritualState.habits.includes(habit.id)}
-                            onCheckedChange={(checked) => {
-                                const newHabitIds = checked 
-                                    ? [...ritualState.habits, habit.id]
-                                    : ritualState.habits.filter(id => id !== habit.id);
-                                setState({ ...ritualState, habits: newHabitIds });
-                            }}
-                        />
-                        <Label htmlFor={`habit-${habit.id}`}>{habit.name}</Label>
+                    <div key={habit.id} className="bg-card/50 p-3 rounded-lg border border-border/60 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <motion.button whileTap={{ scale: 0.9 }}>
+                                <Check className={`w-6 h-6 p-1 rounded-full cursor-pointer transition-all ${habit.completedToday ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`} onClick={() => toggleHabit(habit.id)} />
+                            </motion.button>
+                            <div><h4 className="font-semibold">{habit.name}</h4></div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Dialog onOpenChange={(open) => !open && setEditingHabit(null)}>
+                            <DialogTrigger asChild><Button variant="ghost" size="icon" onClick={() => setEditingHabit(JSON.parse(JSON.stringify(habit)))}><Edit className="h-4 w-4"/></Button></DialogTrigger>
+                             <DialogContent>
+                                <DialogHeader><DialogTitle>Edit Habit</DialogTitle></DialogHeader>
+                                {editingHabit && renderHabitForm(editingHabit, setEditingHabit)}
+                                <DialogFooter><DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose><Button onClick={handleUpdateHabit}>Save Changes</Button></DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild><Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-red-500/80"/></Button></AlertDialogTrigger>
+                             <AlertDialogContent>
+                              <AlertDialogHeader><AlertDialogTitle>Delete {habit.name}?</AlertDialogTitle><AlertDialogDescription>This will permanently delete this habit and cannot be undone.</AlertDialogDescription></AlertDialogHeader>
+                              <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => deleteHabit(habit.id)}>Continue</AlertDialogAction></AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                     </div>
                 ))}
             </div>
+           )}
         </div>
-    </div>
-);
-
-  return (
-    <ModuleCard title="Ritual Engine" module="ritual" headerContent={(
-        <Dialog open={isAddHabitOpen} onOpenChange={setAddHabitOpen}>
-            <DialogTrigger asChild>
-                <Button><Plus className="mr-2 h-4 w-4" /> Add Habit</Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Create New Habit</DialogTitle>
-                    <DialogDescription>A habit is a single, repeatable action.</DialogDescription>
-                </DialogHeader>
-                {renderHabitForm(newHabit, setNewHabit)}
-                <DialogFooter>
-                    <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
-                    <Button onClick={handleAddHabit}>Create Habit</Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    )}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Habits Section */}
-            <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                    <h3 className="text-2xl font-bold tracking-tight">Habit Tracker</h3>
-                </div>
-
-                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
-                    <AnimatePresence>
-                    {habits.map(habit => (
-                        <motion.div 
-                            key={habit.id} 
-                            layout
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
-                            className="bg-background/50 border rounded-lg p-4 space-y-3"
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="space-y-1">
-                                    <h4 className="font-semibold">{habit.name}</h4>
-                                    <p className="text-sm text-muted-foreground">{habit.description}</p>
-                                    <Badge variant="outline" className={getCategoryColor(habit.category)}>{habit.category}</Badge>
-                                </div>
-                                <Button 
-                                    variant={habit.completedToday ? "secondary" : "default"}
-                                    size="sm"
-                                    onClick={() => toggleHabit(habit.id)}
-                                >
-                                    {habit.completedToday ? <Check className="mr-2 h-4 w-4" /> : <X className="mr-2 h-4 w-4" />}
-                                    {habit.completedToday ? 'Completed' : 'Mark Done'}
-                                </Button>
-                            </div>
-                            <Separator />
-                            <div className="flex items-center justify-between text-sm text-muted-foreground">
-                                <div className="flex items-center gap-2">
-                                    <Flame className="w-4 h-4 text-orange-500" />
-                                    <span>Streak: {habit.streak} days</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <Award className="w-4 h-4 text-yellow-500" />
-                                    <span>Best: {habit.longestStreak} days</span>
-                                </div>
-                                <div className={`flex items-center gap-2 font-medium ${getDifficultyColor(habit.difficulty)}`}>
-                                    <Zap className="w-4 h-4" />
-                                    <span>{habit.difficulty}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                <Dialog open={editingHabit?.id === habit.id} onOpenChange={(isOpen) => !isOpen && setEditingHabit(null)}>
-                                    <DialogTrigger asChild>
-                                        <Button variant="ghost" size="icon" onClick={() => setEditingHabit(habit)}><Edit className="h-4 w-4"/></Button>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader><DialogTitle>Edit Habit</DialogTitle></DialogHeader>
-                                        {editingHabit && renderHabitForm(editingHabit, setEditingHabit)}
-                                        <DialogFooter>
-                                            <Button variant="outline" onClick={() => setEditingHabit(null)}>Cancel</Button>
-                                            <Button onClick={handleUpdateHabit}>Save Changes</Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600"><Trash2 className="h-4 w-4"/></Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This will permanently delete "{habit.name}" and all its data. This action cannot be undone.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => deleteHabit(habit.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                                </div>
-                            </div>
-                            <Progress value={(habit.totalCompletions / habit.targetDays) * 100} className="h-2" />
-                        </motion.div>
-                    ))}
-                    </AnimatePresence>
-                </div>
-            </div>
-
-            {/* Rituals Section */}
-            <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                    <h3 className="text-2xl font-bold tracking-tight">Rituals</h3>
-                        <Dialog open={isAddRitualOpen} onOpenChange={setAddRitualOpen}>
-                        <DialogTrigger asChild>
-                            <Button><Plus className="mr-2 h-4 w-4" /> Add Ritual</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Create New Ritual</DialogTitle>
-                                <DialogDescription>A ritual is a sequence of habits.</DialogDescription>
-                            </DialogHeader>
-                            {renderRitualForm(newRitual, setNewRitual)}
-                            <DialogFooter>
-                                <DialogClose asChild><Button variant="outline">Cancel</Button></DialogClose>
-                                <Button onClick={handleAddRitual}>Create Ritual</Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-
-                    <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
-                    <AnimatePresence>
-                    {rituals.map(ritual => {
-                        const totalDuration = ritual.habits.reduce((acc, habitId) => {
-                            const habit = getHabitById(habitId);
-                            // Assuming each habit takes 15 minutes for now
-                            return acc + (habit ? 15 : 0); 
-                        }, 0);
-                        const completedHabits = ritual.habits.filter(hid => getHabitById(hid)?.completedToday).length;
-                        const progress = ritual.habits.length > 0 ? (completedHabits / ritual.habits.length) * 100 : 0;
-
-                        return (
-                            <motion.div 
-                            key={ritual.id} 
-                            layout
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
-                            className="bg-background/50 border rounded-lg p-4 space-y-3"
-                            >
-                            <div className="flex items-start justify-between">
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-2">
-                                        {getTimeOfDayIcon(ritual.timeOfDay)}
-                                        <h4 className="font-semibold">{ritual.name}</h4>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">{ritual.description}</p>
-                                </div>
-                                <Button 
-                                    variant={ritual.isActive ? "secondary" : "default"}
-                                    size="sm"
-                                    onClick={() => toggleRitual(ritual.id)}
-                                >
-                                    <Play className="mr-2 h-4 w-4" />
-                                    {ritual.isActive ? 'Active' : 'Start'}
-                                </Button>
-                            </div>
-                            <Separator />
-                            <div className="space-y-2">
-                                {ritual.habits.map(habitId => {
-                                const habit = getHabitById(habitId);
-                                if (!habit) return null;
-                                return (
-                                    <div key={habit.id} className="flex items-center justify-between text-sm p-2 rounded-md bg-background hover:bg-muted/50">
-                                        <div className="flex items-center gap-3">
-                                            <Button 
-                                                variant="ghost" 
-                                                size="icon" 
-                                                className={`h-6 w-6 rounded-full ${habit.completedToday ? 'bg-green-500 text-white' : 'border'}`}
-                                                onClick={() => toggleHabit(habit.id)}
-                                            >
-                                                <Check className="h-4 w-4"/>
-                                            </Button>
-                                            <span>{habit.name}</span>
-                                        </div>
-                                        <Badge variant="outline" className={getCategoryColor(habit.category)}>{habit.category}</Badge>
-                                    </div>
-                                )
-                                })}
-                            </div>
-                            <Progress value={progress} className="h-2" />
-                            <div className="flex items-center justify-between pt-2">
-                                <span className="text-sm text-muted-foreground">{completedHabits} / {ritual.habits.length} habits completed</span>
-                                <div className="flex items-center gap-2">
-                                <Dialog open={editingRitual?.id === ritual.id} onOpenChange={(isOpen) => !isOpen && setEditingRitual(null)}>
-                                    <DialogTrigger asChild>
-                                        <Button variant="ghost" size="icon" onClick={() => setEditingRitual(ritual)}><Edit className="h-4 w-4"/></Button>
-                                    </DialogTrigger>
-                                    <DialogContent>
-                                        <DialogHeader><DialogTitle>Edit Ritual</DialogTitle></DialogHeader>
-                                        {editingRitual && renderRitualForm(editingRitual, setEditingRitual)}
-                                        <DialogFooter>
-                                            <Button variant="outline" onClick={() => setEditingRitual(null)}>Cancel</Button>
-                                            <Button onClick={handleUpdateRitual}>Save Changes</Button>
-                                        </DialogFooter>
-                                    </DialogContent>
-                                </Dialog>
-                                <AlertDialog>
-                                    <AlertDialogTrigger asChild>
-                                        <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600"><Trash2 className="h-4 w-4"/></Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This will permanently delete the "{ritual.name}" ritual.
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={() => deleteRitual(ritual.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Delete</AlertDialogAction>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                                </div>
-                            </div>
-                            </motion.div>
-                        )
-                    })}
-                    </AnimatePresence>
-                </div>
-            </div>
-        </div>
+      </div>
     </ModuleCard>
-  )
-}
+  );
+};
 
 export default RitualEngine;

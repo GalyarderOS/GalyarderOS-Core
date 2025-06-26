@@ -17,7 +17,7 @@ const Dock = ({ modules, currentPath, onModuleClick }: DockProps) => {
       'dashboard', 'identity', 'vision', 'balance', 'ritual',
       'calendar', 'focus', 'knowledge', 'reflection', 'analytics',
       'notion-ai', // Replaced notion with notion-ai
-      'investments', 'wealth', 'settings'
+      'investments', 'cashflow', 'expenses', 'wealth', 'tax', 'debt', 'settings'
     ].includes(m.id)
   );
 

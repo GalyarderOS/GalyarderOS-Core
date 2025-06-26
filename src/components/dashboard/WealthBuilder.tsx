@@ -12,11 +12,11 @@ import { Target, Plus, Trophy, TrendingUp, Calendar } from 'lucide-react';
 
 interface Goal {
   id: string;
-  name: string;
+  title: string;
   description: string;
   target_amount: number;
   current_amount: number;
-  status: 'in_progress' | 'completed' | 'paused';
+  status: 'in_progress' | 'completed' | 'paused' | 'active';
   target_date: string;
 }
 

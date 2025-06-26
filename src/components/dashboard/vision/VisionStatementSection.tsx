@@ -1,27 +1,39 @@
-import { useState } from 'react';
-import useVisionStore from '@/stores/useVisionStore';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Edit, Save, Quote, Check } from 'lucide-react';
+import { Edit, Check } from 'lucide-react';
+import { Quote } from 'lucide-react';
+import type { VisionStatement } from '@/stores/useVisionStore';
 
-const VisionStatementSection = () => {
-  const { visionStatement, updateVisionStatement } = useVisionStore();
+interface VisionStatementSectionProps {
+  statement: VisionStatement;
+  onUpdate: (update: Partial<VisionStatement>) => void;
+}
+
+const VisionStatementSection = ({ statement, onUpdate }: VisionStatementSectionProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(visionStatement.title);
-  const [editedDescription, setEditedDescription] = useState(visionStatement.description);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedDescription, setEditedDescription] = useState('');
+
+  useEffect(() => {
+    if (statement) {
+      setEditedTitle(statement.title);
+      setEditedDescription(statement.description);
+    }
+  }, [statement]);
 
   const handleSave = () => {
-    updateVisionStatement({ title: editedTitle, description: editedDescription });
+    onUpdate({ title: editedTitle, description: editedDescription });
     setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setEditedTitle(visionStatement.title);
-    setEditedDescription(visionStatement.description);
     setIsEditing(false);
+    setEditedTitle(statement?.title || '');
+    setEditedDescription(statement?.description || '');
   }
 
   return (
@@ -58,12 +70,12 @@ const VisionStatementSection = () => {
             <Input
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
-              className="text-2xl font-bold p-2 h-auto"
+              className="text-2xl font-bold p-2 h-auto bg-transparent focus:ring-0 border-0"
             />
             <Textarea
               value={editedDescription}
               onChange={(e) => setEditedDescription(e.target.value)}
-              className="text-lg text-muted-foreground p-2"
+              className="text-lg text-muted-foreground p-2 bg-transparent focus:ring-0 border-0"
               rows={4}
             />
           </motion.div>
@@ -74,10 +86,10 @@ const VisionStatementSection = () => {
             animate={{ opacity: 1 }}
           >
             <h2 className="text-2xl font-bold text-foreground mb-2">
-              {visionStatement.title}
+              {statement?.title}
             </h2>
             <p className="text-lg text-muted-foreground whitespace-pre-line">
-              {visionStatement.description}
+              {statement?.description}
             </p>
           </motion.div>
         )}
