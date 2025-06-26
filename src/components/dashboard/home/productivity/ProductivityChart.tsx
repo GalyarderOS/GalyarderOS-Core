@@ -1,5 +1,5 @@
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/global/ui/chart';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
 interface FocusData {

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { MobileHeader } from '@/components/ui/mobile-header';
+import { Button } from '@/components/global/ui/button';
+import { MobileHeader } from '@/components/global/ui/mobile-header';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface LandingNavigationProps {

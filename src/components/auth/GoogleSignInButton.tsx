@@ -1,5 +1,5 @@
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/global/ui/button';
 
 interface GoogleSignInButtonProps {
   onClick: () => void;

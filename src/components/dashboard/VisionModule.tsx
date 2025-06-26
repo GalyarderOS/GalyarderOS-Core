@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input'; 
-import { Textarea } from '@/components/ui/textarea';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Button } from '@/components/global/ui/button';
+import { Input } from '@/components/global/ui/input'; 
+import { Textarea } from '@/components/global/ui/textarea';
+import { Progress } from '@/components/global/ui/progress';
+import { Badge } from '@/components/global/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Target, Edit, Trash2, Calendar } from 'lucide-react'; 
 import { ModuleHeader } from '@/components/shared/ModuleHeader';
 import { ModuleCard } from '@/components/shared/ModuleCard';
 import EmptyState from './home/EmptyState';
 import { CreateGoalModal } from './vision/CreateGoalModal';
-import { Label } from '@/components/ui/label';
+import { Label } from '@/components/global/ui/label';
 
 interface Goal {
   id: string;

@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/global/ui/card';
+import { Badge } from '@/components/global/ui/badge';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 import { LucideIcon } from 'lucide-react';
 

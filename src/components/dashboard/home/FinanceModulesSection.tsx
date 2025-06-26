@@ -1,5 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Badge } from '@/components/global/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { TrendingUp, DollarSign, Receipt, Building, Calculator, CreditCard, ArrowRight } from 'lucide-react';

@@ -15,9 +15,9 @@ import {
   Zap,
   Activity
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/global/ui/card";
+import { Badge } from "@/components/global/ui/badge";
+import { Progress } from "@/components/global/ui/progress";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 
 interface PersonalStatsSectionProps {

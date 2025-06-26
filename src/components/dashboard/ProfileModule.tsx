@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Button } from '@/components/global/ui/button';
+import { Input } from '@/components/global/ui/input';
+import { Label } from '@/components/global/ui/label';
+import { Textarea } from '@/components/global/ui/textarea';
+import { Badge } from '@/components/global/ui/badge';
 import { User, Edit, Save, Plus, X } from 'lucide-react';
 import { useAuth } from '@/contexts/auth/useAuth';
 // import { supabase } from '@/integrations/supabase/client';

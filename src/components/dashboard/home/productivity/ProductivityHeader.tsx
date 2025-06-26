@@ -1,6 +1,6 @@
 
-import { CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Badge } from '@/components/global/ui/badge';
 import { Brain } from 'lucide-react';
 
 interface ProductivityHeaderProps {

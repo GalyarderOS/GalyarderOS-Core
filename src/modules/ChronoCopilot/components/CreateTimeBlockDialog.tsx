@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/global/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,8 @@ import {
   DialogTitle,
   DialogFooter,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
+} from '@/components/global/ui/dialog'
+import { Input } from '@/components/global/ui/input'
 import {
   Form,
   FormControl,
@@ -19,7 +19,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
+} from '@/components/global/ui/form'
 import { TimeBlock } from '../types/timeblock'
 
 const timeBlockSchema = z.object({

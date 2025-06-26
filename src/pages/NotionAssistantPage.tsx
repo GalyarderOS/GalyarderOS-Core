@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Button } from '@/components/global/ui/button';
+import { Textarea } from '@/components/global/ui/textarea';
+import { Badge } from '@/components/global/ui/badge';
 import { FileText, Send, Loader2, BookOpen, PenTool, Database, Zap, Sparkles, User, AlertCircle, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ModuleHeader } from '@/components/shared/ModuleHeader';
 import { cn } from '@/lib/utils';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/global/ui/scroll-area';
 
 interface Message {
   id: number;

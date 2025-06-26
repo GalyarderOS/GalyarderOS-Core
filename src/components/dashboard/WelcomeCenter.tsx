@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/global/ui/dialog';
+import { Button } from '@/components/global/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Badge } from '@/components/global/ui/badge';
+import { Progress } from '@/components/global/ui/progress';
 import { 
   User, 
   Target, 

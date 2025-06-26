@@ -2,7 +2,7 @@ import React from 'react'
 import { useChronoLogic } from '../hooks/useChronoLogic'
 import { TimeBlockCard } from './TimeBlockCard'
 import { TimelineGrid } from './TimelineGrid'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/global/ui/tabs'
 import { CreateTimeBlockDialog } from './CreateTimeBlockDialog'
 
 export function TimeBlockMonitor() {

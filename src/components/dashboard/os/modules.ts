@@ -43,14 +43,6 @@ export const getDashboardModules = (
       color: 'from-purple-500 to-pink-600'
     },
     { 
-      id: 'vision', 
-      label: language === 'id' ? 'Visi' : 'Vision Architecture', 
-      icon: Target, 
-      path: '/dashboard/vision',
-      category: 'personal',
-      color: 'from-green-500 to-emerald-600'
-    },
-    { 
       id: 'balance', 
       label: language === 'id' ? 'Keseimbangan' : 'Life Balance', 
       icon: Activity, 
@@ -59,12 +51,12 @@ export const getDashboardModules = (
       color: 'from-emerald-500 to-teal-600'
     },
     { 
-      id: 'ritual', 
-      label: language === 'id' ? 'Ritual' : 'Ritual Engine', 
-      icon: CheckCircle, 
-      path: '/dashboard/ritual',
+      id: 'vision', 
+      label: language === 'id' ? 'Visi' : 'Vision Architecture', 
+      icon: Target, 
+      path: '/dashboard/vision',
       category: 'personal',
-      color: 'from-teal-500 to-cyan-600'
+      color: 'from-green-500 to-emerald-600'
     },
     { 
       id: 'calendar', 

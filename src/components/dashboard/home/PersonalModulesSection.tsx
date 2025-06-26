@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/global/ui/card";
 import { useTheme } from "@/contexts/useTheme";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, User, Calendar, Timer, BookOpen, Brain, FileText, Target, Activity } from "lucide-react";

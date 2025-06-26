@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/global/ui/card';
+import { Progress } from '@/components/global/ui/progress';
+import { Badge } from '@/components/global/ui/badge';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/global/ui/chart';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis } from 'recharts';
 import { TrendingUp, DollarSign, Target, PiggyBank, CreditCard, Building } from 'lucide-react';
 import { useTheme } from '@/contexts/useTheme';

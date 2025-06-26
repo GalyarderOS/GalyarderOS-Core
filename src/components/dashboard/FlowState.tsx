@@ -1,8 +1,8 @@
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/global/ui/card";
+import { Progress } from "@/components/global/ui/progress";
+import { Button } from "@/components/global/ui/button";
 
 const DEFAULT_TIME = 25 * 60;
 

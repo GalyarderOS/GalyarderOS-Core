@@ -1,6 +1,6 @@
 
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/global/ui/card';
 import { DashboardStats } from '@/types/dashboard';
 import { useProductivityMetrics } from './useProductivityMetrics';
 import ProductivityHeader from './productivity/ProductivityHeader';

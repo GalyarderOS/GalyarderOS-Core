@@ -1,7 +1,7 @@
 import { Wifi, WifiOff, Battery, BatteryLow, Volume2, VolumeX, Volume1, BatteryCharging } from 'lucide-react';
 import { useSystemStatus } from '@/hooks/useSystemStatus';
-import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Badge } from '@/components/global/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/global/ui/tooltip';
 
 const SystemStatusIndicator = () => {
   const { battery, wifi, volume } = useSystemStatus();

@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Moon, Sun, LogOut, User as UserIcon, ArrowRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/global/ui/button';
+import { ThemeToggle } from '@/components/global/ui/theme-toggle';
+import { Input } from '@/components/global/ui/input';
+import { Badge } from '@/components/global/ui/badge';
 import { useCommandPalette, Command } from '@/hooks/useCommandPalette';
 import NotificationCenter from './NotificationCenter';
 import SystemStatusIndicator from './SystemStatusIndicator';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogTrigger } from '@/components/global/ui/dialog';
 import { AccountSettingsDialog } from './AccountSettingsDialog';
 import { Profile, User } from '@/contexts/auth/types';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/global/ui/avatar';
 
 interface TopBarProps {
   user: User | null;

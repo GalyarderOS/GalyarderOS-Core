@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 // import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/auth/useAuth';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/global/ui/button';
 import {
   DialogContent,
   DialogHeader,
@@ -12,9 +12,9 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from '@/components/global/ui/dialog';
+import { Input } from '@/components/global/ui/input';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/global/ui/avatar';
 import { User, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -2,26 +2,25 @@ import { useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import OSStyleLayout from '@/components/dashboard/OSStyleLayout';
 import DashboardHome from '@/components/dashboard/DashboardHome';
-import VisionArchitecture from '@/components/dashboard/VisionArchitecture';
-import FocusTimer from '@/components/dashboard/FocusTimer';
-import MemoryVault from '@/components/dashboard/MemoryVault';
-import AIAssistant from '@/components/dashboard/AIAssistant';
+import IdentityCore from "@/components/dashboard/modules/IdentityCore";
+import LifeBalance from "@/components/dashboard/modules/LifeBalance";
+import VisionArchitecture from "@/components/dashboard/modules/VisionArchitecture";
+import FocusTimer from '@/components/dashboard/modules/FocusTimer';
+import MemoryVault from '@/components/dashboard/modules/MemoryVault';
+import AIAssistant from '@/components/dashboard/modules/AIAssistant';
 import NotionAssistantPage from '@/pages/NotionAssistantPage';
-import Settings from '@/components/dashboard/Settings';
-import InvestmentTracker from '@/components/dashboard/InvestmentTracker';
-import CashflowTracker from '@/components/dashboard/CashflowTracker';
-import ExpenseManager from '@/components/dashboard/ExpenseManager';
-import WealthBuilder from '@/components/dashboard/WealthBuilder';
-import TaxOptimizer from '@/components/dashboard/TaxOptimizer';
-import DebtManager from '@/components/dashboard/DebtManager';
-import CommandCenter from "@/components/dashboard/CommandCenter";
-import IdentityCore from "@/components/dashboard/IdentityCore";
-import LifeBalance from "@/components/dashboard/LifeBalance";
-import RitualEngine from "@/components/dashboard/RitualEngine";
-import KnowledgeHub from "@/components/dashboard/KnowledgeHub";
-import Reflection from "@/components/dashboard/Reflection";
-import LifeAnalytics from "@/components/dashboard/LifeAnalytics";
-import CalendarModule from "@/components/dashboard/CalendarModule";
+import Settings from '@/components/dashboard/modules/Settings';
+import InvestmentTracker from '@/components/dashboard/modules/InvestmentTracker';
+import CashflowTracker from '@/components/dashboard/modules/CashflowTracker';
+import ExpenseManager from '@/components/dashboard/modules/ExpenseManager';
+import WealthBuilder from '@/components/dashboard/modules/WealthBuilder';
+import TaxOptimizer from '@/components/dashboard/modules/TaxOptimizer';
+import DebtManager from '@/components/dashboard/modules/DebtManager';
+import CommandCenter from "@/components/dashboard/modules/CommandCenter";
+import KnowledgeHub from "@/components/dashboard/modules/KnowledgeHub";
+import Reflection from "@/components/dashboard/modules/Reflection";
+import LifeAnalytics from "@/components/dashboard/modules/LifeAnalytics";
+import CalendarModule from "@/components/dashboard/modules/CalendarModule";
 import TopBar from "@/components/dashboard/os/TopBar";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 
@@ -40,10 +39,8 @@ const Dashboard = () => {
       <Routes>
         <Route path="/" element={<DashboardHome />} />
         <Route path="/identity" element={<IdentityCore />} />
-        <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/balance" element={<LifeBalance />} />
-        <Route path="/ritual" element={<RitualEngine />} />
-        <Route path="/habits" element={<Navigate to="/dashboard/ritual" replace />} />
+        <Route path="/vision" element={<VisionArchitecture />} />
         <Route path="/focus" element={<FocusTimer />} />
         <Route path="/calendar" element={<CalendarModule />} />
         <Route path="/knowledge" element={<KnowledgeHub />} />

@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/global/ui/card';
 import { Star } from 'lucide-react';
 
 interface Testimonial {

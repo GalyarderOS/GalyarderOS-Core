@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, X, Check, CheckCheck, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/global/ui/button';
+import { Badge } from '@/components/global/ui/badge';
+import { ScrollArea } from '@/components/global/ui/scroll-area';
+import { Separator } from '@/components/global/ui/separator';
 import { useNotifications } from '@/contexts/useNotifications';
 import { cn } from '@/lib/utils';
 import { formatDistanceToNow } from 'date-fns';

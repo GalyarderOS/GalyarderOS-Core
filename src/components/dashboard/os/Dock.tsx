@@ -1,7 +1,6 @@
-
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '@/components/global/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/global/ui/tooltip';
 import { Module } from './types';
 
 interface DockProps {

@@ -1,5 +1,5 @@
 
-import { Progress } from '@/components/ui/progress';
+import { Progress } from '@/components/global/ui/progress';
 
 interface ProductivityOverviewProps {
   score: number;

@@ -23,11 +23,7 @@ const LandingPage = () => {
     }
   }, [user, navigate]);
 
-  const handleGetStarted = () => {
-    navigate('/auth');
-  };
-  
-  const handleSignIn = () => {
+  const navigateToAuth = () => {
     navigate('/auth');
   };
 
@@ -40,14 +36,14 @@ const LandingPage = () => {
       <LandingNavigation 
         theme={theme}
         setTheme={setTheme}
-        onSignIn={handleSignIn}
-        onGetStarted={handleGetStarted}
+        onSignIn={navigateToAuth}
+        onGetStarted={navigateToAuth}
       />
       <main>
-        <LandingHero onGetStarted={handleGetStarted} onLearnMore={handleLearnMore} />
+        <LandingHero onGetStarted={navigateToAuth} onLearnMore={handleLearnMore} />
         <CoreModulesSection coreModules={coreModules} />
         <TestimonialsSection testimonials={testimonials} />
-        <CTASection onGetStarted={handleGetStarted} />
+        <CTASection onGetStarted={navigateToAuth} />
         <InspirationSection quotes={inspirationalQuotes} />
       </main>
       <LandingFooter />

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 // import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/global/ui/button";
 import { Loader2 } from "lucide-react";
 interface Message {
   role: 'user' | 'ai';

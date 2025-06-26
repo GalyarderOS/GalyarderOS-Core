@@ -1,7 +1,7 @@
 import React from 'react'
 import { TimeBlock } from '../types/timeblock'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/global/ui/card'
+import { Badge } from '@/components/global/ui/badge'
 
 interface TimeBlockCardProps {
   block: TimeBlock

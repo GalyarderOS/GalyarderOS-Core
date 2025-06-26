@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { Progress } from '@/components/ui/progress';
+import { Progress } from '@/components/global/ui/progress';
 import { useTheme } from '@/contexts/useTheme';
 import InteractiveAIChatbot from './InteractiveAIChatbot';
 import { DashboardStats } from '@/types/dashboard';
 import { useAuth } from '@/contexts/auth/useAuth';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Skeleton } from '@/components/global/ui/skeleton';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/global/ui/avatar';
 import { useFirstTimeUser } from '@/hooks/useFirstTimeUser';
 
 export interface DashboardHeaderProps {

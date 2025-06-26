@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/components/global/ui/badge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Crown, Sparkles, Award, TrendingUp, Calendar, Target, Brain, Activity } from 'lucide-react';
 import { useIdentityStore } from '@/stores/useIdentityStore';

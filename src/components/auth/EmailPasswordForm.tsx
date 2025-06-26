@@ -1,8 +1,8 @@
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/components/global/ui/button';
+import { Input } from '@/components/global/ui/input';
+import { Label } from '@/components/global/ui/label';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 
 interface EmailPasswordFormProps {

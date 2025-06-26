@@ -1,8 +1,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Command, Search, ArrowRight } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/global/ui/input';
+import { Badge } from '@/components/global/ui/badge';
 
 interface Command {
   id: string;
